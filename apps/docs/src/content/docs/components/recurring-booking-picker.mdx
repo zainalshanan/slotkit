@@ -1,0 +1,276 @@
+---
+title: RecurringBookingPicker
+description: Recurring booking frequency and occurrence picker with conflict detection.
+---
+
+Allows customers to configure recurring bookings by selecting frequency and count. Displays all generated occurrences with visual conflict indicators and prevents booking if conflicts exist.
+
+## Install
+
+```bash
+npx thebookingkit add recurring-booking-picker
+```
+
+## Usage
+
+```tsx
+import { RecurringBookingPicker, type OccurrenceDisplay } from "@/components/recurring-booking-picker";
+import { useState } from "react";
+
+export function RecurringBookingFlow() {
+  const [occurrences, setOccurrences] = useState<OccurrenceDisplay[]>([]);
+
+  const handleConfigChange = (frequency: string, count: number) => {
+    // Call your API to generate occurrences
+    const generated = generateRecurringOccurrences(frequency, count);
+    setOccurrences(generated);
+  };
+
+  const handleConfirm = async (frequency: string, count: number) => {
+    const response = await fetch("/api/bookings/recurring", {
+      method: "POST",
+      body: JSON.stringify({ frequency, count, occurrences }),
+    });
+    if (response.ok) {
+      // Handle success
+    }
+  };
+
+  return (
+    <RecurringBookingPicker
+      occurrences={occurrences}
+      maxOccurrences={24}
+      onConfigChange={handleConfigChange}
+      onConfirm={handleConfirm}
+    />
+  );
+}
+```
+
+## Props
+
+```typescript
+export interface OccurrenceDisplay {
+  index: number;
+  startsAt: Date;
+  endsAt: Date;
+  isConflict?: boolean;
+}
+
+export interface RecurringBookingPickerProps {
+  /** Available frequencies */
+  frequencies?: { value: string; label: string }[];
+  /** Maximum number of occurrences allowed */
+  maxOccurrences?: number;
+  /** Generated occurrences to display (after computing) */
+  occurrences?: OccurrenceDisplay[];
+  /** Called when frequency/count changes to generate occurrences */
+  onConfigChange: (frequency: string, count: number) => void;
+  /** Called when the user confirms the recurring series */
+  onConfirm: (frequency: string, count: number) => void;
+  /** Called when cancelled */
+  onCancel?: () => void;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+```
+
+## Source
+
+```tsx
+import React, { useState, useMemo } from "react";
+import { cn } from "../utils/cn.js";
+
+/** A generated occurrence for display */
+export interface OccurrenceDisplay {
+  index: number;
+  startsAt: Date;
+  endsAt: Date;
+  isConflict?: boolean;
+}
+
+/** Props for the RecurringBookingPicker component */
+export interface RecurringBookingPickerProps {
+  /** Available frequencies */
+  frequencies?: { value: string; label: string }[];
+  /** Maximum number of occurrences allowed */
+  maxOccurrences?: number;
+  /** Generated occurrences to display (after computing) */
+  occurrences?: OccurrenceDisplay[];
+  /** Called when frequency/count changes to generate occurrences */
+  onConfigChange: (frequency: string, count: number) => void;
+  /** Called when the user confirms the recurring series */
+  onConfirm: (frequency: string, count: number) => void;
+  /** Called when cancelled */
+  onCancel?: () => void;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+const DEFAULT_FREQUENCIES = [
+  { value: "weekly", label: "Weekly" },
+  { value: "biweekly", label: "Every 2 weeks" },
+  { value: "monthly", label: "Monthly" },
+];
+
+/**
+ * Recurring booking picker shown after initial slot selection.
+ *
+ * Allows the customer to choose frequency and number of occurrences,
+ * see all generated dates, and identify any conflicts.
+ *
+ * @example
+ * ```tsx
+ * <RecurringBookingPicker
+ *   occurrences={occurrences}
+ *   onConfigChange={(freq, count) => generateOccurrences(freq, count)}
+ *   onConfirm={(freq, count) => bookSeries(freq, count)}
+ * />
+ * ```
+ */
+export function RecurringBookingPicker({
+  frequencies = DEFAULT_FREQUENCIES,
+  maxOccurrences = 12,
+  occurrences,
+  onConfigChange,
+  onConfirm,
+  onCancel,
+  className,
+  style,
+}: RecurringBookingPickerProps) {
+  const [frequency, setFrequency] = useState(frequencies[0]?.value ?? "weekly");
+  const [count, setCount] = useState(4);
+
+  const conflicts = useMemo(
+    () => occurrences?.filter((o) => o.isConflict) ?? [],
+    [occurrences],
+  );
+
+  const handleFrequencyChange = (newFreq: string) => {
+    setFrequency(newFreq);
+    onConfigChange(newFreq, count);
+  };
+
+  const handleCountChange = (newCount: number) => {
+    const clamped = Math.max(1, Math.min(maxOccurrences, newCount));
+    setCount(clamped);
+    onConfigChange(frequency, clamped);
+  };
+
+  return (
+    <div
+      className={cn("tbk-recurring-picker", className)}
+      style={style}
+    >
+      <h3 className="tbk-recurring-title">Recurring Booking</h3>
+
+      <div className="tbk-recurring-config">
+        <div className="tbk-field">
+          <label htmlFor="recurring-freq" className="tbk-label">
+            Frequency
+          </label>
+          <select
+            id="recurring-freq"
+            className="tbk-select"
+            value={frequency}
+            onChange={(e) => handleFrequencyChange(e.target.value)}
+          >
+            {frequencies.map((f) => (
+              <option key={f.value} value={f.value}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="tbk-field">
+          <label htmlFor="recurring-count" className="tbk-label">
+            Number of sessions
+          </label>
+          <input
+            id="recurring-count"
+            type="number"
+            className="tbk-input"
+            min={1}
+            max={maxOccurrences}
+            value={count}
+            onChange={(e) => handleCountChange(parseInt(e.target.value, 10))}
+          />
+        </div>
+      </div>
+
+      {/* Occurrence list */}
+      {occurrences && occurrences.length > 0 && (
+        <div className="tbk-occurrences-list">
+          <h4>Sessions</h4>
+          <ul>
+            {occurrences.map((occ) => (
+              <li
+                key={occ.index}
+                className={cn(
+                  "tbk-occurrence-item",
+                  occ.isConflict && "tbk-occurrence-conflict",
+                )}
+              >
+                <span className="tbk-occurrence-date">
+                  {occ.startsAt.toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                <span className="tbk-occurrence-time">
+                  {occ.startsAt.toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
+                  {" – "}
+                  {occ.endsAt.toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
+                </span>
+                {occ.isConflict && (
+                  <span className="tbk-badge tbk-badge-warning">
+                    Unavailable
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Conflict warning */}
+      {conflicts.length > 0 && (
+        <p className="tbk-recurring-warning">
+          {conflicts.length} session(s) have scheduling conflicts. Please adjust
+          the frequency or number of sessions.
+        </p>
+      )}
+
+      <div className="tbk-form-actions">
+        <button
+          className="tbk-button-primary"
+          onClick={() => onConfirm(frequency, count)}
+          disabled={conflicts.length > 0}
+        >
+          Confirm {count} Sessions
+        </button>
+        {onCancel && (
+          <button
+            className="tbk-button-secondary"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+```

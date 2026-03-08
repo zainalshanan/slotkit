@@ -5,6 +5,12 @@ description: Webhook subscription management with delivery logs.
 
 Admin component for creating, managing, and monitoring webhook subscriptions.
 
+## Install
+
+```bash
+npx thebookingkit add webhook-manager
+```
+
 ## Usage
 
 ```tsx
@@ -23,25 +29,359 @@ import { WebhookManager } from "./components/webhook-manager";
 
 ```typescript
 interface WebhookManagerProps {
-  /** Existing webhook subscriptions */
+  /** Webhook subscriptions to display */
   webhooks: WebhookDisplay[];
-  /** Recent delivery logs */
-  deliveryLogs?: WebhookDeliveryLog[];
-  /** Create a new subscription */
-  onCreateWebhook: (webhook: { url: string; triggers: string[]; secret: string }) => void;
-  /** Delete a subscription */
-  onDeleteWebhook: (webhookId: string) => void;
-  /** Send a test payload */
-  onTestWebhook?: (webhookId: string) => void;
-  /** Additional CSS classes */
+  /** Called when creating a new webhook */
+  onCreate?: (data: {
+    subscriberUrl: string;
+    triggers: string[];
+    secret?: string;
+  }) => void;
+  /** Called when toggling a webhook's active state */
+  onToggle?: (webhookId: string, active: boolean) => void;
+  /** Called when deleting a webhook */
+  onDelete?: (webhookId: string) => void;
+  /** Called when sending a test payload */
+  onTest?: (webhookId: string) => void;
+  /** Available trigger options */
+  availableTriggers?: { value: string; label: string }[];
+  /** Additional CSS class name */
   className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+interface WebhookDisplay {
+  id: string;
+  subscriberUrl: string;
+  triggers: string[];
+  isActive: boolean;
+  hasSecret: boolean;
+  deliveries?: WebhookDeliveryLog[];
+}
+
+interface WebhookDeliveryLog {
+  id: string;
+  trigger: string;
+  responseCode: number | null;
+  success: boolean;
+  deliveredAt: Date;
+  error?: string;
 }
 ```
 
 ## Features
 
-- **Subscription list** — URL, active triggers, status, created date
-- **Create form** — URL input, trigger checkboxes, auto-generated secret
-- **Delivery logs** — response status, latency, payload preview, retry count
-- **Test button** — send a sample payload to verify the endpoint
-- **Delete** with confirmation dialog
+- **Create form** — URL input, trigger checkboxes, optional secret
+- **Subscription list** — display URL, active triggers, status, and enable/disable toggle
+- **Test button** — send a test payload to verify the endpoint works
+- **Delivery history** — toggle to view delivery logs showing status, response code, and error messages
+- **Enable/Disable** webhooks without deleting them
+- **Delete** with confirmation
+- **Signed webhooks** badge indicating secret-protected endpoints
+- **Default triggers** including booking lifecycle events, form submission, and out-of-office creation
+
+## Source
+
+```tsx
+import React, { useState, useCallback } from "react";
+import { cn } from "../utils/cn.js";
+
+/** A webhook delivery log entry */
+export interface WebhookDeliveryLog {
+  id: string;
+  trigger: string;
+  responseCode: number | null;
+  success: boolean;
+  deliveredAt: Date;
+  error?: string;
+}
+
+/** A webhook subscription for display */
+export interface WebhookDisplay {
+  id: string;
+  subscriberUrl: string;
+  triggers: string[];
+  isActive: boolean;
+  hasSecret: boolean;
+  deliveries?: WebhookDeliveryLog[];
+}
+
+/** Props for the WebhookManager component */
+export interface WebhookManagerProps {
+  /** Webhook subscriptions to display */
+  webhooks: WebhookDisplay[];
+  /** Called when creating a new webhook */
+  onCreate?: (data: {
+    subscriberUrl: string;
+    triggers: string[];
+    secret?: string;
+  }) => void;
+  /** Called when toggling a webhook's active state */
+  onToggle?: (webhookId: string, active: boolean) => void;
+  /** Called when deleting a webhook */
+  onDelete?: (webhookId: string) => void;
+  /** Called when sending a test payload */
+  onTest?: (webhookId: string) => void;
+  /** Available trigger options */
+  availableTriggers?: { value: string; label: string }[];
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+const DEFAULT_AVAILABLE_TRIGGERS = [
+  { value: "BOOKING_CREATED", label: "Booking Created" },
+  { value: "BOOKING_CONFIRMED", label: "Booking Confirmed" },
+  { value: "BOOKING_CANCELLED", label: "Booking Cancelled" },
+  { value: "BOOKING_RESCHEDULED", label: "Booking Rescheduled" },
+  { value: "BOOKING_REJECTED", label: "Booking Rejected" },
+  { value: "BOOKING_PAID", label: "Booking Paid" },
+  { value: "BOOKING_NO_SHOW", label: "Booking No-Show" },
+  { value: "FORM_SUBMITTED", label: "Form Submitted" },
+  { value: "OOO_CREATED", label: "Out of Office Created" },
+];
+
+/**
+ * Admin component for managing webhook subscriptions and viewing delivery history.
+ *
+ * @example
+ * ```tsx
+ * <WebhookManager
+ *   webhooks={webhooks}
+ *   onCreate={(data) => createWebhook(data)}
+ *   onToggle={(id, active) => toggleWebhook(id, active)}
+ *   onTest={(id) => testWebhook(id)}
+ * />
+ * ```
+ */
+export function WebhookManager({
+  webhooks,
+  onCreate,
+  onToggle,
+  onDelete,
+  onTest,
+  availableTriggers = DEFAULT_AVAILABLE_TRIGGERS,
+  className,
+  style,
+}: WebhookManagerProps) {
+  const [showForm, setShowForm] = useState(false);
+  const [newUrl, setNewUrl] = useState("");
+  const [newSecret, setNewSecret] = useState("");
+  const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const handleTriggerToggle = useCallback((trigger: string) => {
+    setSelectedTriggers((prev) =>
+      prev.includes(trigger)
+        ? prev.filter((t) => t !== trigger)
+        : [...prev, trigger],
+    );
+  }, []);
+
+  const handleCreate = useCallback(() => {
+    if (!newUrl || selectedTriggers.length === 0) return;
+    onCreate?.({
+      subscriberUrl: newUrl,
+      triggers: selectedTriggers,
+      secret: newSecret || undefined,
+    });
+    setNewUrl("");
+    setNewSecret("");
+    setSelectedTriggers([]);
+    setShowForm(false);
+  }, [newUrl, newSecret, selectedTriggers, onCreate]);
+
+  return (
+    <div className={cn("tbk-webhook-manager", className)} style={style}>
+      <div className="tbk-webhook-header">
+        <h3>Webhooks</h3>
+        {onCreate && (
+          <button
+            className="tbk-button-primary"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? "Cancel" : "Add Webhook"}
+          </button>
+        )}
+      </div>
+
+      {/* Create form */}
+      {showForm && (
+        <div className="tbk-webhook-form">
+          <div className="tbk-field">
+            <label htmlFor="wh-url" className="tbk-label">
+              Endpoint URL
+            </label>
+            <input
+              id="wh-url"
+              type="url"
+              className="tbk-input"
+              placeholder="https://your-api.com/webhooks"
+              value={newUrl}
+              onChange={(e) => setNewUrl(e.target.value)}
+            />
+          </div>
+
+          <div className="tbk-field">
+            <label htmlFor="wh-secret" className="tbk-label">
+              Secret (optional)
+            </label>
+            <input
+              id="wh-secret"
+              type="password"
+              className="tbk-input"
+              placeholder="whsec_..."
+              value={newSecret}
+              onChange={(e) => setNewSecret(e.target.value)}
+            />
+          </div>
+
+          <div className="tbk-field">
+            <label className="tbk-label">Triggers</label>
+            <div className="tbk-checkbox-group">
+              {availableTriggers.map((t) => (
+                <label key={t.value} className="tbk-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={selectedTriggers.includes(t.value)}
+                    onChange={() => handleTriggerToggle(t.value)}
+                  />
+                  <span>{t.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <button
+            className="tbk-button-primary"
+            onClick={handleCreate}
+            disabled={!newUrl || selectedTriggers.length === 0}
+          >
+            Create Webhook
+          </button>
+        </div>
+      )}
+
+      {/* Webhook list */}
+      <div className="tbk-webhook-list">
+        {webhooks.length === 0 ? (
+          <p className="tbk-empty-state">
+            No webhook subscriptions configured.
+          </p>
+        ) : (
+          webhooks.map((webhook) => (
+            <div
+              key={webhook.id}
+              className={cn(
+                "tbk-webhook-card",
+                !webhook.isActive && "tbk-webhook-inactive",
+              )}
+            >
+              <div className="tbk-webhook-card-header">
+                <div className="tbk-webhook-url">
+                  <code>{webhook.subscriberUrl}</code>
+                  {webhook.hasSecret && (
+                    <span className="tbk-badge">Signed</span>
+                  )}
+                </div>
+                <div className="tbk-webhook-actions">
+                  {onTest && (
+                    <button
+                      className="tbk-button-secondary"
+                      onClick={() => onTest(webhook.id)}
+                    >
+                      Test
+                    </button>
+                  )}
+                  {onToggle && (
+                    <button
+                      className="tbk-button-secondary"
+                      onClick={() =>
+                        onToggle(webhook.id, !webhook.isActive)
+                      }
+                    >
+                      {webhook.isActive ? "Disable" : "Enable"}
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button
+                      className="tbk-button-danger"
+                      onClick={() => onDelete(webhook.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="tbk-webhook-triggers">
+                {webhook.triggers.map((t) => (
+                  <span key={t} className="tbk-badge">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {/* Delivery history toggle */}
+              {webhook.deliveries && webhook.deliveries.length > 0 && (
+                <>
+                  <button
+                    className="tbk-link-button"
+                    onClick={() =>
+                      setExpandedId(
+                        expandedId === webhook.id ? null : webhook.id,
+                      )
+                    }
+                  >
+                    {expandedId === webhook.id
+                      ? "Hide delivery history"
+                      : `Show delivery history (${webhook.deliveries.length})`}
+                  </button>
+
+                  {expandedId === webhook.id && (
+                    <table className="tbk-webhook-deliveries-table">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Trigger</th>
+                          <th>Status</th>
+                          <th>Code</th>
+                          <th>Error</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {webhook.deliveries.map((d) => (
+                          <tr key={d.id}>
+                            <td>{d.deliveredAt.toLocaleString()}</td>
+                            <td>{d.trigger}</td>
+                            <td>
+                              <span
+                                className={cn(
+                                  "tbk-delivery-status",
+                                  d.success
+                                    ? "tbk-delivery-success"
+                                    : "tbk-delivery-failed",
+                                )}
+                              >
+                                {d.success ? "Success" : "Failed"}
+                              </span>
+                            </td>
+                            <td>{d.responseCode ?? "—"}</td>
+                            <td>{d.error ?? "—"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+```

@@ -22,6 +22,7 @@ export default defineConfig({
 						{ label: 'Architecture', slug: 'getting-started/architecture' },
 						{ label: 'Examples & Use Cases', slug: 'getting-started/examples' },
 						{ label: 'Comparison', slug: 'getting-started/comparison' },
+						{ label: 'Why Not Cal.com?', slug: 'getting-started/calcom-shortcomings' },
 					],
 				},
 				{
@@ -56,16 +57,76 @@ export default defineConfig({
 				},
 				{
 					label: 'UI Components',
+					collapsed: false,
 					items: [
 						{ label: 'Overview', slug: 'components/overview' },
-						{ label: 'BookingCalendar', slug: 'components/booking-calendar' },
-						{ label: 'TimeSlotPicker', slug: 'components/time-slot-picker' },
-						{ label: 'BookingQuestions', slug: 'components/booking-questions' },
-						{ label: 'BookingConfirmation', slug: 'components/booking-confirmation' },
-						{ label: 'AvailabilityEditor', slug: 'components/availability-editor' },
-						{ label: 'AdminScheduleView', slug: 'components/admin-schedule-view' },
-						{ label: 'WorkflowBuilder', slug: 'components/workflow-builder' },
-						{ label: 'WebhookManager', slug: 'components/webhook-manager' },
+						{
+							label: 'Booking Flow',
+							collapsed: true,
+							items: [
+								{ label: 'BookingCalendar', slug: 'components/booking-calendar' },
+								{ label: 'TimeSlotPicker', slug: 'components/time-slot-picker' },
+								{ label: 'BookingQuestions', slug: 'components/booking-questions' },
+								{ label: 'BookingConfirmation', slug: 'components/booking-confirmation' },
+								{ label: 'BookingStatusBadge', slug: 'components/booking-status-badge' },
+								{ label: 'BookingManagementView', slug: 'components/booking-management-view' },
+								{ label: 'RecurringBookingPicker', slug: 'components/recurring-booking-picker' },
+								{ label: 'SeatsPicker', slug: 'components/seats-picker' },
+								{ label: 'RoutingForm', slug: 'components/routing-form' },
+							],
+						},
+						{
+							label: 'Admin & Host',
+							collapsed: true,
+							items: [
+								{ label: 'AvailabilityEditor', slug: 'components/availability-editor' },
+								{ label: 'OverrideManager', slug: 'components/override-manager' },
+								{ label: 'AdminScheduleView', slug: 'components/admin-schedule-view' },
+								{ label: 'BookingLifecycleActions', slug: 'components/booking-lifecycle-actions' },
+								{ label: 'ManualBookingForm', slug: 'components/manual-booking-form' },
+								{ label: 'ProviderAuth', slug: 'components/provider-auth' },
+								{ label: 'TeamAssignmentEditor', slug: 'components/team-assignment-editor' },
+								{ label: 'WorkflowBuilder', slug: 'components/workflow-builder' },
+								{ label: 'WebhookManager', slug: 'components/webhook-manager' },
+							],
+						},
+						{
+							label: 'Payments',
+							collapsed: true,
+							items: [
+								{ label: 'PaymentGate', slug: 'components/payment-gate' },
+								{ label: 'PaymentHistory', slug: 'components/payment-history' },
+							],
+						},
+						{
+							label: 'Embed',
+							collapsed: true,
+							items: [
+								{ label: 'EmbedConfigurator', slug: 'components/embed-configurator' },
+							],
+						},
+						{
+							label: 'Walk-In Queue',
+							collapsed: true,
+							items: [
+								{ label: 'WalkInEntryForm', slug: 'components/walk-in-entry-form' },
+								{ label: 'WalkInToggle', slug: 'components/walk-in-toggle' },
+								{ label: 'WalkInAnalytics', slug: 'components/walk-in-analytics' },
+								{ label: 'QueueDisplay', slug: 'components/queue-display' },
+								{ label: 'QueueManager', slug: 'components/queue-manager' },
+								{ label: 'QueueTicket', slug: 'components/queue-ticket' },
+							],
+						},
+						{
+							label: 'Kiosk',
+							collapsed: true,
+							items: [
+								{ label: 'KioskCalendar', slug: 'components/kiosk-calendar' },
+								{ label: 'KioskSettingsPanel', slug: 'components/kiosk-settings-panel' },
+								{ label: 'KioskShell', slug: 'components/kiosk-shell' },
+								{ label: 'BreakBlockForm', slug: 'components/break-block-form' },
+							],
+						},
 					],
 				},
 				{

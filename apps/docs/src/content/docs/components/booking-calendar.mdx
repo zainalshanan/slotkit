@@ -5,6 +5,12 @@ description: Date picker component with available date highlighting.
 
 A calendar component for selecting booking dates. Built on `react-day-picker`. Highlights dates that have available slots and disables dates with no availability.
 
+## Install
+
+```bash
+npx thebookingkit add booking-calendar
+```
+
 ## Usage
 
 ```tsx
@@ -28,15 +34,19 @@ function DateStep() {
 
 ```typescript
 interface BookingCalendarProps {
-  /** Array of available date strings (YYYY-MM-DD) or Date objects */
-  availableDates: (string | Date)[];
   /** Currently selected date */
-  selectedDate: Date | null;
+  selected?: Date;
   /** Callback when a date is selected */
-  onDateSelect: (date: Date) => void;
-  /** IANA timezone for display */
+  onSelect: (date: Date) => void;
+  /** Dates that have available slots (all other future dates are disabled) */
+  availableDates?: Date[];
+  /** Maximum days in the future that can be booked */
+  maxFutureDays?: number;
+  /** Customer's timezone (displayed below calendar) */
   timezone?: string;
-  /** Additional CSS classes */
+  /** Callback when timezone is changed */
+  onTimezoneChange?: (timezone: string) => void;
+  /** Additional CSS class name */
   className?: string;
   /** Inline styles */
   style?: React.CSSProperties;
@@ -47,7 +57,144 @@ interface BookingCalendarProps {
 
 - Dates with availability are highlighted and clickable
 - Dates without availability are visually muted and disabled
-- Past dates are disabled
+- Past dates and dates beyond `maxFutureDays` are disabled
 - Month navigation with previous/next arrows
 - Current month displayed by default
 - Selected date is visually distinguished
+- Optional timezone selector dropdown
+
+## Source
+
+```tsx
+import React, { useMemo } from "react";
+import { DayPicker } from "react-day-picker";
+import { addDays, isBefore, startOfDay } from "date-fns";
+import { cn } from "../utils/cn.js";
+
+/** Props for the BookingCalendar component */
+export interface BookingCalendarProps {
+  /** Currently selected date */
+  selected?: Date;
+  /** Callback when a date is selected */
+  onSelect: (date: Date) => void;
+  /** Dates that have available slots (all other future dates are disabled) */
+  availableDates?: Date[];
+  /** Maximum days in the future that can be booked */
+  maxFutureDays?: number;
+  /** Customer's timezone (displayed below calendar) */
+  timezone?: string;
+  /** Callback when timezone is changed */
+  onTimezoneChange?: (timezone: string) => void;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+/**
+ * Customer-facing date picker calendar for booking.
+ *
+ * Renders a month-view calendar using react-day-picker.
+ * Dates with no available slots are visually disabled.
+ * Past dates and dates beyond maxFutureDays are disabled.
+ */
+export function BookingCalendar({
+  selected,
+  onSelect,
+  availableDates,
+  maxFutureDays = 60,
+  timezone,
+  onTimezoneChange,
+  className,
+  style,
+}: BookingCalendarProps) {
+  const today = startOfDay(new Date());
+  const maxDate = addDays(today, maxFutureDays);
+
+  const availableSet = useMemo(() => {
+    if (!availableDates) return null;
+    const set = new Set<string>();
+    for (const d of availableDates) {
+      set.add(d.toISOString().split("T")[0]);
+    }
+    return set;
+  }, [availableDates]);
+
+  const disabledMatcher = (date: Date) => {
+    if (isBefore(date, today)) return true;
+    if (date > maxDate) return true;
+    if (availableSet) {
+      const key = date.toISOString().split("T")[0];
+      return !availableSet.has(key);
+    }
+    return false;
+  };
+
+  return (
+    <div className={cn("tbk-booking-calendar", className)} style={style}>
+      <DayPicker
+        mode="single"
+        selected={selected}
+        onSelect={(day) => day && onSelect(day)}
+        disabled={disabledMatcher}
+        fromDate={today}
+        toDate={maxDate}
+        showOutsideDays={false}
+      />
+      {timezone && (
+        <div className="tbk-timezone-display">
+          <span>Timezone: {timezone}</span>
+          {onTimezoneChange && (
+            <TimezoneSelector
+              value={timezone}
+              onChange={onTimezoneChange}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Simple timezone selector dropdown */
+function TimezoneSelector({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (tz: string) => void;
+}) {
+  const commonTimezones = [
+    "America/New_York",
+    "America/Chicago",
+    "America/Denver",
+    "America/Los_Angeles",
+    "America/Anchorage",
+    "Pacific/Honolulu",
+    "Europe/London",
+    "Europe/Paris",
+    "Europe/Berlin",
+    "Asia/Tokyo",
+    "Asia/Shanghai",
+    "Asia/Kolkata",
+    "Australia/Sydney",
+    "Pacific/Auckland",
+    "UTC",
+  ];
+
+  return (
+    <select
+      className="tbk-timezone-select"
+      value={value}
+      onChange={(e) => onChange((e.target as HTMLSelectElement).value)}
+      aria-label="Select timezone"
+    >
+      {commonTimezones.map((tz) => (
+        <option key={tz} value={tz}>
+          {tz.replace(/_/g, " ")}
+        </option>
+      ))}
+    </select>
+  );
+}
+```

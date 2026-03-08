@@ -1,0 +1,331 @@
+---
+title: ManualBookingForm
+description: Form for providers to create walk-in and phone appointments directly.
+---
+
+Manual booking creation form that allows providers to create bookings with confirmed status directly, bypassing the customer-facing booking flow. Validates event type selection, date, time, and customer details.
+
+## Install
+
+```bash
+npx thebookingkit add manual-booking-form
+```
+
+## Usage
+
+```tsx
+import { ManualBookingForm } from "@/components/manual-booking-form";
+
+export function CreateWalkInBooking() {
+  const eventTypes = [
+    { id: "haircut", title: "Haircut", durationMinutes: 30 },
+    { id: "coloring", title: "Coloring", durationMinutes: 60 },
+  ];
+
+  const handleSubmit = async (values) => {
+    const res = await fetch("/api/bookings/create-manual", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
+    if (!res.ok) throw new Error("Failed to create booking");
+  };
+
+  return (
+    <ManualBookingForm
+      eventTypes={eventTypes}
+      onSubmit={handleSubmit}
+      onCancel={() => router.back()}
+    />
+  );
+}
+```
+
+## Props
+
+```typescript
+export interface EventTypeOption {
+  id: string;
+  title: string;
+  durationMinutes: number;
+}
+
+export interface ManualBookingFormValues {
+  eventTypeId: string;
+  /** ISO date string YYYY-MM-DD */
+  date: string;
+  /** Time in HH:MM (24h) */
+  startTime: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  notes?: string;
+}
+
+export interface ManualBookingFormProps {
+  /** Available event types to book */
+  eventTypes: EventTypeOption[];
+  /** Called when form is submitted and validation passes */
+  onSubmit: (values: ManualBookingFormValues) => Promise<void>;
+  /** Called when form is cancelled */
+  onCancel?: () => void;
+  /** Prepopulated values */
+  defaultValues?: Partial<ManualBookingFormValues>;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+```
+
+## Source
+
+```tsx
+import React from "react";
+import { useForm } from "react-hook-form";
+import { cn } from "../utils/cn.js";
+
+/** An event type option for the selector */
+export interface EventTypeOption {
+  id: string;
+  title: string;
+  durationMinutes: number;
+}
+
+/** Values submitted by the manual booking form */
+export interface ManualBookingFormValues {
+  eventTypeId: string;
+  /** ISO date string YYYY-MM-DD */
+  date: string;
+  /** Time in HH:MM (24h) */
+  startTime: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  notes?: string;
+}
+
+/** Props for the ManualBookingForm component */
+export interface ManualBookingFormProps {
+  /** Available event types to book */
+  eventTypes: EventTypeOption[];
+  /** Called when form is submitted and validation passes */
+  onSubmit: (values: ManualBookingFormValues) => Promise<void>;
+  /** Called when form is cancelled */
+  onCancel?: () => void;
+  /** Prepopulated values */
+  defaultValues?: Partial<ManualBookingFormValues>;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+/**
+ * Manual booking creation form for providers to book walk-in or phone appointments.
+ *
+ * Creates bookings with `confirmed` status directly, bypassing the customer-facing
+ * booking flow. Validates against the selected event type's duration.
+ *
+ * @example
+ * ```tsx
+ * <ManualBookingForm
+ *   eventTypes={myEventTypes}
+ *   onSubmit={async (values) => {
+ *     await api.createManualBooking(values);
+ *     toast.success("Booking created!");
+ *   }}
+ * />
+ * ```
+ */
+export function ManualBookingForm({
+  eventTypes,
+  onSubmit,
+  onCancel,
+  defaultValues,
+  className,
+  style,
+}: ManualBookingFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<ManualBookingFormValues>({
+    defaultValues: {
+      eventTypeId: eventTypes[0]?.id ?? "",
+      ...defaultValues,
+    },
+  });
+
+  const handleFormSubmit = async (values: ManualBookingFormValues) => {
+    try {
+      await onSubmit(values);
+    } catch (err) {
+      setError("root", {
+        message: err instanceof Error ? err.message : "Failed to create booking.",
+      });
+    }
+  };
+
+  return (
+    <form
+      className={cn("tbk-manual-booking-form", className)}
+      style={style}
+      onSubmit={handleSubmit(handleFormSubmit)}
+      noValidate
+    >
+      <h2 className="tbk-form-title">New Booking</h2>
+
+      {/* Event Type */}
+      <div className="tbk-field">
+        <label htmlFor="mb-event-type" className="tbk-label">
+          Service <span aria-hidden="true">*</span>
+        </label>
+        <select
+          id="mb-event-type"
+          className="tbk-select"
+          {...register("eventTypeId", { required: "Please select a service" })}
+        >
+          {eventTypes.map((et) => (
+            <option key={et.id} value={et.id}>
+              {et.title} ({et.durationMinutes} min)
+            </option>
+          ))}
+        </select>
+        {errors.eventTypeId ? (
+          <p className="tbk-error">{errors.eventTypeId.message}</p>
+        ) : null}
+      </div>
+
+      {/* Date */}
+      <div className="tbk-field">
+        <label htmlFor="mb-date" className="tbk-label">
+          Date <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="mb-date"
+          type="date"
+          className="tbk-input"
+          {...register("date", { required: "Please select a date" })}
+        />
+        {errors.date ? (
+          <p className="tbk-error">{errors.date.message}</p>
+        ) : null}
+      </div>
+
+      {/* Start Time */}
+      <div className="tbk-field">
+        <label htmlFor="mb-time" className="tbk-label">
+          Start Time <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="mb-time"
+          type="time"
+          className="tbk-input"
+          {...register("startTime", { required: "Please select a start time" })}
+        />
+        {errors.startTime ? (
+          <p className="tbk-error">{errors.startTime.message}</p>
+        ) : null}
+      </div>
+
+      <hr className="tbk-divider" />
+      <h3 className="tbk-section-title">Customer Details</h3>
+
+      {/* Customer Name */}
+      <div className="tbk-field">
+        <label htmlFor="mb-name" className="tbk-label">
+          Full Name <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="mb-name"
+          type="text"
+          className="tbk-input"
+          placeholder="Jane Smith"
+          {...register("customerName", { required: "Customer name is required" })}
+        />
+        {errors.customerName ? (
+          <p className="tbk-error">{errors.customerName.message}</p>
+        ) : null}
+      </div>
+
+      {/* Customer Email */}
+      <div className="tbk-field">
+        <label htmlFor="mb-email" className="tbk-label">
+          Email <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="mb-email"
+          type="email"
+          className="tbk-input"
+          placeholder="jane@example.com"
+          {...register("customerEmail", {
+            required: "Email is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Please enter a valid email address",
+            },
+          })}
+        />
+        {errors.customerEmail ? (
+          <p className="tbk-error">{errors.customerEmail.message}</p>
+        ) : null}
+      </div>
+
+      {/* Customer Phone (optional) */}
+      <div className="tbk-field">
+        <label htmlFor="mb-phone" className="tbk-label">
+          Phone (optional)
+        </label>
+        <input
+          id="mb-phone"
+          type="tel"
+          className="tbk-input"
+          placeholder="+1 555 000 0000"
+          {...register("customerPhone")}
+        />
+      </div>
+
+      {/* Notes (optional) */}
+      <div className="tbk-field">
+        <label htmlFor="mb-notes" className="tbk-label">
+          Notes (optional)
+        </label>
+        <textarea
+          id="mb-notes"
+          className="tbk-textarea"
+          rows={3}
+          placeholder="Any additional information..."
+          {...register("notes")}
+        />
+      </div>
+
+      {errors.root ? (
+        <div className="tbk-alert tbk-alert-error" role="alert">
+          {errors.root.message}
+        </div>
+      ) : null}
+
+      <div className="tbk-form-actions">
+        <button
+          type="submit"
+          className="tbk-button-primary"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Creating..." : "Create Booking"}
+        </button>
+        {onCancel && (
+          <button
+            type="button"
+            className="tbk-button-secondary"
+            onClick={onCancel}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
+    </form>
+  );
+}
+```

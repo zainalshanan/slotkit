@@ -1,0 +1,256 @@
+---
+title: RoutingForm
+description: Customer-facing form to collect responses for routing to the correct event type or provider.
+---
+
+Collects customer responses to routing questions using dropdowns, text fields, radio buttons, and checkboxes. Evaluates responses against routing rules to direct the customer to the appropriate event type.
+
+## Install
+
+```bash
+npx thebookingkit add routing-form
+```
+
+## Usage
+
+```tsx
+import { RoutingForm, type RoutingFormField } from "@/components/routing-form";
+import { useRouter } from "next/navigation";
+
+export function RoutingPage() {
+  const router = useRouter();
+
+  const fields: RoutingFormField[] = [
+    {
+      key: "service_type",
+      label: "What service do you need?",
+      type: "dropdown",
+      options: ["Haircut", "Color Treatment", "Hair Wash"],
+      required: true,
+    },
+    {
+      key: "hair_length",
+      label: "Hair length",
+      type: "radio",
+      options: ["Short", "Medium", "Long"],
+      required: true,
+    },
+  ];
+
+  const handleSubmit = (responses: Record<string, string | string[]>) => {
+    // Evaluate routing rules
+    const eventTypeId = evaluateRoutingRules(responses);
+    router.push(`/book/${eventTypeId}`);
+  };
+
+  return (
+    <RoutingForm
+      title="Book Your Appointment"
+      description="Answer a few questions to find the right service for you."
+      fields={fields}
+      onSubmit={handleSubmit}
+    />
+  );
+}
+```
+
+## Props
+
+```typescript
+export interface RoutingFormField {
+  key: string;
+  label: string;
+  type: "dropdown" | "text" | "radio" | "checkbox";
+  options?: string[];
+  required?: boolean;
+  placeholder?: string;
+}
+
+export interface RoutingFormProps {
+  /** Form title */
+  title: string;
+  /** Optional description */
+  description?: string;
+  /** Form fields to render */
+  fields: RoutingFormField[];
+  /** Called with the customer's responses */
+  onSubmit: (responses: Record<string, string | string[]>) => void;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+```
+
+## Source
+
+```tsx
+import React from "react";
+import { useForm, type FieldValues } from "react-hook-form";
+import { cn } from "../utils/cn.js";
+
+/** Routing form field definition */
+export interface RoutingFormField {
+  key: string;
+  label: string;
+  type: "dropdown" | "text" | "radio" | "checkbox";
+  options?: string[];
+  required?: boolean;
+  placeholder?: string;
+}
+
+/** Props for the RoutingForm component */
+export interface RoutingFormProps {
+  /** Form title */
+  title: string;
+  /** Optional description */
+  description?: string;
+  /** Form fields to render */
+  fields: RoutingFormField[];
+  /** Called with the customer's responses */
+  onSubmit: (responses: Record<string, string | string[]>) => void;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+/**
+ * Customer-facing routing form that collects responses to determine
+ * the correct event type or provider for booking.
+ *
+ * On submission, the parent component evaluates routing rules and
+ * transitions to the BookingCalendar for the matched event type.
+ *
+ * @example
+ * ```tsx
+ * <RoutingForm
+ *   title="Find Your Service"
+ *   fields={routingFormFields}
+ *   onSubmit={(responses) => {
+ *     const result = evaluateRoutingRules(form, responses);
+ *     router.push(`/book/${result.eventTypeId}`);
+ *   }}
+ * />
+ * ```
+ */
+export function RoutingForm({
+  title,
+  description,
+  fields,
+  onSubmit,
+  className,
+  style,
+}: RoutingFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleFormSubmit = (data: FieldValues) => {
+    const responses: Record<string, string | string[]> = {};
+    for (const field of fields) {
+      const value = data[field.key];
+      if (value !== undefined && value !== "") {
+        responses[field.key] = value;
+      }
+    }
+    onSubmit(responses);
+  };
+
+  return (
+    <form
+      className={cn("tbk-routing-form", className)}
+      style={style}
+      onSubmit={handleSubmit(handleFormSubmit)}
+      noValidate
+    >
+      <h2>{title}</h2>
+      {description && <p className="tbk-form-description">{description}</p>}
+
+      {fields.map((field) => (
+        <div key={field.key} className="tbk-field">
+          <label htmlFor={`rf-${field.key}`} className="tbk-label">
+            {field.label}
+            {field.required && <span aria-hidden="true"> *</span>}
+          </label>
+
+          {field.type === "text" && (
+            <input
+              id={`rf-${field.key}`}
+              type="text"
+              className="tbk-input"
+              placeholder={field.placeholder}
+              {...register(field.key, {
+                required: field.required ? `${field.label} is required` : false,
+              })}
+            />
+          )}
+
+          {field.type === "dropdown" && (
+            <select
+              id={`rf-${field.key}`}
+              className="tbk-select"
+              {...register(field.key, {
+                required: field.required ? `${field.label} is required` : false,
+              })}
+            >
+              <option value="">Select...</option>
+              {field.options?.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {field.type === "radio" && (
+            <div className="tbk-radio-group" role="radiogroup">
+              {field.options?.map((opt) => (
+                <label key={opt} className="tbk-radio-label">
+                  <input
+                    type="radio"
+                    value={opt}
+                    {...register(field.key, {
+                      required: field.required
+                        ? `${field.label} is required`
+                        : false,
+                    })}
+                  />
+                  <span>{opt}</span>
+                </label>
+              ))}
+            </div>
+          )}
+
+          {field.type === "checkbox" && (
+            <div className="tbk-checkbox-group">
+              {field.options?.map((opt) => (
+                <label key={opt} className="tbk-checkbox-label">
+                  <input
+                    type="checkbox"
+                    value={opt}
+                    {...register(field.key)}
+                  />
+                  <span>{opt}</span>
+                </label>
+              ))}
+            </div>
+          )}
+
+          {errors[field.key] ? (
+            <p className="tbk-error">
+              {errors[field.key]?.message as string}
+            </p>
+          ) : null}
+        </div>
+      ))}
+
+      <button type="submit" className="tbk-button-primary">
+        Continue
+      </button>
+    </form>
+  );
+}
+```

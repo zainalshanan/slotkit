@@ -1,0 +1,265 @@
+---
+title: QueueDisplay
+description: Public-facing auto-refreshing display showing queue status and wait times.
+---
+
+A customer-facing component for displaying the current queue on screens or wall-mounted displays. Automatically refreshes at a configurable interval, shows who is being served now, upcoming positions, and estimated wait times. Designed for visibility in reception areas.
+
+## Install
+
+```bash
+npx thebookingkit add queue-display
+```
+
+## Usage
+
+```tsx
+import { QueueDisplay } from "@/components/queue-display";
+import { useEffect, useState } from "react";
+
+export function PublicQueueScreen() {
+  const [entries, setEntries] = useState([]);
+
+  const fetchQueueEntries = async () => {
+    const response = await fetch("/api/queue/public");
+    const data = await response.json();
+    return data.entries;
+  };
+
+  useEffect(() => {
+    fetchQueueEntries();
+  }, []);
+
+  return (
+    <QueueDisplay
+      entries={entries}
+      isAccepting={true}
+      providerName="Main Reception"
+      onRefresh={fetchQueueEntries}
+      refreshInterval={15}
+    />
+  );
+}
+```
+
+## Props
+
+```typescript
+export interface QueueDisplayProps {
+  /** Current queue entries */
+  entries: QueueDisplayEntry[];
+  /** Whether the provider is accepting walk-ins */
+  isAccepting: boolean;
+  /** Provider display name */
+  providerName?: string;
+  /** Callback to refresh queue data */
+  onRefresh?: () => Promise<QueueDisplayEntry[]>;
+  /** Auto-refresh interval in seconds (default: 30) */
+  refreshInterval?: number;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+export interface QueueDisplayEntry {
+  /** Queue entry ID */
+  id: string;
+  /** Queue position (1-based) */
+  position: number;
+  /** Customer first name (last name hidden for privacy) */
+  customerFirstName: string;
+  /** Service name */
+  serviceName: string;
+  /** Estimated wait in minutes */
+  estimatedWaitMinutes: number;
+  /** Current status */
+  status: "queued" | "in_service";
+}
+```
+
+## Source
+
+```tsx
+import React, { useEffect, useState } from "react";
+import { cn } from "../utils/cn.js";
+
+/** A queue entry for display */
+export interface QueueDisplayEntry {
+  /** Queue entry ID */
+  id: string;
+  /** Queue position (1-based) */
+  position: number;
+  /** Customer first name (last name hidden for privacy) */
+  customerFirstName: string;
+  /** Service name */
+  serviceName: string;
+  /** Estimated wait in minutes */
+  estimatedWaitMinutes: number;
+  /** Current status */
+  status: "queued" | "in_service";
+}
+
+/** Props for the QueueDisplay component */
+export interface QueueDisplayProps {
+  /** Current queue entries */
+  entries: QueueDisplayEntry[];
+  /** Whether the provider is accepting walk-ins */
+  isAccepting: boolean;
+  /** Provider display name */
+  providerName?: string;
+  /** Callback to refresh queue data */
+  onRefresh?: () => Promise<QueueDisplayEntry[]>;
+  /** Auto-refresh interval in seconds (default: 30) */
+  refreshInterval?: number;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+/**
+ * Public-facing auto-refreshing queue display.
+ *
+ * Shows current queue with positions, service types, and estimated wait times.
+ * Designed for wall-mounted displays or customer-facing screens.
+ *
+ * @example
+ * ```tsx
+ * <QueueDisplay
+ *   entries={queueEntries}
+ *   isAccepting={true}
+ *   providerName="Downtown Barber Shop"
+ *   onRefresh={fetchQueueEntries}
+ *   refreshInterval={15}
+ * />
+ * ```
+ */
+export function QueueDisplay({
+  entries: initialEntries,
+  isAccepting,
+  providerName,
+  onRefresh,
+  refreshInterval = 30,
+  className,
+  style,
+}: QueueDisplayProps) {
+  const [entries, setEntries] = useState(initialEntries);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+
+  // Sync with prop changes
+  useEffect(() => {
+    setEntries(initialEntries);
+  }, [initialEntries]);
+
+  // Auto-refresh
+  useEffect(() => {
+    if (!onRefresh || refreshInterval <= 0) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const updated = await onRefresh();
+        setEntries(updated);
+        setLastUpdated(new Date());
+      } catch {
+        // Silently fail on refresh errors
+      }
+    }, refreshInterval * 1000);
+
+    return () => clearInterval(interval);
+  }, [onRefresh, refreshInterval]);
+
+  const queuedEntries = entries.filter((e) => e.status === "queued");
+  const inService = entries.find((e) => e.status === "in_service");
+
+  return (
+    <div className={cn("tbk-queue-display", className)} style={style}>
+      {/* Header */}
+      <div className="tbk-queue-header">
+        {providerName && (
+          <h2 className="tbk-queue-title">{providerName}</h2>
+        )}
+        <div
+          className={cn(
+            "tbk-queue-status-indicator",
+            isAccepting
+              ? "tbk-queue-accepting"
+              : "tbk-queue-not-accepting",
+          )}
+        >
+          <span
+            className="tbk-queue-status-dot"
+            aria-hidden="true"
+          />
+          {isAccepting ? "Accepting Walk-Ins" : "Not Accepting Walk-Ins"}
+        </div>
+      </div>
+
+      {/* Now Serving */}
+      {inService && (
+        <div className="tbk-queue-now-serving">
+          <span className="tbk-queue-now-label">Now Serving</span>
+          <span className="tbk-queue-now-name">
+            {inService.customerFirstName}
+          </span>
+          <span className="tbk-queue-now-service">
+            {inService.serviceName}
+          </span>
+        </div>
+      )}
+
+      {/* Queue List */}
+      {queuedEntries.length > 0 ? (
+        <div className="tbk-queue-list" role="list">
+          <div className="tbk-queue-list-header">
+            <span>#</span>
+            <span>Customer</span>
+            <span>Service</span>
+            <span>Est. Wait</span>
+          </div>
+          {queuedEntries.map((entry) => (
+            <div
+              key={entry.id}
+              className={cn(
+                "tbk-queue-list-row",
+                entry.estimatedWaitMinutes > 60 && "tbk-queue-overdue",
+              )}
+              role="listitem"
+            >
+              <span className="tbk-queue-position">{entry.position}</span>
+              <span className="tbk-queue-name">
+                {entry.customerFirstName}
+              </span>
+              <span className="tbk-queue-service">
+                {entry.serviceName}
+              </span>
+              <span className="tbk-queue-wait">
+                ~{entry.estimatedWaitMinutes} min
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="tbk-queue-empty">
+          {isAccepting
+            ? "No one in the queue — walk right in!"
+            : "Queue is currently closed."}
+        </div>
+      )}
+
+      {/* Footer */}
+      <div className="tbk-queue-footer">
+        <span className="tbk-queue-count">
+          {queuedEntries.length} in queue
+        </span>
+        <span className="tbk-queue-updated">
+          Updated {lastUpdated.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </span>
+      </div>
+    </div>
+  );
+}
+```

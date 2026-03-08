@@ -1,0 +1,179 @@
+---
+title: QueueTicket
+description: Receipt-style ticket showing queue number and estimated wait for walk-in customers.
+---
+
+A customer-facing ticket component displayed after joining a walk-in queue. Shows the queue position, estimated wait time, service details, and optionally a QR code linking to a live status page. Designed to be printable or displayed on screens.
+
+## Install
+
+```bash
+npx thebookingkit add queue-ticket
+```
+
+## Usage
+
+```tsx
+import { QueueTicket } from "@/components/queue-ticket";
+
+export function QueueTicketDisplay() {
+  const queueEntry = {
+    position: 5,
+    customerName: "James",
+    serviceName: "Haircut",
+    estimatedWaitMinutes: 35,
+    statusUrl: "https://myshop.example.com/queue/abc-123-def",
+    providerName: "Downtown Barbers",
+  };
+
+  return (
+    <div>
+      <QueueTicket
+        position={queueEntry.position}
+        customerName={queueEntry.customerName}
+        serviceName={queueEntry.serviceName}
+        estimatedWaitMinutes={queueEntry.estimatedWaitMinutes}
+        statusUrl={queueEntry.statusUrl}
+        providerName={queueEntry.providerName}
+      />
+    </div>
+  );
+}
+```
+
+## Props
+
+```typescript
+export interface QueueTicketProps {
+  /** Queue position */
+  position: number;
+  /** Customer name */
+  customerName: string;
+  /** Service name */
+  serviceName: string;
+  /** Estimated wait in minutes */
+  estimatedWaitMinutes: number;
+  /** URL to live status page for QR code */
+  statusUrl?: string;
+  /** Provider/business name */
+  providerName?: string;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+```
+
+## Source
+
+```tsx
+import React from "react";
+import { cn } from "../utils/cn.js";
+
+/** Props for the QueueTicket component */
+export interface QueueTicketProps {
+  /** Queue position */
+  position: number;
+  /** Customer name */
+  customerName: string;
+  /** Service name */
+  serviceName: string;
+  /** Estimated wait in minutes */
+  estimatedWaitMinutes: number;
+  /** URL to live status page for QR code */
+  statusUrl?: string;
+  /** Provider/business name */
+  providerName?: string;
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+}
+
+/**
+ * Queue ticket shown to walk-in customers after joining.
+ *
+ * Displays queue number, estimated wait, and optionally a QR code
+ * linking to a live status page. Designed to be printable or shown
+ * on a screen.
+ *
+ * @example
+ * ```tsx
+ * <QueueTicket
+ *   position={3}
+ *   customerName="James"
+ *   serviceName="Haircut"
+ *   estimatedWaitMinutes={20}
+ *   statusUrl="https://shop.example.com/queue/abc123"
+ *   providerName="Downtown Barbers"
+ * />
+ * ```
+ */
+export function QueueTicket({
+  position,
+  customerName,
+  serviceName,
+  estimatedWaitMinutes,
+  statusUrl,
+  providerName,
+  className,
+  style,
+}: QueueTicketProps) {
+  return (
+    <div
+      className={cn("tbk-queue-ticket", className)}
+      style={style}
+      role="region"
+      aria-label="Queue ticket"
+    >
+      {providerName && (
+        <div className="tbk-ticket-provider">{providerName}</div>
+      )}
+
+      <div className="tbk-ticket-number">
+        <span className="tbk-ticket-label">Your Number</span>
+        <span className="tbk-ticket-position">#{position}</span>
+      </div>
+
+      <div className="tbk-ticket-details">
+        <div className="tbk-ticket-row">
+          <span className="tbk-ticket-dt">Name</span>
+          <span className="tbk-ticket-dd">{customerName}</span>
+        </div>
+        <div className="tbk-ticket-row">
+          <span className="tbk-ticket-dt">Service</span>
+          <span className="tbk-ticket-dd">{serviceName}</span>
+        </div>
+        <div className="tbk-ticket-row">
+          <span className="tbk-ticket-dt">Est. Wait</span>
+          <span className="tbk-ticket-dd">
+            {estimatedWaitMinutes === 0
+              ? "No wait"
+              : `~${estimatedWaitMinutes} min`}
+          </span>
+        </div>
+      </div>
+
+      {statusUrl && (
+        <div className="tbk-ticket-qr">
+          <div
+            className="tbk-ticket-qr-placeholder"
+            aria-label={`QR code linking to ${statusUrl}`}
+            title="Scan to track your position"
+          >
+            {/*
+              QR code rendering is left to the integrator.
+              Use a library like `qrcode.react` or `react-qr-code`:
+              <QRCodeSVG value={statusUrl} size={120} />
+            */}
+            <span className="tbk-ticket-qr-text">QR</span>
+          </div>
+          <p className="tbk-ticket-qr-hint">
+            Scan to track your position
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+```

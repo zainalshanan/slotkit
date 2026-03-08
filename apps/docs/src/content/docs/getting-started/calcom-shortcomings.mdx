@@ -1,0 +1,343 @@
+---
+title: Why The Booking Kit Over Cal.com
+description: Where Cal.com falls short and why The Booking Kit is the better choice for developers building custom scheduling.
+---
+
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
+
+<Aside type="note">
+  This page is an honest, code-backed comparison based on a deep analysis of Cal.com's open-source codebase (AGPL-3.0). We respect Cal.com — it's a great product. This page explains when and why The Booking Kit is the better tool for the job.
+</Aside>
+
+## The Core Problem With Cal.com
+
+Cal.com is a **product** disguised as a toolkit. When you self-host Cal.com, you deploy an entire 4,500+ TypeScript file Next.js application with 80+ Prisma models, 111 integration packages, and a UI you cannot separate from the scheduling logic. You don't get a library — you get someone else's app.
+
+The Booking Kit gives you the **scheduling primitive** — the math, the schema, the components — as composable packages you integrate into **your** application.
+
+---
+
+## 1. Licensing: AGPL-3.0 vs MIT
+
+This is the single biggest differentiator for commercial products.
+
+| | The Booking Kit | Cal.com |
+|---|---|---|
+| License | **MIT** | **AGPL-3.0** |
+| Modify and keep private | Yes | **No** — you must release modifications |
+| Embed in proprietary SaaS | Yes | **Only via their commercial license** |
+| Distribute modified versions | Unrestricted | Must release under AGPL |
+
+Cal.com's AGPL license means that if you modify their code and serve it over a network (which every SaaS does), you must release your modifications under the same license. For companies building commercial scheduling into their product, this is a **legal blocker** unless you purchase Cal.com's enterprise license.
+
+### The /ee Directory Problem
+
+It gets worse. Cal.com's repository uses a **mixed-licensing model**. All premium features live in a proprietary `/ee` (Enterprise Edition) directory with a separate commercial license. Independent code audits have shown that the AGPL-licensed core code **deeply depends on** the proprietary `/ee` packages — foundational files actively import from and rely on enterprise modules to function.
+
+This means you can't simply delete the `/ee` folder to run a "pure open-source" deployment. Doing so **breaks core functionality**. To operate a truly independent instance, you'd need extensive engineering rewrites to untangle the interdependent code paths. Critics call this "look but don't touch" open source — the code is visible, but modifying or removing parts of it is practically impossible without dedicated engineering resources and legal review.
+
+The Booking Kit is MIT. Every line of code. No proprietary directories. No enterprise edition. No legal landmines.
+
+---
+
+## 2. Architecture: Monolith vs Composable Primitives
+
+### Cal.com's Tight Coupling
+
+Cal.com's codebase has **72 feature packages** with deep interdependencies, a **3,341-line Prisma schema** with 80+ models, and a web app with 1,648 TypeScript files. The scheduling logic is inseparable from:
+
+- NextAuth.js 4.x (auth is baked into every query)
+- Prisma ORM (no alternative data layer)
+- tRPC (API layer deeply coupled to React components)
+- A specific Next.js app structure
+
+You cannot extract "just the slot engine" from Cal.com. You take the whole thing or nothing.
+
+### The Booking Kit's Separation
+
+```
+@slotkit/core    → Pure math. Zero dependencies on any framework, ORM, or runtime.
+@slotkit/db      → Drizzle schema. Swap for any Postgres.
+@slotkit/server  → Auth, webhooks, API. Pluggable adapters.
+@slotkit/d1      → Cloudflare D1 edge adapter.
+registry/ui/     → 31 copy-paste React components. You own the source.
+```
+
+Each layer is independently usable. Run `@slotkit/core` in a Cloudflare Worker, a Deno function, or a browser. The Booking Kit doesn't care about your stack — it adapts to it.
+
+---
+
+## 3. Database: Prisma Lock-In vs Portable Schema
+
+Cal.com uses **Prisma** exclusively. Their EventType model alone has **100+ fields**, including deprecated ones (`price`, `currency`) still in the schema. Configuration is stored in JSON blobs (`metadata`, `recurringEvent`, `locations`) — making schema evolution fragile and migrations risky.
+
+### Prisma Migration Fragility
+
+Cal.com's rapid development cycle means self-hosters must constantly run Prisma migrations to stay current. This is **inherently dangerous**. Prisma tracks applied migrations via an internal `_prisma_migrations` table. If the local codebase state diverges from the database record — common during git merges, failed deployments, or manual DB interventions — Prisma throws a fatal `P3005` error and refuses to proceed.
+
+Resolving this requires DBAs to manually purge the tracking table with raw SQL and force-rebaseline the schema. Cal.com's own documentation warns operators to "always keep an eye on what migrations Prisma is generating," explicitly noting that **Prisma will "happily drop entire columns of data because it can't figure out what to do"** when reconciling complex schema changes.
+
+Routine software updates in self-hosted Cal.com carry a non-trivial probability of destroying historical scheduling data.
+
+### The Booking Kit's Approach
+
+The Booking Kit uses **Drizzle ORM** with a clean, normalized schema:
+- Every table follows the same convention: `id` (UUID), `created_at`, `updated_at`
+- No JSON blob configuration fields
+- Database-level constraints (`EXCLUDE USING gist`) for double-booking prevention — not application-level checks
+- **SERIALIZABLE transactions** with `withSerializableRetry()` (catches SQLSTATE 40001, retries with jittered exponential backoff)
+- Custom SQL migrations in `packages/db/src/migrations/` — you control every statement
+- Portable to any Postgres 15+ provider, or Cloudflare D1 via `@slotkit/d1`
+
+Cal.com's double-booking prevention relies on application-level conflict checking (`checkForConflicts.ts`). The Booking Kit enforces it at the **database level** — even if your application code has a bug, the database won't allow a double booking.
+
+---
+
+## 4. Runtime: Server-Only vs Universal
+
+Cal.com requires a Node.js server with a warm PostgreSQL connection. There is no edge deployment story. Their dayjs wrapper, Prisma client, and tRPC layer all assume a traditional server environment.
+
+The Booking Kit's `@slotkit/core` is **universal**:
+- Runs in browsers (client-side slot computation)
+- Runs in Cloudflare Workers / Deno Deploy / Vercel Edge Functions
+- Runs in Node.js
+- No Node.js-specific APIs (no `crypto`, no `fs`, no `process`)
+
+With `@slotkit/d1`, you can deploy a complete scheduling backend to Cloudflare's edge network — something Cal.com's architecture fundamentally cannot support.
+
+---
+
+## 5. Feature Volatility: What's Free Today May Not Be Tomorrow
+
+Cal.com operates a freemium model where feature availability has proven **unpredictable**. The most documented example: the **Workflows engine**.
+
+Cal.com's Workflows feature — automated SMS reminders, custom follow-up emails, internal notifications triggered by booking events — was initially included free for all users. This was a major competitive advantage over Calendly. Then malicious actors exploited the free custom email templates to run phishing campaigns through Cal.com's legitimate email servers.
+
+Cal.com's response was abrupt: **Workflows was removed from the Free tier entirely** and locked behind the Teams paywall ($15/user/month). Legitimate free-tier users who had spent months building automated pipelines around Workflows saw their operational processes severed overnight. After community backlash, Cal.com reinstated basic non-editable email reminders for free users, but custom messaging templates remained permanently paywalled.
+
+**The lesson:** When you build on Cal.com's free tier, you're building on a foundation the vendor can restructure at any time. Features deemed financially unviable or operationally risky are restricted without notice.
+
+**The Booking Kit alternative:** You own the code. The workflow engine, the notification system, the entire automation pipeline — it's MIT-licensed source code in your repository. No vendor can revoke features you control.
+
+---
+
+## 6. Cloud Customization: Paywalled and Rigid
+
+Cal.com markets deep customization, but the reality on their managed cloud is restrictive:
+
+| Customization | Free | Teams ($15/user) | Organizations ($37/user) |
+|---|---|---|---|
+| Brand colors (2 hex codes) | Yes | Yes | Yes |
+| Remove "Powered by Cal.com" | No | Yes | Yes |
+| Custom CSS injection | No | No | No |
+| Custom subdomain | No | No | Yes |
+| Per-team branding | No | No | **No** |
+
+Even at the highest cloud tier, you **cannot inject custom CSS** into the standard booking page. The platform prioritizes functional routing over aesthetic control, producing a minimalist interface that frequently fails to satisfy enterprise design teams.
+
+### The Per-Team Branding Gap
+
+Cal.com enforces branding at the **organization level only**. Custom banners, logos, and icons propagate to all subordinate teams and event types — with no override capability. This creates real compliance problems: clinical research trials with regulations prohibiting sponsor branding, multi-brand enterprises with distinct visual identities per division, and franchises with location-specific branding all hit the same wall. To comply with a single sub-team's branding restriction, administrators must strip branding from the **entire organization**.
+
+To achieve true design control on Cal.com Cloud, you must abandon their booking page entirely and rebuild the UI from scratch using their "Booker Atoms" React library and API — at which point you've negated the entire convenience of a SaaS tool.
+
+**The Booking Kit alternative:** 31 copy-paste React components with full CSS control. `className` and `style` props on everything. `tbk-` CSS prefix for zero collisions. Different branding per team, per event type, per page — whatever you want.
+
+---
+
+## 7. Self-Hosting: The Hidden Operations Tax
+
+Cal.com markets self-hosting as "free forever." The software costs nothing — the **operations cost is enormous**.
+
+### What Self-Hosting Cal.com Actually Requires
+
+- **Node.js 18** runtime (specific version required for cryptographic stability)
+- **PostgreSQL 13+** with Prisma ORM managing all database interactions
+- **Redis** for session storage and state management
+- **PgBouncer** for database connection pooling
+- **Multiple synchronized instances** behind load balancers for high availability
+- **Manual cron job configuration** for every background task
+
+That last point is critical. Unlike Cal.com Cloud where background tasks run automatically, self-hosted Cal.com requires you to **manually configure cron jobs** that execute `curl` requests against internal API endpoints:
+
+```bash
+# You must set up each of these manually
+*/5 * * * * curl http://localhost:3000/api/cron/workflows/scheduleEmailReminders
+```
+
+Misconfiguring these crons — or failing to set undocumented environment variables like `ENABLE_TASK_SYSTEM=true` and `CRON_API_KEY` — results in **silent failures** where scheduled reminders simply never send, with no alerts or error logs.
+
+### Data Migration: No Easy Exit
+
+There is no automated mechanism to migrate from Cal.com Cloud to self-hosted. You must contact enterprise support to request a raw `pg_dump`, manually restore it with `psql`, and then **every single OAuth connection is severed** — Google Calendar, Outlook, Stripe payments. All users must manually re-authenticate every integration on the new instance.
+
+### The Booking Kit Alternative
+
+The Booking Kit's self-hosted deployment is fundamentally simpler because it's not an application — it's packages you compose:
+- `@slotkit/core` has zero infrastructure requirements (runs anywhere)
+- `@slotkit/db` works with any Postgres provider via Drizzle (no ORM migration fragility)
+- `@slotkit/d1` deploys to Cloudflare's managed edge (zero server management)
+- Background jobs use your existing infrastructure via the `JobAdapter` interface
+- No cron jobs to configure — your job runner (Inngest, BullMQ, Trigger.dev) handles scheduling
+
+---
+
+## 8. UI: Their App vs Your Components
+
+Cal.com's booking UI is part of their application. You can theme it, but you cannot extract individual components or rearrange the booking flow. Their date picker, time slots, and booking form are wired to their tRPC API and Zustand store.
+
+The Booking Kit gives you **31 independent React components** following the shadcn/ui convention:
+
+- **Copy-paste source code** — no npm dependency, no version lock
+- Every component accepts `className` and `style` props
+- Components use a `tbk-` CSS prefix — no style collisions
+- Swap out the calendar library, change the layout, redesign the entire flow
+- Components work with any data source — not tied to any specific backend
+
+### Components Cal.com Doesn't Have
+
+| Component | Purpose |
+|---|---|
+| `KioskCalendar` | Multi-resource day view with provider columns |
+| `KioskShell` / `KioskSettingsPanel` | Full kiosk mode for reception desks |
+| `QueueDisplay` / `QueueManager` / `QueueTicket` | Walk-in queue management |
+| `WalkInEntryForm` / `WalkInToggle` / `WalkInAnalytics` | Walk-in scheduling |
+| `BreakBlockForm` | Break and block period management |
+| `OverrideManager` | Availability override editor |
+| `ManualBookingForm` | Admin-side manual booking creation |
+| `BookingLifecycleActions` | Status transition action buttons |
+| `EmbedConfigurator` | Embed code generator UI |
+
+---
+
+## 9. Walk-In & Kiosk: Features Cal.com Doesn't Have
+
+Cal.com has "instant meetings" — a token-based ad-hoc meeting feature. But it has **no walk-in queue management** and **no kiosk mode**.
+
+The Booking Kit provides:
+
+- **Walk-in queue** with position tracking, wait time estimation, gap-finding, and analytics
+- **Kiosk mode** with multi-provider resource views, check-in management, break/block scheduling
+- **Hybrid scheduling** — appointments and walk-ins coexist in the same timeline
+
+These features exist because The Booking Kit was designed for physical service businesses (barbershops, clinics, salons) — not just online meeting scheduling.
+
+---
+
+## 10. Adapter Pattern: Swap Anything
+
+Cal.com has 111 integrations hardcoded as "app store" packages. Adding a new calendar provider means creating a new package in their monorepo, following their specific patterns, and submitting a PR.
+
+The Booking Kit uses **typed adapter interfaces**:
+
+```typescript
+// Swap auth
+const auth: AuthAdapter = new ClerkAdapter();    // or NextAuth, Supabase, Lucia
+
+// Swap email
+const email: EmailAdapter = new SESAdapter();    // or Resend, SendGrid, Postmark
+
+// Swap jobs
+const jobs: JobAdapter = new BullMQAdapter();     // or Inngest, Trigger.dev
+
+// Swap calendar
+const calendar: CalendarAdapter = new OutlookAdapter(); // or Google, CalDAV
+```
+
+No marketplace. No app store architecture. Just TypeScript interfaces you implement.
+
+---
+
+## 11. Bundle Size & Complexity
+
+| Metric | The Booking Kit | Cal.com |
+|---|---|---|
+| Core engine size | ~50KB (tree-shakeable) | Not extractable |
+| TypeScript files | ~200 across all packages | ~4,500+ in monorepo |
+| Database models | ~15 normalized tables | 80+ Prisma models |
+| Integration packages | 0 (adapter pattern) | 111 app-store packages |
+| UI components | 31 (copy-paste, no runtime dep) | 51 (npm package dependency) |
+| Date library | date-fns 3.x (one library) | dayjs + date-fns (migrating, both present) |
+
+Cal.com carries two date libraries simultaneously (legacy `@calcom/dayjs` and modern `date-fns`) because they haven't completed the migration. The Booking Kit uses date-fns exclusively.
+
+---
+
+## 12. Testing Philosophy
+
+| | The Booking Kit | Cal.com |
+|---|---|---|
+| Core logic tests | 325 tests, property-based (fast-check) | Unit tests, no property-based |
+| Server tests | 157 tests | Vitest + Playwright (heavy E2E) |
+| D1 adapter tests | 115 tests | N/A |
+| CLI tests | 26 tests | N/A |
+| Double-booking tests | Database-level constraint tests | Application-level conflict checks |
+
+The Booking Kit uses **property-based testing** (fast-check) for the slot engine — generating thousands of random schedule configurations to prove correctness. Cal.com uses traditional example-based tests.
+
+---
+
+## 13. Developer Experience
+
+| Task | The Booking Kit | Cal.com |
+|---|---|---|
+| Add scheduling to existing app | `npm install @slotkit/core` | Fork entire repo, deploy whole app |
+| Customize booking UI | Edit your copied component files | Override CSS, limited customization |
+| Add a new adapter | Implement a TypeScript interface | Create an app-store package |
+| Deploy to edge | `@slotkit/d1` + Cloudflare Workers | Not supported |
+| Scaffold a project | `npx thebookingkit init` | `git clone` + manual setup |
+| Add a component | `npx thebookingkit add booking-calendar` | N/A (components are in the app) |
+
+---
+
+## 14. Integration Fragility
+
+Cal.com markets 100+ integrations, but the connections are not bulletproof:
+
+- **Calendar sync failures** — documented delays and silent failures caused by slow CalDAV servers and silently expired OAuth tokens that the system fails to refresh
+- **Google Calendar OOO bugs** — the availability engine occasionally misinterprets "Out of Office" events, allowing clients to book during protected leave periods
+- **Salesforce routing failures** — the two-way sync has exhibited bugs where prospects are routed to the wrong personnel, with hardcoded retry limits (`SALESFORCE_GRAPHQL_MAX_RETRIES=3`) causing silent payload abandonment
+- **Webhook inheritance confusion** — team-level webhooks fail to trigger for individual member events unless explicitly configured at the child-event level or the top organizational tier, leading to silently dropped events
+- **No native analytics integration** — booking events don't push to GA4 or Meta Pixel natively; you must implement GTM with custom data layer listeners, requiring specialized analytics engineering
+
+The Booking Kit avoids this fragility by using the adapter pattern. Your integrations are TypeScript code in your repository — debuggable, testable, and under your control.
+
+---
+
+## 15. Pricing Escalation
+
+Cal.com's free tier is generous for individuals. The moment you need team features, costs escalate rapidly:
+
+| What You Need | Cal.com Cost | The Booking Kit Cost |
+|---|---|---|
+| Basic scheduling | Free | Free (MIT) |
+| Remove vendor branding | $15/user/month | Free (you own the code) |
+| Round-robin scheduling | $15/user/month | Free |
+| Routing forms | $15/user/month | Free |
+| SSO / SCIM | $37/user/month | Free (implement `AuthAdapter`) |
+| Per-team branding | **Not available at any tier** | Free |
+| API (production scale) | $299-$2,499/month | Free |
+
+For a 20-person team needing routing forms and brand removal, Cal.com Cloud costs **$3,600-$8,880/year**. The Booking Kit costs the engineering time to integrate it — and then nothing, forever.
+
+The API pricing is particularly aggressive: the free API tier caps at **25 bookings/month** with $0.99 overage per booking. Production usage requires the $299/month "Essentials" tier (500 bookings) or $2,499/month "Scale" tier (5,000 bookings).
+
+---
+
+## The Bottom Line
+
+Cal.com is an impressive product. It's also a **massive, complex infrastructure commitment** with AGPL licensing constraints, proprietary code entanglement, volatile feature availability, rigid cloud customization, fragile database migrations, aggressive pricing escalation, and substantial self-hosting operations overhead.
+
+**Use Cal.com** if you want a complete, ready-to-deploy scheduling product with video conferencing, 100+ integrations, and a managed cloud option — and you have the budget, legal resources, and engineering team to navigate its complexities.
+
+**Use The Booking Kit** if you're building a product that needs scheduling as infrastructure:
+- **MIT license** — no copyleft, no proprietary directories, no legal landmines
+- **Composable packages** — use what you need, leave the rest
+- **Universal runtime** — browser, edge, Node.js — not locked to a server
+- **Copy-paste UI** — 31 components you own, full CSS control, per-team branding
+- **Stable features** — no vendor can revoke capabilities from your own source code
+- **Safe migrations** — Drizzle ORM with hand-written SQL, no "happily drop columns" surprises
+- **Walk-in & kiosk** — features for physical businesses that Cal.com doesn't offer
+- **Predictable costs** — MIT-licensed, forever free, no per-seat or per-booking fees
+- **Database-level safety** — `EXCLUDE USING gist` constraints, not application-level checks
+- **Simple operations** — no Redis, no PgBouncer, no manual cron jobs to configure

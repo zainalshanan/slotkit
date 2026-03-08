@@ -1,129 +1,192 @@
 ---
 title: Comparison
-description: An honest comparison of The Booking Kit vs Cal.com vs Calendly — trade-offs, licensing, and who each tool is built for.
+description: An honest comparison of The Booking Kit vs Cal.com vs Calendly — and why developers building custom products choose The Booking Kit.
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Card, CardGrid } from '@astrojs/starlight/components';
 
 <Aside type="tip">
-  The Booking Kit is a developer toolkit, not a hosted platform. The comparisons below reflect that distinction honestly. If you need a managed SaaS with zero code, stop here and use Calendly.
+  The Booking Kit is a developer toolkit, not a hosted platform. If you need a managed SaaS with zero code, use Calendly. If you want to **own** your scheduling infrastructure, keep reading.
 </Aside>
 
-## Feature Comparison Table
+## The Short Version
 
-The table below compares features across three tools. "The Booking Kit" refers to the full combination of `@slotkit/core`, `@slotkit/db`, `@slotkit/server`, and the copy-paste UI component registry.
+| | The Booking Kit | Cal.com | Calendly |
+|---|---|---|---|
+| **What it is** | Composable scheduling toolkit | Full scheduling application | Managed SaaS product |
+| **License** | **MIT** | AGPL-3.0 | Proprietary |
+| **You get** | Packages you compose | An entire app you deploy | A hosted service you rent |
+| **Modify privately** | Yes | No (AGPL copyleft) | No (closed source) |
+| **Runtime** | Browser, Edge, Node | Node + Postgres only | N/A |
+| **Bundle** | ~50KB core (tree-shakeable) | 4,500+ TS files, 80+ DB models | N/A |
+
+---
+
+## Feature Comparison
 
 | Feature | The Booking Kit | Cal.com | Calendly |
 |---|---|---|---|
-| **Licensing** | MIT (open source) | AGPL-3.0 (open source) | Proprietary SaaS |
-| **Hosting model** | Self-hosted (you own it) | Self-hosted or managed | Managed SaaS only |
-| **Code ownership** | Full — you copy the source | Full (self-hosted) | None |
-| **Usage fees** | None | None (self-hosted) | Per-seat subscription |
 | **Slot computation engine** | Yes | Yes | Yes |
 | **RRULE-based availability** | Yes | Yes | Yes |
 | **Timezone-aware scheduling** | Yes | Yes | Yes |
-| **Buffer time between appointments** | Yes | Yes | Yes |
-| **Availability overrides (blocks, custom hours)** | Yes | Yes | Yes |
-| **Database-level double-booking prevention** | Yes (EXCLUDE USING gist + SERIALIZABLE) | Partial | Managed internally |
-| **Team scheduling (round-robin, collective)** | Yes | Yes | Yes (basic) |
-| **Fixed assignment / managed scheduling** | Yes | Yes | Limited |
+| **Buffer time** | Yes | Yes | Yes |
+| **Availability overrides** | Yes | Yes | Yes |
+| **Double-booking prevention** | **Database-level** (EXCLUDE USING gist + SERIALIZABLE) | Application-level conflict checks | Managed internally |
+| **Team scheduling** | Yes (round-robin, collective, fixed) | Yes | Basic |
 | **Seat-based / group bookings** | Yes | Yes | No |
 | **Recurring bookings** | Yes | Yes | No |
-| **Walk-in queue management** | Yes | No | No |
-| **Kiosk mode (reception desk view)** | Yes | No | No |
-| **Routing forms (conditional routing)** | Yes | Yes | No |
-| **Payment integration hooks** | Yes (Stripe, cancellation policies, no-show fees) | Yes | Yes (Stripe) |
-| **Confirmation modes (auto / manual approval)** | Yes | Yes | Yes |
-| **Booking status state machine + audit trail** | Yes | Partial | No |
-| **Multi-tenancy with RBAC** | Yes | Yes | Limited |
-| **Webhooks (HMAC-SHA256, replay-protected)** | Yes | Yes | Yes |
-| **Workflow automation (trigger-condition-action)** | Yes | Yes | Limited |
-| **Email notifications with ICS attachments** | Yes | Yes | Yes |
-| **Calendar sync (Google Calendar)** | Yes | Yes | Yes |
-| **Embed widgets (inline, popup, floating)** | Yes | Yes | Yes |
-| **REST API with API key management** | Yes | Yes | Yes |
-| **Copy-paste UI components (shadcn convention)** | Yes (21+ components) | No | No |
-| **Pluggable adapters (auth, email, jobs, calendar)** | Yes | Partial | No |
-| **Cloudflare D1 / edge adapter** | Yes | No | No |
-| **CLI scaffolding tool** | Yes | No | No |
-| **Hosted platform / managed service** | No | Yes (Cal.com Cloud) | Yes |
-| **Built-in video conferencing** | No | Yes | Yes |
-| **App marketplace / integration ecosystem** | No | Yes | Yes |
+| **Walk-in queue management** | **Yes** | No | No |
+| **Kiosk mode** | **Yes** | No | No |
+| **Routing forms** | Yes | Yes | No |
+| **Payment integration** | Yes (Stripe + adapter pattern) | Yes | Yes (Stripe) |
+| **Confirmation modes** | Yes | Yes | Yes |
+| **Booking audit trail** | Yes (append-only event log) | Partial | No |
+| **Multi-tenancy + RBAC** | Yes | Yes | Limited |
+| **Webhooks** | Yes (HMAC-SHA256, replay-protected) | Yes | Yes |
+| **Workflow automation** | Yes | Yes | Limited |
+| **Email + ICS** | Yes | Yes | Yes |
+| **Calendar sync** | Yes | Yes | Yes |
+| **Embed widgets** | Yes | Yes | Yes |
+| **REST API** | Yes | Yes | Yes |
+| **Copy-paste UI (shadcn convention)** | **31 components** | No — tied to their app | No |
+| **Pluggable adapters** | **Yes** (auth, email, jobs, calendar, SMS, payment) | Hardcoded integrations | No |
+| **Edge / Cloudflare D1** | **Yes** | No | No |
+| **CLI scaffolding** | **Yes** (`npx thebookingkit init`) | No | No |
+| **Hosted platform** | No | Yes | Yes |
+| **Built-in video** | No | Yes | Yes |
+| **App marketplace** | No (adapter pattern instead) | Yes (111 integrations) | Yes |
 | **Mobile apps** | No | Yes | Yes |
-| **Analytics dashboard (built-in)** | No | Yes | Yes |
-| **Pre-built integrations (100+ tools)** | No | Partial | Yes |
 | **Zero-code setup** | No | Partial | Yes |
 
 ---
 
-## Who Each Tool Is For
+## Why Developers Choose The Booking Kit
 
-### The Booking Kit
+### 1. MIT License — No Strings Attached
 
-The Booking Kit is for developers who want to own every line of their booking system. You get the scheduling math, the database schema, and the UI components as source code you control completely. There is no vendor, no per-seat fee, and no hosted infrastructure to depend on.
+Cal.com is AGPL-3.0. If you modify Cal.com and serve it over a network (which every SaaS does), you must **release your modifications** under the same license. For companies embedding scheduling into a commercial product, this is a legal blocker without purchasing Cal.com's enterprise license.
 
-**Choose The Booking Kit when:**
+The Booking Kit is MIT. Modify it, embed it, sell it, keep it private. No copyleft obligations.
 
-- You are building a custom application and need scheduling as a primitive, not a product
-- You want full control over UI design — your booking flow should look like your app, not a third-party widget
-- You are deploying to Cloudflare Workers, a custom Postgres host, or any infrastructure that a managed platform does not support
-- You need capabilities not offered by SaaS tools: walk-in queues, kiosk mode, hybrid appointment/walk-in scheduling, or custom routing logic
-- You want to swap auth providers, email senders, background job runners, or calendar adapters without rebuilding your integration
-- Long-term vendor lock-in is not acceptable for your business
+### 2. Composable Packages, Not a Monolith
 
-**The trade-off is real:** The Booking Kit requires a developer to integrate it. There is no dashboard you sign up for. You write code.
+Cal.com gives you a 4,500-file Next.js application with 80+ Prisma models and 72 interdependent feature packages. You can't extract "just the slot engine."
 
-### Cal.com
+The Booking Kit gives you independent packages:
 
-Cal.com is the right choice when you want open-source flexibility with the option of a managed cloud offering. It ships a complete scheduling product out of the box — admin UI, hosted infrastructure, video conferencing, and a growing app marketplace. Self-hosting Cal.com is a legitimate option, though you get an entire Next.js application rather than a composable toolkit.
+```
+@slotkit/core    → Pure scheduling math. No framework, no ORM, no runtime assumptions.
+@slotkit/db      → Drizzle schema. Any Postgres 15+.
+@slotkit/server  → Auth, webhooks, API. Swap any adapter.
+@slotkit/d1      → Cloudflare D1 edge adapter.
+registry/ui/     → 31 copy-paste React components you own.
+```
 
-**Cal.com is stronger than The Booking Kit at:**
+Use one package or all of them. They compose — they don't couple.
 
-- Providing a ready-to-use scheduling product for non-developers
-- Built-in video conferencing (Google Meet, Zoom, Teams)
-- A broad integration marketplace
-- A managed cloud tier if you do not want to operate infrastructure
-- Mobile apps for providers
+### 3. Runs Anywhere — Including the Edge
 
-**Cal.com's license (AGPL-3.0)** means that if you modify and distribute Cal.com, you must release those modifications under AGPL. This matters for commercial products built on top of it. The Booking Kit is MIT, with no such restriction.
+Cal.com requires a Node.js server with a warm PostgreSQL connection. No edge deployment.
 
-### Calendly
+`@slotkit/core` runs in **browsers**, **Cloudflare Workers**, **Deno**, **Vercel Edge Functions**, and **Node.js**. With `@slotkit/d1`, you can deploy a complete scheduling backend to Cloudflare's global edge network.
 
-Calendly is a fully managed SaaS. No code, no server, no database. You create an account, configure your availability, and share a link. It handles everything else.
+### 4. Database-Level Safety
 
-**Choose Calendly when:**
+Cal.com prevents double-bookings with application-level conflict checks (`checkForConflicts.ts`). If the application code has a bug or a race condition slips through, a double booking can occur.
 
-- You need scheduling set up today with no engineering resources
-- Your use case is straightforward: one-on-one meetings, simple availability windows
-- You are comfortable paying per-seat fees indefinitely
-- You do not need custom UI or deep integration with your own application
+The Booking Kit enforces double-booking prevention at the **database level** with PostgreSQL `EXCLUDE USING gist` constraints and `SERIALIZABLE` transactions with automatic retry (jittered exponential backoff). Even buggy application code cannot create a double booking.
 
-**Calendly is not suitable when:**
+### 5. Own Your UI
 
-- You need to embed scheduling deeply into your product's UI
-- You require features like walk-in queues, kiosk mode, or complex team scheduling
-- You want to avoid per-seat SaaS pricing at scale
-- Data sovereignty or self-hosting is a requirement
+Cal.com's booking UI is wired to their tRPC API and Zustand store. You can theme it, but you cannot restructure the booking flow or extract individual components.
+
+The Booking Kit provides **31 React components** following the shadcn/ui convention — copy-paste source code, `className`/`style` props, `tbk-` CSS prefix, zero runtime dependency on any backend.
+
+### 6. Walk-In & Kiosk — For Physical Businesses
+
+Cal.com was built for online meetings. It has no walk-in queue, no kiosk mode, no hybrid appointment/walk-in scheduling.
+
+The Booking Kit includes:
+- Walk-in queue with position tracking, wait time estimation, and analytics
+- Kiosk mode with multi-provider resource views and check-in management
+- 8 dedicated components: `QueueDisplay`, `QueueManager`, `QueueTicket`, `WalkInEntryForm`, `WalkInToggle`, `WalkInAnalytics`, `KioskCalendar`, `KioskShell`
+
+### 7. Swap Anything With Adapters
+
+Cal.com has 111 integrations as hardcoded "app store" packages. Adding a new one means forking their monorepo.
+
+The Booking Kit uses **typed adapter interfaces**:
+
+```typescript
+const auth: AuthAdapter = new ClerkAdapter();
+const email: EmailAdapter = new SESAdapter();
+const jobs: JobAdapter = new BullMQAdapter();
+const calendar: CalendarAdapter = new OutlookAdapter();
+```
+
+Implement a TypeScript interface. No marketplace, no vendor approval.
+
+### 8. No Feature Rug-Pulls
+
+Cal.com has a history of removing free-tier features overnight. Their Workflows engine (automated email/SMS notifications) was free, then abruptly paywalled after abuse. Users who built processes around it had their pipelines severed without warning.
+
+With The Booking Kit, features can't be revoked. You own the source code under MIT. No vendor can paywall your own codebase.
+
+### 9. Predictable Costs
+
+Cal.com's costs escalate quickly: removing branding requires Teams ($15/user/month), SSO requires Organizations ($37/user/month), and production API usage starts at $299/month. A 20-person team needing routing forms and brand removal pays $3,600-$8,880/year.
+
+The Booking Kit is MIT-licensed. No per-seat fees. No per-booking API charges. No paywalls. Ever.
 
 ---
 
-## Licensing Summary
+## When Cal.com Is the Better Choice
 
-| | The Booking Kit | Cal.com | Calendly |
-|---|---|---|---|
-| License | MIT | AGPL-3.0 | Proprietary |
-| Can modify and keep private | Yes | No (AGPL requires release) | No (closed source) |
-| Commercial use | Unrestricted | Permitted with attribution | SaaS subscription required |
-| Self-host | Yes | Yes | No |
+We're honest about this. Cal.com is better when:
+
+- **You want a product, not a toolkit** — Cal.com ships a complete admin dashboard, managed hosting, and mobile apps
+- **You need 100+ integrations today** — Zoom, Google Meet, Slack, Salesforce, Zapier, and more, pre-built
+- **Video conferencing is core** — Cal.com integrates Daily.co, Zoom, Teams natively
+- **Non-developers will manage scheduling** — Cal.com has a no-code admin UI
+- **You want a managed cloud option** — Cal.com Cloud handles infrastructure for you
 
 ---
 
-## The Honest Bottom Line
+## When Calendly Is the Better Choice
 
-If you want a hosted solution with zero code, use **Calendly**.
+- You need scheduling running today with zero engineering effort
+- Your use case is simple one-on-one meetings
+- You're comfortable with per-seat subscription pricing
+- You don't need custom UI or deep product integration
 
-If you want open-source scheduling with a full product UI and a managed cloud option, use **Cal.com**.
+---
 
-If you are a developer who wants to own the booking primitive — the math, the schema, the components — and integrate it into your own application without vendor dependencies, use **The Booking Kit**.
+## Architecture Comparison
 
-The Booking Kit does not try to replace Cal.com or Calendly. It exists for the use case where those tools are not the right fit: custom applications that need scheduling logic as a composable, self-hosted, MIT-licensed building block.
+| Dimension | The Booking Kit | Cal.com |
+|---|---|---|
+| **Core engine** | `@slotkit/core` — framework-agnostic, 0 runtime deps | Embedded in feature packages, requires Prisma + tRPC |
+| **Database** | Drizzle ORM, normalized schema, ~15 tables | Prisma, 80+ models, JSON blob configuration fields |
+| **Schema safety** | DB constraints (gist exclusion, serializable txns) | Application-level conflict checks |
+| **Date handling** | date-fns 3.x (single library) | dayjs + date-fns (dual, mid-migration) |
+| **Auth** | Pluggable `AuthAdapter` interface | NextAuth.js 4.x hardcoded |
+| **API** | REST + adapter pattern | tRPC (coupled to React) |
+| **UI delivery** | Copy-paste source (shadcn convention) | npm package (`@calcom/ui`) |
+| **Testing** | Property-based (fast-check) + 623 unit tests | Example-based unit + Playwright E2E |
+| **Edge support** | Yes (D1 adapter, universal core) | No (Node.js + Postgres only) |
+
+---
+
+## The Bottom Line
+
+**Calendly** — you want zero code and don't mind renting.
+
+**Cal.com** — you want a complete open-source scheduling product with managed hosting and 100+ integrations.
+
+**The Booking Kit** — you're building a product that needs scheduling as infrastructure. MIT license, composable packages, edge-ready runtime, copy-paste UI, database-level safety, and features for physical businesses that no other tool provides.
+
+<CardGrid>
+  <Card title="Deep Dive: Cal.com's Shortcomings" icon="warning">
+    [Where The Booking Kit wins →](/getting-started/calcom-shortcomings)
+  </Card>
+</CardGrid>
