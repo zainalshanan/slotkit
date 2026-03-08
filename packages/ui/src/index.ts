@@ -34,5 +34,9 @@ export { RoutingForm, type RoutingFormProps, type RoutingFormField } from "./com
 // Team Components
 export { TeamAssignmentEditor, type TeamAssignmentEditorProps, type TeamMemberDisplay } from "./components/team-assignment-editor.js";
 
+// Recurring & Seats Components
+export { RecurringBookingPicker, type RecurringBookingPickerProps, type OccurrenceDisplay } from "./components/recurring-booking-picker.js";
+export { SeatsPicker, type SeatsPickerProps } from "./components/seats-picker.js";
+
 // Utilities
 export { cn } from "./utils/cn.js";

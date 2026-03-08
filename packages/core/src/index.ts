@@ -251,3 +251,32 @@ export {
   type WebhookRetryConfig,
   type WebhookVerificationResult,
 } from "./webhooks.js";
+
+// Recurring Bookings
+export {
+  generateOccurrences,
+  checkRecurringAvailability,
+  cancelFutureOccurrences,
+  isValidFrequency,
+  RecurringBookingError,
+  type RecurringFrequency,
+  type RecurringSeriesInput,
+  type RecurringOccurrence,
+  type RecurringAvailabilityResult,
+  type SeriesBooking,
+  type SeriesCancellationResult,
+} from "./recurring-bookings.js";
+
+// Seats / Group Bookings
+export {
+  computeSeatAvailability,
+  canReserveSeat,
+  isGroupEvent,
+  computeGroupEventSummary,
+  formatSeatCount,
+  validateSeatReservation,
+  SeatError,
+  type SeatAttendee,
+  type SeatAvailability,
+  type GroupEventSummary,
+} from "./seats.js";
