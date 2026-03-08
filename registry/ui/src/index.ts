@@ -41,5 +41,19 @@ export { SeatsPicker, type SeatsPickerProps } from "./components/seats-picker.js
 // Embed Components
 export { EmbedConfigurator, type EmbedConfiguratorProps, type EmbedEventTypeOption, type EmbedModeOption } from "./components/embed-configurator.js";
 
+// Walk-In Queue Components (E-19)
+export { WalkInEntryForm, type WalkInEntryFormProps, type WalkInEntryFormValues, type WalkInEntryResult, type WalkInProvider, type WalkInEventType } from "./components/walk-in-entry-form.js";
+export { QueueDisplay, type QueueDisplayProps, type QueueDisplayEntry } from "./components/queue-display.js";
+export { QueueTicket, type QueueTicketProps } from "./components/queue-ticket.js";
+export { QueueManager, type QueueManagerProps, type QueueManagerEntry } from "./components/queue-manager.js";
+export { WalkInToggle, type WalkInToggleProps } from "./components/walk-in-toggle.js";
+export { WalkInAnalytics, type WalkInAnalyticsProps, type WalkInAnalyticsData } from "./components/walk-in-analytics.js";
+
+// Kiosk Mode Components (E-20)
+export { KioskCalendar, type KioskCalendarProps, type KioskEvent, type KioskColorMode } from "./components/kiosk-calendar.js";
+export { KioskSettingsPanel, type KioskSettingsPanelProps, type KioskSettingsValues, type BlockDensity, type ColorCoding, type KioskView } from "./components/kiosk-settings-panel.js";
+export { BreakBlockForm, type BreakBlockFormProps, type BreakBlockFormValues, type BlockType } from "./components/break-block-form.js";
+export { KioskShell, type KioskShellProps } from "./components/kiosk-shell.js";
+
 // Utilities
 export { cn } from "./utils/cn.js";

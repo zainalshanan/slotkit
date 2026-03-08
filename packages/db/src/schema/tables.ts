@@ -24,6 +24,8 @@ import {
   workflowTriggerEnum,
   workflowActionTypeEnum,
   emailDeliveryStatusEnum,
+  bookingSourceEnum,
+  walkInStatusEnum,
 } from "./enums.js";
 
 // ---------------------------------------------------------------------------
@@ -96,6 +98,7 @@ export const providers = pgTable(
     timezone: varchar("timezone", { length: 100 })
       .notNull()
       .default("America/New_York"),
+    acceptingWalkIns: boolean("accepting_walk_ins").notNull().default(false),
     stripeAccountId: text("stripe_account_id"),
     metadata: jsonb("metadata").default({}),
     ...timestamps(),
@@ -141,6 +144,7 @@ export const eventTypes = pgTable(
     minimumNoticeMinutes: integer("minimum_notice_minutes").default(0),
     maxFutureDays: integer("max_future_days").default(60),
     slotInterval: integer("slot_interval"),
+    walkInsEnabled: boolean("walk_ins_enabled").notNull().default(false),
     isActive: boolean("is_active").notNull().default(true),
     metadata: jsonb("metadata").default({}),
     ...timestamps(),
@@ -259,6 +263,7 @@ export const bookings = pgTable(
     startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
     endsAt: timestamp("ends_at", { withTimezone: true }).notNull(),
     status: bookingStatusEnum("status").notNull().default("pending"),
+    source: bookingSourceEnum("source").notNull().default("online"),
     paymentStatus: paymentStatusEnum("payment_status"),
     recurringBookingId: uuid("recurring_booking_id").references(
       () => recurringBookings.id,
@@ -496,3 +501,33 @@ export const customerPreferences = pgTable("customer_preferences", {
     .notNull()
     .defaultNow(),
 });
+
+// ---------------------------------------------------------------------------
+// Walk-In Queue (E-19)
+// ---------------------------------------------------------------------------
+export const walkInQueue = pgTable(
+  "walk_in_queue",
+  {
+    id: idColumn(),
+    bookingId: uuid("booking_id")
+      .notNull()
+      .references(() => bookings.id, { onDelete: "cascade" }),
+    providerId: uuid("provider_id")
+      .notNull()
+      .references(() => providers.id, { onDelete: "cascade" }),
+    queuePosition: integer("queue_position").notNull(),
+    estimatedWaitMinutes: integer("estimated_wait_minutes").notNull().default(0),
+    checkedInAt: timestamp("checked_in_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    serviceStartedAt: timestamp("service_started_at", { withTimezone: true }),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    status: walkInStatusEnum("status").notNull().default("queued"),
+    ...timestamps(),
+  },
+  (table) => [
+    index("walk_in_queue_provider_id_idx").on(table.providerId),
+    index("walk_in_queue_booking_id_idx").on(table.bookingId),
+    index("walk_in_queue_status_idx").on(table.status),
+  ],
+);

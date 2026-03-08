@@ -120,3 +120,20 @@ export const emailDeliveryStatusEnum = pgEnum("email_delivery_status", [
   "complained",
   "failed",
 ]);
+
+/** Booking source — how the booking was created */
+export const bookingSourceEnum = pgEnum("booking_source", [
+  "online",
+  "walk_in",
+  "phone",
+  "admin",
+]);
+
+/** Walk-in queue entry status */
+export const walkInStatusEnum = pgEnum("walk_in_status", [
+  "queued",
+  "in_service",
+  "completed",
+  "no_show",
+  "cancelled",
+]);

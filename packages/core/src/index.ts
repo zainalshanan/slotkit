@@ -149,6 +149,50 @@ export {
   type GroupEventSummary,
 } from "./seats.js";
 
+// Walk-In Queue (E-19)
+export {
+  estimateWaitTime,
+  findNextAvailableGap,
+  isValidQueueTransition,
+  validateQueueTransition,
+  recomputeQueuePositions,
+  reorderQueue,
+  recomputeWaitTimes,
+  isAcceptingWalkIns,
+  computeWalkInAnalytics,
+  WalkInsDisabledError,
+  QueueEntryNotFoundError,
+  InvalidQueueTransitionError,
+  type BookingSource,
+  type WalkInStatus,
+  type WalkInQueueEntry,
+  type AddWalkInInput,
+  type AddWalkInResult,
+  type WaitTimeEstimate,
+  type ProviderWalkInState,
+  type WalkInAnalytics,
+} from "./walk-in.js";
+
+// Kiosk Mode (E-20)
+export {
+  validateKioskSettings,
+  resolveKioskSettings,
+  validateReschedule,
+  validateBreakBlock,
+  breakBlockToOverride,
+  resolveKioskProviders,
+  DEFAULT_KIOSK_SETTINGS,
+  type BlockDensityMode,
+  type ColorCodingMode,
+  type KioskViewType,
+  type KioskFieldVisibility,
+  type KioskSettings,
+  type RescheduleValidation,
+  type BlockType,
+  type BreakBlockInput,
+  type KioskProvider,
+} from "./kiosk.js";
+
 // Embed
 export {
   validateEmbedConfig,
