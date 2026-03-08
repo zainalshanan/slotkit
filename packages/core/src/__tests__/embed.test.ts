@@ -128,6 +128,44 @@ describe("validateEmbedConfig", () => {
       validateEmbedConfig(makeConfig({ branding: { borderRadius: 0 } })),
     ).not.toThrow();
   });
+
+  it("accepts https redirectUrl", () => {
+    expect(() =>
+      validateEmbedConfig(
+        makeConfig({ redirectUrl: "https://example.com/thanks" }),
+      ),
+    ).not.toThrow();
+  });
+
+  it("accepts relative path redirectUrl", () => {
+    expect(() =>
+      validateEmbedConfig(makeConfig({ redirectUrl: "/thank-you" })),
+    ).not.toThrow();
+  });
+
+  it("rejects javascript: redirectUrl", () => {
+    expect(() =>
+      validateEmbedConfig(
+        makeConfig({ redirectUrl: "javascript:alert(1)" }),
+      ),
+    ).toThrow(EmbedConfigError);
+  });
+
+  it("rejects data: redirectUrl", () => {
+    expect(() =>
+      validateEmbedConfig(
+        makeConfig({ redirectUrl: "data:text/html,<script>alert(1)</script>" }),
+      ),
+    ).toThrow(EmbedConfigError);
+  });
+
+  it("rejects non-url non-relative-path redirectUrl", () => {
+    expect(() =>
+      validateEmbedConfig(
+        makeConfig({ redirectUrl: "not-a-url-or-path" }),
+      ),
+    ).toThrow(EmbedConfigError);
+  });
 });
 
 // ---------------------------------------------------------------------------

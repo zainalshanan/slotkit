@@ -62,31 +62,31 @@ export function getAvailableSlots(
   }
 
   // --- Step 2: Mask Layer — Apply overrides ---
+  // Use provider's timezone for date comparisons (overrides are local dates)
+  const providerTz = rules.length > 0 ? rules[0].timezone : "UTC";
   let maskedWindows = [...rawWindows];
 
   for (const override of overrides) {
     const overrideDate = formatDateOnly(override.date);
 
     if (override.isUnavailable) {
-      // Remove all windows on this date
+      // Remove all windows whose start falls on this local date
       maskedWindows = maskedWindows.filter(
-        (w) => formatDateOnly(w.start) !== overrideDate,
+        (w) => formatDateInTimezone(w.start, providerTz) !== overrideDate,
       );
     } else if (override.startTime && override.endTime) {
-      // First remove existing windows on this date
+      // First remove existing windows on this local date
       maskedWindows = maskedWindows.filter(
-        (w) => formatDateOnly(w.start) !== overrideDate,
+        (w) => formatDateInTimezone(w.start, providerTz) !== overrideDate,
       );
 
       // Then add the override window
-      // We need a timezone for the override — use the first rule's timezone as reference
-      const tz = rules.length > 0 ? rules[0].timezone : "UTC";
       const startLocal = `${overrideDate}T${override.startTime}:00`;
       const endLocal = `${overrideDate}T${override.endTime}:00`;
 
       maskedWindows.push({
-        start: fromZonedTime(startLocal, tz),
-        end: fromZonedTime(endLocal, tz),
+        start: fromZonedTime(startLocal, providerTz),
+        end: fromZonedTime(endLocal, providerTz),
       });
     }
   }
@@ -165,7 +165,9 @@ export function isSlotAvailable(
   bufferAfter = 0,
 ): SlotAvailabilityResult {
   // Check overrides first (blocked dates)
-  const slotDateStr = formatDateOnly(startTime);
+  // Use provider timezone for local date comparison
+  const isSlotProviderTz = rules.length > 0 ? rules[0].timezone : "UTC";
+  const slotDateStr = formatDateInTimezone(startTime, isSlotProviderTz);
   for (const override of overrides) {
     if (override.isUnavailable && formatDateOnly(override.date) === slotDateStr) {
       return { available: false, reason: "blocked_date" };
@@ -207,9 +209,8 @@ export function isSlotAvailable(
         override.endTime &&
         formatDateOnly(override.date) === slotDateStr
       ) {
-        const tz = rules.length > 0 ? rules[0].timezone : "UTC";
-        const windowStart = fromZonedTime(`${slotDateStr}T${override.startTime}:00`, tz);
-        const windowEnd = fromZonedTime(`${slotDateStr}T${override.endTime}:00`, tz);
+        const windowStart = fromZonedTime(`${slotDateStr}T${override.startTime}:00`, isSlotProviderTz);
+        const windowEnd = fromZonedTime(`${slotDateStr}T${override.endTime}:00`, isSlotProviderTz);
 
         if (startTime >= windowStart && endTime <= windowEnd) {
           withinAvailability = true;
@@ -254,12 +255,18 @@ export function isSlotAvailable(
   return { available: true };
 }
 
-/** Format a Date as YYYY-MM-DD in UTC */
+/** Format a Date as YYYY-MM-DD in UTC (used for override.date which is already a local date) */
 function formatDateOnly(date: Date): string {
   const y = date.getUTCFullYear();
   const m = String(date.getUTCMonth() + 1).padStart(2, "0");
   const d = String(date.getUTCDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
+}
+
+/** Format a UTC Date as YYYY-MM-DD in a specific timezone */
+function formatDateInTimezone(date: Date, timezone: string): string {
+  const zonedDate = toZonedTime(date, timezone);
+  return format(zonedDate, "yyyy-MM-dd", { timeZone: timezone });
 }
 
 /** Format a UTC Date in the given timezone */

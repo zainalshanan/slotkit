@@ -109,8 +109,32 @@ export function validateEmbedConfig(config: EmbedConfig): void {
     throw new EmbedConfigError(`Invalid baseUrl: "${config.baseUrl}"`);
   }
 
+  if (config.redirectUrl) {
+    validateRedirectUrl(config.redirectUrl);
+  }
+
   if (config.branding) {
     validateBranding(config.branding);
+  }
+}
+
+function validateRedirectUrl(url: string): void {
+  // Only allow http/https URLs — block javascript:, data:, etc.
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      throw new EmbedConfigError(
+        `Invalid redirectUrl protocol: "${parsed.protocol}". Only http: and https: are allowed`,
+      );
+    }
+  } catch (err) {
+    if (err instanceof EmbedConfigError) throw err;
+    // Allow relative paths (e.g., "/thank-you")
+    if (!url.startsWith("/")) {
+      throw new EmbedConfigError(
+        `Invalid redirectUrl: "${url}". Must be an absolute https:// URL or a relative path starting with /`,
+      );
+    }
   }
 }
 

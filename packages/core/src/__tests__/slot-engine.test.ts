@@ -378,3 +378,88 @@ describe("isSlotAvailable", () => {
     expect(result).toEqual({ available: true });
   });
 });
+
+describe("timezone-aware override matching", () => {
+  it("correctly blocks a local Friday in Asia/Tokyo (UTC date differs)", () => {
+    // Friday March 6 in Tokyo (UTC+9).
+    // 9:00 AM Tokyo = 00:00 UTC Friday (same day in UTC)
+    // But an evening slot like 21:00 Tokyo = 12:00 UTC Friday
+    const tokyoRule: AvailabilityRuleInput = {
+      rrule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+      startTime: "09:00",
+      endTime: "21:00",
+      timezone: "Asia/Tokyo",
+    };
+
+    // Block Friday March 6 (local date)
+    const overrides: AvailabilityOverrideInput[] = [
+      {
+        date: new Date("2026-03-06T00:00:00Z"), // Represents March 6 local
+        isUnavailable: true,
+      },
+    ];
+
+    const dateRange = {
+      start: new Date("2026-03-05T00:00:00Z"),
+      end: new Date("2026-03-06T23:59:59Z"),
+    };
+
+    const slots = getAvailableSlots(
+      [tokyoRule],
+      overrides,
+      [],
+      dateRange,
+      "Asia/Tokyo",
+      { duration: 60 },
+    );
+
+    // All returned slots should be from Thursday March 5 Tokyo, not Friday
+    for (const slot of slots) {
+      // Convert slot start to Tokyo date and ensure none are on March 6
+      expect(slot.localStart).not.toContain("2026-03-06");
+    }
+  });
+
+  it("correctly blocks a local date in negative-offset timezone", () => {
+    // Wednesday March 4 in Los Angeles (UTC-8).
+    // 17:00 LA = 01:00 March 5 UTC — the UTC date is the NEXT day
+    const laRule: AvailabilityRuleInput = {
+      rrule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+      startTime: "09:00",
+      endTime: "18:00",
+      timezone: "America/Los_Angeles",
+    };
+
+    // Block Wednesday March 4 (local date)
+    const overrides: AvailabilityOverrideInput[] = [
+      {
+        date: new Date("2026-03-04T00:00:00Z"),
+        isUnavailable: true,
+      },
+    ];
+
+    const dateRange = {
+      start: new Date("2026-03-03T00:00:00Z"),
+      end: new Date("2026-03-05T23:59:59Z"),
+    };
+
+    const slots = getAvailableSlots(
+      [laRule],
+      overrides,
+      [],
+      dateRange,
+      "America/Los_Angeles",
+      { duration: 60 },
+    );
+
+    // Should have slots for Tuesday March 3 and Thursday March 5, but not Wednesday March 4
+    for (const slot of slots) {
+      expect(slot.localStart).not.toContain("2026-03-04");
+    }
+
+    // Should still have Tuesday and Thursday slots
+    const dates = new Set(slots.map((s) => s.localStart.slice(0, 10)));
+    expect(dates.has("2026-03-03")).toBe(true);
+    expect(dates.has("2026-03-05")).toBe(true);
+  });
+});

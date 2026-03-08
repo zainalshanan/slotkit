@@ -195,17 +195,23 @@ export function generateApiKey(prefix: string = "sk_live_"): GeneratedApiKey {
 /**
  * Hash an API key for secure storage.
  *
- * Uses HMAC-SHA256 with a static secret. In production, use an
- * environment variable as the HMAC secret.
+ * Uses HMAC-SHA256 with a secret from the SLOTKIT_API_KEY_SECRET
+ * environment variable. Throws if the secret is not configured.
  *
  * @param key - The full API key
+ * @param secret - Optional HMAC secret (defaults to SLOTKIT_API_KEY_SECRET env var)
  * @returns The hex-encoded hash
  */
-export function hashApiKey(key: string): string {
-  // In production, HMAC secret should come from environment
-  return createHmac("sha256", "slotkit-api-key-hash-secret")
-    .update(key)
-    .digest("hex");
+export function hashApiKey(key: string, secret?: string): string {
+  const hmacSecret =
+    secret ?? process.env.SLOTKIT_API_KEY_SECRET;
+  if (!hmacSecret) {
+    throw new Error(
+      "SLOTKIT_API_KEY_SECRET environment variable is required for API key hashing. " +
+        "Set it to a random 32+ character string.",
+    );
+  }
+  return createHmac("sha256", hmacSecret).update(key).digest("hex");
 }
 
 /**
