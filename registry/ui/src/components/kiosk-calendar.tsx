@@ -356,9 +356,9 @@ export function KioskCalendar({
       if (evt.isBlock) {
         return {
           style: {
-            backgroundColor: "var(--slotkit-block-bg, #f1f5f9)",
-            border: "2px dashed var(--slotkit-block-border, #94a3b8)",
-            color: "var(--slotkit-block-text, #475569)",
+            backgroundColor: "var(--tbk-block-bg, #f1f5f9)",
+            border: "2px dashed var(--tbk-block-border, #94a3b8)",
+            color: "var(--tbk-block-text, #475569)",
             fontSize: "12px",
             padding: "2px 6px",
             opacity: 0.85,
@@ -444,16 +444,16 @@ export function KioskCalendar({
   return (
     <div
       ref={calendarRef}
-      className={cn("slotkit-kiosk-calendar", `slotkit-view-${view}`, className)}
+      className={cn("tbk-kiosk-calendar", `tbk-view-${view}`, className)}
       style={style}
     >
       {/* ── Toolbar ── */}
-      <div className="slotkit-kiosk-toolbar">
+      <div className="tbk-kiosk-toolbar">
         {/* Left: navigation */}
-        <div className="slotkit-kiosk-nav">
+        <div className="tbk-kiosk-nav">
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => handleNavigate("prev")}
             aria-label="Previous"
           >
@@ -461,14 +461,14 @@ export function KioskCalendar({
           </button>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => handleNavigate("today")}
           >
             Today
           </button>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => handleNavigate("next")}
             aria-label="Next"
           >
@@ -477,8 +477,8 @@ export function KioskCalendar({
         </div>
 
         {/* Centre: date heading + week-view resource picker */}
-        <div className="slotkit-kiosk-centre">
-          <h2 className="slotkit-kiosk-date">{dateHeading}</h2>
+        <div className="tbk-kiosk-centre">
+          <h2 className="tbk-kiosk-date">{dateHeading}</h2>
 
           {/*
            * Resource picker: only rendered in week view when multiple
@@ -487,7 +487,7 @@ export function KioskCalendar({
            * is nothing to pick.
            */}
           {view === "week" && hasMultipleResources && (
-            <div className="slotkit-resource-picker" role="tablist">
+            <div className="tbk-resource-picker" role="tablist">
               {resources!.map((r) => (
                 <button
                   key={r.id}
@@ -495,8 +495,8 @@ export function KioskCalendar({
                   role="tab"
                   aria-selected={selectedResourceId === r.id}
                   className={cn(
-                    "slotkit-resource-pill",
-                    selectedResourceId === r.id && "slotkit-resource-pill-active",
+                    "tbk-resource-pill",
+                    selectedResourceId === r.id && "tbk-resource-pill-active",
                   )}
                   onClick={() => setSelectedResourceId(r.id)}
                 >
@@ -508,14 +508,14 @@ export function KioskCalendar({
         </div>
 
         {/* Right: view switcher */}
-        <div className="slotkit-kiosk-view-switcher">
+        <div className="tbk-kiosk-view-switcher">
           {(["day", "week"] as const).map((v) => (
             <button
               key={v}
               type="button"
               className={cn(
-                "slotkit-button-secondary",
-                view === v && "slotkit-button-active",
+                "tbk-button-secondary",
+                view === v && "tbk-button-active",
               )}
               onClick={() => handleViewSwitch(v)}
             >
@@ -557,13 +557,13 @@ export function KioskCalendar({
       {/* ── Event Detail Popover ── */}
       {selectedEvent && (
         <div
-          className="slotkit-kiosk-popover"
+          className="tbk-kiosk-popover"
           role="dialog"
           aria-label="Event details"
         >
           <button
             type="button"
-            className="slotkit-popover-close"
+            className="tbk-popover-close"
             onClick={() => setSelectedEvent(null)}
             aria-label="Close"
           >
@@ -573,10 +573,10 @@ export function KioskCalendar({
           {selectedEvent.isBlock ? (
             <>
               <h3>{selectedEvent.title}</h3>
-              <p className="slotkit-kiosk-popover-type">
+              <p className="tbk-kiosk-popover-type">
                 {selectedEvent.blockType ?? "Block"}
               </p>
-              <dl className="slotkit-detail-list">
+              <dl className="tbk-detail-list">
                 <dt>Time</dt>
                 <dd>
                   {formatTime(selectedEvent.startsAt)} &ndash;{" "}
@@ -590,7 +590,7 @@ export function KioskCalendar({
               <h3 style={{ marginTop: "8px", marginBottom: "4px" }}>
                 {selectedEvent.serviceName}
               </h3>
-              <dl className="slotkit-detail-list">
+              <dl className="tbk-detail-list">
                 <dt>Customer</dt>
                 <dd>{selectedEvent.customerName}</dd>
                 {selectedEvent.customerEmail && (

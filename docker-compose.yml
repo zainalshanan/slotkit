@@ -4,13 +4,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: slotkit
-      POSTGRES_USER: slotkit
-      POSTGRES_PASSWORD: slotkit
+      POSTGRES_DB: thebookingkit
+      POSTGRES_USER: thebookingkit
+      POSTGRES_PASSWORD: thebookingkit
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U slotkit"]
+      test: ["CMD-SHELL", "pg_isready -U thebookingkit"]
       interval: 5s
       timeout: 5s
       retries: 5

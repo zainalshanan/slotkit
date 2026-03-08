@@ -81,10 +81,10 @@ export function TimeSlotPicker({
 
   if (isLoading) {
     return (
-      <div className={cn("slotkit-timeslot-picker slotkit-loading", className)} style={style}>
-        <div className="slotkit-skeleton" role="status" aria-label="Loading time slots">
+      <div className={cn("tbk-timeslot-picker tbk-loading", className)} style={style}>
+        <div className="tbk-skeleton" role="status" aria-label="Loading time slots">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="slotkit-skeleton-slot" />
+            <div key={i} className="tbk-skeleton-slot" />
           ))}
         </div>
       </div>
@@ -93,20 +93,20 @@ export function TimeSlotPicker({
 
   if (slots.length === 0) {
     return (
-      <div className={cn("slotkit-timeslot-picker slotkit-empty", className)} style={style}>
+      <div className={cn("tbk-timeslot-picker tbk-empty", className)} style={style}>
         <p>No times available for this date. Please select another date.</p>
       </div>
     );
   }
 
   return (
-    <div className={cn("slotkit-timeslot-picker", className)} style={style}>
+    <div className={cn("tbk-timeslot-picker", className)} style={style}>
       {groups.map((group) => (
-        <div key={group.label} className="slotkit-slot-group">
+        <div key={group.label} className="tbk-slot-group">
           {group.label && (
-            <h3 className="slotkit-slot-group-label">{group.label}</h3>
+            <h3 className="tbk-slot-group-label">{group.label}</h3>
           )}
-          <div className="slotkit-slot-grid">
+          <div className="tbk-slot-grid">
             {group.slots.map((slot) => {
               const isSelected = selectedSlot?.startTime === slot.startTime;
               return (
@@ -114,8 +114,8 @@ export function TimeSlotPicker({
                   key={slot.startTime}
                   type="button"
                   className={cn(
-                    "slotkit-slot-button",
-                    isSelected && "slotkit-slot-selected",
+                    "tbk-slot-button",
+                    isSelected && "tbk-slot-selected",
                   )}
                   onClick={() => onSelect(slot)}
                   aria-pressed={isSelected}

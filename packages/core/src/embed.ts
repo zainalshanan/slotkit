@@ -36,7 +36,7 @@ export interface EmbedConfig {
   mode: EmbedMode;
   /** Container CSS selector (for inline mode) */
   container?: string;
-  /** Base URL of the SlotKit instance */
+  /** Base URL of the Booking Kit instance */
   baseUrl: string;
   /** Branding options */
   branding?: EmbedBranding;
@@ -170,7 +170,7 @@ function validateBranding(branding: EmbedBranding): void {
  */
 export function generateEmbedSnippet(config: EmbedConfig): string {
   const attrs: Record<string, string> = {
-    src: `${config.baseUrl}/embed/slotkit-embed.js`,
+    src: `${config.baseUrl}/embed/thebookingkit-embed.js`,
     "data-provider": config.providerId,
     "data-event-type": config.eventTypeSlug,
     "data-mode": config.mode,

@@ -95,22 +95,22 @@ export function PaymentGate({
 
   return (
     <div
-      className={cn("slotkit-payment-gate", className)}
+      className={cn("tbk-payment-gate", className)}
       style={style}
     >
-      <div className="slotkit-payment-header">
-        <h3 className="slotkit-payment-title">Payment</h3>
-        <p className="slotkit-payment-amount">{formattedAmount}</p>
+      <div className="tbk-payment-header">
+        <h3 className="tbk-payment-title">Payment</h3>
+        <p className="tbk-payment-amount">{formattedAmount}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="slotkit-payment-form">
-        <div className="slotkit-payment-element">
+      <form onSubmit={handleSubmit} className="tbk-payment-form">
+        <div className="tbk-payment-element">
           {renderPaymentElement ? (
             renderPaymentElement()
           ) : (
-            <div className="slotkit-payment-placeholder">
+            <div className="tbk-payment-placeholder">
               <p>Payment element will be mounted here.</p>
-              <p className="slotkit-payment-hint">
+              <p className="tbk-payment-hint">
                 Provide a <code>renderPaymentElement</code> prop to render
                 your Stripe PaymentElement.
               </p>
@@ -118,10 +118,10 @@ export function PaymentGate({
           )}
         </div>
 
-        <div className="slotkit-payment-actions">
+        <div className="tbk-payment-actions">
           <button
             type="submit"
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             disabled={processing}
           >
             {processing ? "Processing..." : buttonLabel}
@@ -130,7 +130,7 @@ export function PaymentGate({
           {onCancel && (
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={onCancel}
               disabled={processing}
             >

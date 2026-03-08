@@ -71,38 +71,38 @@ export function BookingQuestions({
 
   return (
     <form
-      className={cn("slotkit-booking-questions", className)}
+      className={cn("tbk-booking-questions", className)}
       style={style}
       onSubmit={handleSubmit(onFormSubmit)}
       noValidate
     >
       {/* Standard fields */}
-      <div className="slotkit-field">
-        <label htmlFor="slotkit-name" className="slotkit-label">
-          Name <span className="slotkit-required">*</span>
+      <div className="tbk-field">
+        <label htmlFor="tbk-name" className="tbk-label">
+          Name <span className="tbk-required">*</span>
         </label>
         <input
-          id="slotkit-name"
+          id="tbk-name"
           type="text"
-          className="slotkit-input"
+          className="tbk-input"
           {...register("name", { required: "Name is required" })}
           aria-invalid={!!errors.name}
         />
         {errors.name && (
-          <p className="slotkit-error" role="alert">
+          <p className="tbk-error" role="alert">
             {errors.name.message as string}
           </p>
         )}
       </div>
 
-      <div className="slotkit-field">
-        <label htmlFor="slotkit-email" className="slotkit-label">
-          Email <span className="slotkit-required">*</span>
+      <div className="tbk-field">
+        <label htmlFor="tbk-email" className="tbk-label">
+          Email <span className="tbk-required">*</span>
         </label>
         <input
-          id="slotkit-email"
+          id="tbk-email"
           type="email"
-          className="slotkit-input"
+          className="tbk-input"
           {...register("email", {
             required: "Email is required",
             pattern: {
@@ -113,20 +113,20 @@ export function BookingQuestions({
           aria-invalid={!!errors.email}
         />
         {errors.email && (
-          <p className="slotkit-error" role="alert">
+          <p className="tbk-error" role="alert">
             {errors.email.message as string}
           </p>
         )}
       </div>
 
-      <div className="slotkit-field">
-        <label htmlFor="slotkit-phone" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="tbk-phone" className="tbk-label">
           Phone
         </label>
         <input
-          id="slotkit-phone"
+          id="tbk-phone"
           type="tel"
-          className="slotkit-input"
+          className="tbk-input"
           {...register("phone", {
             pattern: {
               value: /^[+]?[\d\s()-]{7,20}$/,
@@ -136,7 +136,7 @@ export function BookingQuestions({
           aria-invalid={!!errors.phone}
         />
         {errors.phone && (
-          <p className="slotkit-error" role="alert">
+          <p className="tbk-error" role="alert">
             {errors.phone.message as string}
           </p>
         )}
@@ -144,10 +144,10 @@ export function BookingQuestions({
 
       {/* Custom questions */}
       {questions.map((q) => (
-        <div key={q.key} className="slotkit-field">
-          <label htmlFor={`slotkit-q-${q.key}`} className="slotkit-label">
+        <div key={q.key} className="tbk-field">
+          <label htmlFor={`tbk-q-${q.key}`} className="tbk-label">
             {q.label}
-            {q.isRequired && <span className="slotkit-required"> *</span>}
+            {q.isRequired && <span className="tbk-required"> *</span>}
           </label>
           {renderQuestionInput(q, register, errors)}
         </div>
@@ -155,7 +155,7 @@ export function BookingQuestions({
 
       <button
         type="submit"
-        className="slotkit-submit-button"
+        className="tbk-submit-button"
         disabled={isSubmitting}
       >
         {isSubmitting ? "Submitting..." : submitLabel}
@@ -177,14 +177,14 @@ function renderQuestionInput(
       return (
         <>
           <textarea
-            id={`slotkit-q-${q.key}`}
-            className="slotkit-textarea"
+            id={`tbk-q-${q.key}`}
+            className="tbk-textarea"
             rows={3}
             {...register(q.key, validation)}
             aria-invalid={!!errors[q.key]}
           />
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}
@@ -195,8 +195,8 @@ function renderQuestionInput(
       return (
         <>
           <select
-            id={`slotkit-q-${q.key}`}
-            className="slotkit-select"
+            id={`tbk-q-${q.key}`}
+            className="tbk-select"
             {...register(q.key, validation)}
             aria-invalid={!!errors[q.key]}
           >
@@ -208,7 +208,7 @@ function renderQuestionInput(
             ))}
           </select>
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}
@@ -217,16 +217,16 @@ function renderQuestionInput(
 
     case "checkbox":
       return (
-        <div className="slotkit-checkbox-wrapper">
+        <div className="tbk-checkbox-wrapper">
           <input
-            id={`slotkit-q-${q.key}`}
+            id={`tbk-q-${q.key}`}
             type="checkbox"
-            className="slotkit-checkbox"
+            className="tbk-checkbox"
             {...register(q.key, validation)}
             aria-invalid={!!errors[q.key]}
           />
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}
@@ -237,9 +237,9 @@ function renderQuestionInput(
       return (
         <>
           <input
-            id={`slotkit-q-${q.key}`}
+            id={`tbk-q-${q.key}`}
             type="number"
-            className="slotkit-input"
+            className="tbk-input"
             {...register(q.key, {
               ...validation,
               validate: (v: string) =>
@@ -248,7 +248,7 @@ function renderQuestionInput(
             aria-invalid={!!errors[q.key]}
           />
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}
@@ -259,9 +259,9 @@ function renderQuestionInput(
       return (
         <>
           <input
-            id={`slotkit-q-${q.key}`}
+            id={`tbk-q-${q.key}`}
             type="email"
-            className="slotkit-input"
+            className="tbk-input"
             {...register(q.key, {
               ...validation,
               pattern: {
@@ -272,7 +272,7 @@ function renderQuestionInput(
             aria-invalid={!!errors[q.key]}
           />
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}
@@ -283,9 +283,9 @@ function renderQuestionInput(
       return (
         <>
           <input
-            id={`slotkit-q-${q.key}`}
+            id={`tbk-q-${q.key}`}
             type="tel"
-            className="slotkit-input"
+            className="tbk-input"
             {...register(q.key, {
               ...validation,
               pattern: {
@@ -296,7 +296,7 @@ function renderQuestionInput(
             aria-invalid={!!errors[q.key]}
           />
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}
@@ -307,14 +307,14 @@ function renderQuestionInput(
       return (
         <>
           <input
-            id={`slotkit-q-${q.key}`}
+            id={`tbk-q-${q.key}`}
             type="text"
-            className="slotkit-input"
+            className="tbk-input"
             {...register(q.key, validation)}
             aria-invalid={!!errors[q.key]}
           />
           {errors[q.key] ? (
-            <p className="slotkit-error" role="alert">
+            <p className="tbk-error" role="alert">
               {String((errors[q.key] as { message?: string })?.message ?? "")}
             </p>
           ) : null}

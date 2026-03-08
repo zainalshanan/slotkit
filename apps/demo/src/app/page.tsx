@@ -28,7 +28,7 @@ export default function DemoPage() {
           </div>
           <div className="header-badge">
             <span className="badge-label">Powered by</span>
-            <code className="badge-code">SlotKit</code>
+            <code className="badge-code">The Booking Kit</code>
             <span className="badge-sub">The Headless Booking Primitive</span>
           </div>
         </div>
@@ -61,7 +61,7 @@ export default function DemoPage() {
           All slot computation powered by <code>@thebookingkit/core</code> pure functions.
         </p>
         <p>
-          <strong>SlotKit</strong> &mdash; Open-source scheduling toolkit for developers.
+          <strong>The Booking Kit</strong> &mdash; Open-source scheduling toolkit for developers.
         </p>
       </footer>
     </>

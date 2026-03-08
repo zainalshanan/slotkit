@@ -98,40 +98,40 @@ export function PaymentHistory({
 
   return (
     <div
-      className={cn("slotkit-payment-history", className)}
+      className={cn("tbk-payment-history", className)}
       style={style}
     >
       {/* Summary cards */}
-      <div className="slotkit-payment-summary">
-        <div className="slotkit-summary-card">
-          <span className="slotkit-summary-label">Total Revenue</span>
-          <span className="slotkit-summary-value">
+      <div className="tbk-payment-summary">
+        <div className="tbk-summary-card">
+          <span className="tbk-summary-label">Total Revenue</span>
+          <span className="tbk-summary-value">
             {formatAmount(summary.totalRevenue, currency)}
           </span>
         </div>
-        <div className="slotkit-summary-card">
-          <span className="slotkit-summary-label">Total Refunded</span>
-          <span className="slotkit-summary-value">
+        <div className="tbk-summary-card">
+          <span className="tbk-summary-label">Total Refunded</span>
+          <span className="tbk-summary-value">
             {formatAmount(summary.totalRefunded, currency)}
           </span>
         </div>
-        <div className="slotkit-summary-card">
-          <span className="slotkit-summary-label">Net Revenue</span>
-          <span className="slotkit-summary-value">
+        <div className="tbk-summary-card">
+          <span className="tbk-summary-label">Net Revenue</span>
+          <span className="tbk-summary-value">
             {formatAmount(summary.netRevenue, currency)}
           </span>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="slotkit-payment-filters">
-        <div className="slotkit-filter-group">
-          <label htmlFor="payment-status-filter" className="slotkit-label">
+      <div className="tbk-payment-filters">
+        <div className="tbk-filter-group">
+          <label htmlFor="payment-status-filter" className="tbk-label">
             Status
           </label>
           <select
             id="payment-status-filter"
-            className="slotkit-select"
+            className="tbk-select"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -144,27 +144,27 @@ export function PaymentHistory({
           </select>
         </div>
 
-        <div className="slotkit-filter-group">
-          <label htmlFor="payment-date-from" className="slotkit-label">
+        <div className="tbk-filter-group">
+          <label htmlFor="payment-date-from" className="tbk-label">
             From
           </label>
           <input
             id="payment-date-from"
             type="date"
-            className="slotkit-input"
+            className="tbk-input"
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
           />
         </div>
 
-        <div className="slotkit-filter-group">
-          <label htmlFor="payment-date-to" className="slotkit-label">
+        <div className="tbk-filter-group">
+          <label htmlFor="payment-date-to" className="tbk-label">
             To
           </label>
           <input
             id="payment-date-to"
             type="date"
-            className="slotkit-input"
+            className="tbk-input"
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
           />
@@ -172,8 +172,8 @@ export function PaymentHistory({
       </div>
 
       {/* Table */}
-      <div className="slotkit-payment-table-wrapper">
-        <table className="slotkit-payment-table">
+      <div className="tbk-payment-table-wrapper">
+        <table className="tbk-payment-table">
           <thead>
             <tr>
               <th>Date</th>
@@ -187,7 +187,7 @@ export function PaymentHistory({
           <tbody>
             {filteredPayments.length === 0 ? (
               <tr>
-                <td colSpan={6} className="slotkit-empty-row">
+                <td colSpan={6} className="tbk-empty-row">
                   No payments found.
                 </td>
               </tr>
@@ -195,7 +195,7 @@ export function PaymentHistory({
               filteredPayments.map((payment) => (
                 <tr
                   key={payment.id}
-                  className="slotkit-payment-row"
+                  className="tbk-payment-row"
                   onClick={() => onPaymentClick?.(payment)}
                   role={onPaymentClick ? "button" : undefined}
                   tabIndex={onPaymentClick ? 0 : undefined}
@@ -205,7 +205,7 @@ export function PaymentHistory({
                     {payment.customerName ?? payment.customerEmail ?? "—"}
                   </td>
                   <td>
-                    <span className="slotkit-payment-type-badge">
+                    <span className="tbk-payment-type-badge">
                       {formatPaymentType(payment.paymentType)}
                     </span>
                   </td>
@@ -213,8 +213,8 @@ export function PaymentHistory({
                   <td>
                     <span
                       className={cn(
-                        "slotkit-payment-status-badge",
-                        `slotkit-payment-status-${payment.status}`,
+                        "tbk-payment-status-badge",
+                        `tbk-payment-status-${payment.status}`,
                       )}
                     >
                       {formatStatus(payment.status)}
@@ -223,7 +223,7 @@ export function PaymentHistory({
                   <td>
                     {onBookingClick ? (
                       <button
-                        className="slotkit-link-button"
+                        className="tbk-link-button"
                         onClick={(e) => {
                           e.stopPropagation();
                           onBookingClick(payment.bookingId);

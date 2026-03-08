@@ -65,7 +65,7 @@ describe("TimeSlotPicker", () => {
     );
 
     const button = screen.getByText("2:00 PM");
-    expect(button).toHaveClass("slotkit-slot-selected");
+    expect(button).toHaveClass("tbk-slot-selected");
     expect(button).toHaveAttribute("aria-pressed", "true");
   });
 

@@ -1,12 +1,12 @@
 /**
- * Config file and env template generation for SlotKit projects.
+ * Config file and env template generation for The Booking Kit projects.
  */
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-/** SlotKit project configuration */
+/** The Booking Kit project configuration */
 export interface SlotKitConfig {
   /** Postgres connection string (from env) */
   databaseUrl: string;
@@ -26,11 +26,11 @@ export interface SlotKitConfig {
 // Generators
 // ---------------------------------------------------------------------------
 
-/** Generate the content of slotkit.config.ts */
-export function generateSlotkitConfig(config: Partial<SlotKitConfig>): string {
+/** Generate the content of thebookingkit.config.ts */
+export function generateThebookingkitConfig(config: Partial<SlotKitConfig>): string {
   const {
-    componentsDir = "src/components/slotkit",
-    typesOutput = "src/types/slotkit.ts",
+    componentsDir = "src/components/thebookingkit",
+    typesOutput = "src/types/thebookingkit.ts",
     authAdapter = "nextauth",
     jobAdapter = "inngest",
     emailAdapter = "resend",
@@ -76,7 +76,7 @@ INNGEST_EVENT_KEY=
 INNGEST_SIGNING_KEY=
 
 # API Key Hashing
-SLOTKIT_API_KEY_SECRET=
+THEBOOKINGKIT_API_KEY_SECRET=
 
 # Stripe (optional)
 STRIPE_SECRET_KEY=

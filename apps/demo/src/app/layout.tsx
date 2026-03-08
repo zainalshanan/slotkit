@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Fade & Shave Barbershop — Book Online | SlotKit Demo",
+  title: "Fade & Shave Barbershop — Book Online | The Booking Kit Demo",
   description:
-    "Demo barber shop booking site powered by SlotKit scheduling toolkit.",
+    "Demo barber shop booking site powered by The Booking Kit scheduling toolkit.",
 };
 
 export default function RootLayout({

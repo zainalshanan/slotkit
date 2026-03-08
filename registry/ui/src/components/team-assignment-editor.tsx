@@ -102,22 +102,22 @@ export function TeamAssignmentEditor({
 
   return (
     <div
-      className={cn("slotkit-team-assignment-editor", className)}
+      className={cn("tbk-team-assignment-editor", className)}
       style={style}
     >
       <h2>Team Scheduling Configuration</h2>
 
       {/* Strategy selector */}
-      <div className="slotkit-strategy-selector">
-        <label className="slotkit-label">Assignment Strategy</label>
-        <div className="slotkit-strategy-options">
+      <div className="tbk-strategy-selector">
+        <label className="tbk-label">Assignment Strategy</label>
+        <div className="tbk-strategy-options">
           {(Object.keys(STRATEGY_LABELS) as AssignmentStrategy[]).map((s) => (
             <button
               key={s}
               type="button"
               className={cn(
-                "slotkit-strategy-option",
-                strategy === s && "slotkit-strategy-active",
+                "tbk-strategy-option",
+                strategy === s && "tbk-strategy-active",
               )}
               onClick={() => onStrategyChange(s)}
             >
@@ -129,7 +129,7 @@ export function TeamAssignmentEditor({
       </div>
 
       {/* Members table */}
-      <div className="slotkit-members-table">
+      <div className="tbk-members-table">
         <h3>Team Members</h3>
         <table>
           <thead>
@@ -146,14 +146,14 @@ export function TeamAssignmentEditor({
           <tbody>
             {members.map((member) => (
               <tr key={member.userId}>
-                <td className="slotkit-member-name">{member.displayName}</td>
+                <td className="tbk-member-name">{member.displayName}</td>
                 <td>
-                  <span className="slotkit-role-badge">{member.role}</span>
+                  <span className="tbk-role-badge">{member.role}</span>
                 </td>
                 <td>
                   <input
                     type="number"
-                    className="slotkit-input slotkit-input-sm"
+                    className="tbk-input tbk-input-sm"
                     value={member.priority}
                     min={0}
                     max={10}
@@ -168,7 +168,7 @@ export function TeamAssignmentEditor({
                   <td>
                     <input
                       type="range"
-                      className="slotkit-slider"
+                      className="tbk-slider"
                       value={member.weight}
                       min={1}
                       max={500}
@@ -178,22 +178,22 @@ export function TeamAssignmentEditor({
                         })
                       }
                     />
-                    <span className="slotkit-weight-value">
+                    <span className="tbk-weight-value">
                       {member.weight}
                     </span>
                   </td>
                 )}
                 {strategy === "round_robin" && (
-                  <td className="slotkit-target-pct">
+                  <td className="tbk-target-pct">
                     {totalWeight > 0
                       ? `${((member.weight / totalWeight) * 100).toFixed(1)}%`
                       : "—"}
                   </td>
                 )}
-                <td className="slotkit-booking-count">
+                <td className="tbk-booking-count">
                   {member.recentBookingCount}
                   {totalBookings > 0 && (
-                    <span className="slotkit-actual-pct">
+                    <span className="tbk-actual-pct">
                       {" "}
                       (
                       {(
@@ -225,16 +225,16 @@ export function TeamAssignmentEditor({
 
       {/* Distribution preview for round-robin */}
       {strategy === "round_robin" && members.length > 0 && (
-        <div className="slotkit-distribution-preview">
+        <div className="tbk-distribution-preview">
           <h3>Expected Distribution</h3>
-          <div className="slotkit-distribution-bar">
+          <div className="tbk-distribution-bar">
             {members.map((member) => {
               const pct =
                 totalWeight > 0 ? (member.weight / totalWeight) * 100 : 0;
               return (
                 <div
                   key={member.userId}
-                  className="slotkit-distribution-segment"
+                  className="tbk-distribution-segment"
                   style={{ width: `${pct}%` }}
                   title={`${member.displayName}: ${pct.toFixed(1)}%`}
                 >
@@ -251,10 +251,10 @@ export function TeamAssignmentEditor({
       )}
 
       {onSave && (
-        <div className="slotkit-form-actions">
+        <div className="tbk-form-actions">
           <button
             type="button"
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             onClick={handleSave}
             disabled={saving}
           >

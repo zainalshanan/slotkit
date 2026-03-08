@@ -11,7 +11,7 @@ import {
   DEFAULT_MANIFEST,
 } from "../manifest.js";
 import {
-  generateSlotkitConfig,
+  generateThebookingkitConfig,
   generateEnvTemplate,
 } from "../config.js";
 import {
@@ -136,13 +136,13 @@ describe("createManifestEntry", () => {
     const entry = createManifestEntry(
       "booking-calendar",
       "1.0.0",
-      "src/components/slotkit/booking-calendar.tsx",
+      "src/components/thebookingkit/booking-calendar.tsx",
       "abc123",
     );
 
     expect(entry.name).toBe("booking-calendar");
     expect(entry.version).toBe("1.0.0");
-    expect(entry.installedPath).toBe("src/components/slotkit/booking-calendar.tsx");
+    expect(entry.installedPath).toBe("src/components/thebookingkit/booking-calendar.tsx");
     expect(entry.checksum).toBe("abc123");
     expect(new Date(entry.installedAt).toISOString()).toBe(entry.installedAt);
   });
@@ -171,22 +171,22 @@ describe("DEFAULT_MANIFEST", () => {
 // Config Generation
 // ---------------------------------------------------------------------------
 
-describe("generateSlotkitConfig", () => {
+describe("generateThebookingkitConfig", () => {
   it("generates valid TypeScript config with defaults", () => {
-    const config = generateSlotkitConfig({});
+    const config = generateThebookingkitConfig({});
     expect(config).toContain('import type { SlotKitConfig } from "@thebookingkit/cli"');
-    expect(config).toContain("src/components/slotkit");
+    expect(config).toContain("src/components/thebookingkit");
     expect(config).toContain("nextauth");
     expect(config).toContain("inngest");
     expect(config).toContain("resend");
   });
 
   it("uses provided values", () => {
-    const config = generateSlotkitConfig({
-      componentsDir: "app/slotkit",
+    const config = generateThebookingkitConfig({
+      componentsDir: "app/thebookingkit",
       authAdapter: "clerk",
     });
-    expect(config).toContain("app/slotkit");
+    expect(config).toContain("app/thebookingkit");
     expect(config).toContain("clerk");
   });
 });
@@ -199,7 +199,7 @@ describe("generateEnvTemplate", () => {
     expect(env).toContain("RESEND_API_KEY");
     expect(env).toContain("INNGEST_EVENT_KEY");
     expect(env).toContain("STRIPE_SECRET_KEY");
-    expect(env).toContain("SLOTKIT_API_KEY_SECRET");
+    expect(env).toContain("THEBOOKINGKIT_API_KEY_SECRET");
   });
 });
 

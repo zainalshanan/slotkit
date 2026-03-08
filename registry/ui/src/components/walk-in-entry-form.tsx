@@ -54,7 +54,7 @@ export interface WalkInEntryFormProps {
   style?: React.CSSProperties;
 }
 
-const RECENT_CUSTOMERS_KEY = "slotkit-recent-walkins";
+const RECENT_CUSTOMERS_KEY = "tbk-recent-walkins";
 const MAX_RECENT = 10;
 
 /**
@@ -176,12 +176,12 @@ export function WalkInEntryForm({
   // Show success state
   if (result) {
     return (
-      <div className={cn("slotkit-walkin-success", className)} style={style}>
-        <div className="slotkit-walkin-success-icon" aria-hidden="true">
+      <div className={cn("tbk-walkin-success", className)} style={style}>
+        <div className="tbk-walkin-success-icon" aria-hidden="true">
           &#10003;
         </div>
-        <h3 className="slotkit-walkin-success-title">Added to Queue</h3>
-        <dl className="slotkit-detail-list">
+        <h3 className="tbk-walkin-success-title">Added to Queue</h3>
+        <dl className="tbk-detail-list">
           <dt>Position</dt>
           <dd>#{result.queuePosition}</dd>
           <dt>Estimated Wait</dt>
@@ -191,10 +191,10 @@ export function WalkInEntryForm({
               : `~${result.estimatedWaitMinutes} min`}
           </dd>
         </dl>
-        <div className="slotkit-form-actions">
+        <div className="tbk-form-actions">
           <button
             type="button"
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             onClick={handleAddAnother}
           >
             Add Another
@@ -202,7 +202,7 @@ export function WalkInEntryForm({
           {onCancel && (
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={onCancel}
             >
               Close
@@ -215,22 +215,22 @@ export function WalkInEntryForm({
 
   return (
     <form
-      className={cn("slotkit-walkin-entry-form", className)}
+      className={cn("tbk-walkin-entry-form", className)}
       style={style}
       onSubmit={handleSubmit(handleFormSubmit)}
       noValidate
     >
-      <h2 className="slotkit-form-title">Add Walk-In</h2>
+      <h2 className="tbk-form-title">Add Walk-In</h2>
 
       {/* Customer Name */}
-      <div className="slotkit-field">
-        <label htmlFor="wi-name" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="wi-name" className="tbk-label">
           Customer Name <span aria-hidden="true">*</span>
         </label>
         <input
           id="wi-name"
           type="text"
-          className="slotkit-input"
+          className="tbk-input"
           placeholder="Customer name"
           list="wi-recent-names"
           autoFocus
@@ -246,32 +246,32 @@ export function WalkInEntryForm({
           </datalist>
         )}
         {errors.customerName ? (
-          <p className="slotkit-error">{errors.customerName.message}</p>
+          <p className="tbk-error">{errors.customerName.message}</p>
         ) : null}
       </div>
 
       {/* Phone or Email (optional) */}
-      <div className="slotkit-field-row">
-        <div className="slotkit-field">
-          <label htmlFor="wi-phone" className="slotkit-label">
+      <div className="tbk-field-row">
+        <div className="tbk-field">
+          <label htmlFor="wi-phone" className="tbk-label">
             Phone
           </label>
           <input
             id="wi-phone"
             type="tel"
-            className="slotkit-input"
+            className="tbk-input"
             placeholder="+1 555 000 0000"
             {...register("customerPhone")}
           />
         </div>
-        <div className="slotkit-field">
-          <label htmlFor="wi-email" className="slotkit-label">
+        <div className="tbk-field">
+          <label htmlFor="wi-email" className="tbk-label">
             Email
           </label>
           <input
             id="wi-email"
             type="email"
-            className="slotkit-input"
+            className="tbk-input"
             placeholder="email@example.com"
             {...register("customerEmail")}
           />
@@ -279,13 +279,13 @@ export function WalkInEntryForm({
       </div>
 
       {/* Service Selector */}
-      <div className="slotkit-field">
-        <label htmlFor="wi-service" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="wi-service" className="tbk-label">
           Service <span aria-hidden="true">*</span>
         </label>
         <select
           id="wi-service"
-          className="slotkit-select"
+          className="tbk-select"
           {...register("eventTypeId", { required: "Please select a service" })}
         >
           {eventTypes.map((et) => (
@@ -296,7 +296,7 @@ export function WalkInEntryForm({
         </select>
         {selectedEventType?.priceCents != null &&
           selectedEventType.priceCents > 0 && (
-            <p className="slotkit-field-hint">
+            <p className="tbk-field-hint">
               Price:{" "}
               {formatPrice(
                 selectedEventType.priceCents,
@@ -305,19 +305,19 @@ export function WalkInEntryForm({
             </p>
           )}
         {errors.eventTypeId ? (
-          <p className="slotkit-error">{errors.eventTypeId.message}</p>
+          <p className="tbk-error">{errors.eventTypeId.message}</p>
         ) : null}
       </div>
 
       {/* Provider Selector (only if multiple) */}
       {acceptingProviders.length > 1 && (
-        <div className="slotkit-field">
-          <label htmlFor="wi-provider" className="slotkit-label">
+        <div className="tbk-field">
+          <label htmlFor="wi-provider" className="tbk-label">
             Provider <span aria-hidden="true">*</span>
           </label>
           <select
             id="wi-provider"
-            className="slotkit-select"
+            className="tbk-select"
             {...register("providerId", {
               required: "Please select a provider",
             })}
@@ -329,19 +329,19 @@ export function WalkInEntryForm({
             ))}
           </select>
           {errors.providerId ? (
-            <p className="slotkit-error">{errors.providerId.message}</p>
+            <p className="tbk-error">{errors.providerId.message}</p>
           ) : null}
         </div>
       )}
 
       {/* Notes */}
-      <div className="slotkit-field">
-        <label htmlFor="wi-notes" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="wi-notes" className="tbk-label">
           Notes
         </label>
         <textarea
           id="wi-notes"
-          className="slotkit-textarea"
+          className="tbk-textarea"
           rows={2}
           placeholder="Optional notes..."
           {...register("notes")}
@@ -349,15 +349,15 @@ export function WalkInEntryForm({
       </div>
 
       {errors.root ? (
-        <div className="slotkit-alert slotkit-alert-error" role="alert">
+        <div className="tbk-alert tbk-alert-error" role="alert">
           {errors.root.message}
         </div>
       ) : null}
 
-      <div className="slotkit-form-actions">
+      <div className="tbk-form-actions">
         <button
           type="submit"
-          className="slotkit-button-primary"
+          className="tbk-button-primary"
           disabled={isSubmitting || acceptingProviders.length === 0}
         >
           {isSubmitting ? "Adding..." : "Add to Queue"}
@@ -365,7 +365,7 @@ export function WalkInEntryForm({
         {onCancel && (
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={onCancel}
             disabled={isSubmitting}
           >
@@ -375,7 +375,7 @@ export function WalkInEntryForm({
       </div>
 
       {acceptingProviders.length === 0 && (
-        <p className="slotkit-alert slotkit-alert-warning">
+        <p className="tbk-alert tbk-alert-warning">
           No providers are currently accepting walk-ins.
         </p>
       )}

@@ -108,12 +108,12 @@ export function WebhookManager({
   }, [newUrl, newSecret, selectedTriggers, onCreate]);
 
   return (
-    <div className={cn("slotkit-webhook-manager", className)} style={style}>
-      <div className="slotkit-webhook-header">
+    <div className={cn("tbk-webhook-manager", className)} style={style}>
+      <div className="tbk-webhook-header">
         <h3>Webhooks</h3>
         {onCreate && (
           <button
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             onClick={() => setShowForm(!showForm)}
           >
             {showForm ? "Cancel" : "Add Webhook"}
@@ -123,40 +123,40 @@ export function WebhookManager({
 
       {/* Create form */}
       {showForm && (
-        <div className="slotkit-webhook-form">
-          <div className="slotkit-field">
-            <label htmlFor="wh-url" className="slotkit-label">
+        <div className="tbk-webhook-form">
+          <div className="tbk-field">
+            <label htmlFor="wh-url" className="tbk-label">
               Endpoint URL
             </label>
             <input
               id="wh-url"
               type="url"
-              className="slotkit-input"
+              className="tbk-input"
               placeholder="https://your-api.com/webhooks"
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
             />
           </div>
 
-          <div className="slotkit-field">
-            <label htmlFor="wh-secret" className="slotkit-label">
+          <div className="tbk-field">
+            <label htmlFor="wh-secret" className="tbk-label">
               Secret (optional)
             </label>
             <input
               id="wh-secret"
               type="password"
-              className="slotkit-input"
+              className="tbk-input"
               placeholder="whsec_..."
               value={newSecret}
               onChange={(e) => setNewSecret(e.target.value)}
             />
           </div>
 
-          <div className="slotkit-field">
-            <label className="slotkit-label">Triggers</label>
-            <div className="slotkit-checkbox-group">
+          <div className="tbk-field">
+            <label className="tbk-label">Triggers</label>
+            <div className="tbk-checkbox-group">
               {availableTriggers.map((t) => (
-                <label key={t.value} className="slotkit-checkbox-label">
+                <label key={t.value} className="tbk-checkbox-label">
                   <input
                     type="checkbox"
                     checked={selectedTriggers.includes(t.value)}
@@ -169,7 +169,7 @@ export function WebhookManager({
           </div>
 
           <button
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             onClick={handleCreate}
             disabled={!newUrl || selectedTriggers.length === 0}
           >
@@ -179,9 +179,9 @@ export function WebhookManager({
       )}
 
       {/* Webhook list */}
-      <div className="slotkit-webhook-list">
+      <div className="tbk-webhook-list">
         {webhooks.length === 0 ? (
-          <p className="slotkit-empty-state">
+          <p className="tbk-empty-state">
             No webhook subscriptions configured.
           </p>
         ) : (
@@ -189,21 +189,21 @@ export function WebhookManager({
             <div
               key={webhook.id}
               className={cn(
-                "slotkit-webhook-card",
-                !webhook.isActive && "slotkit-webhook-inactive",
+                "tbk-webhook-card",
+                !webhook.isActive && "tbk-webhook-inactive",
               )}
             >
-              <div className="slotkit-webhook-card-header">
-                <div className="slotkit-webhook-url">
+              <div className="tbk-webhook-card-header">
+                <div className="tbk-webhook-url">
                   <code>{webhook.subscriberUrl}</code>
                   {webhook.hasSecret && (
-                    <span className="slotkit-badge">Signed</span>
+                    <span className="tbk-badge">Signed</span>
                   )}
                 </div>
-                <div className="slotkit-webhook-actions">
+                <div className="tbk-webhook-actions">
                   {onTest && (
                     <button
-                      className="slotkit-button-secondary"
+                      className="tbk-button-secondary"
                       onClick={() => onTest(webhook.id)}
                     >
                       Test
@@ -211,7 +211,7 @@ export function WebhookManager({
                   )}
                   {onToggle && (
                     <button
-                      className="slotkit-button-secondary"
+                      className="tbk-button-secondary"
                       onClick={() =>
                         onToggle(webhook.id, !webhook.isActive)
                       }
@@ -221,7 +221,7 @@ export function WebhookManager({
                   )}
                   {onDelete && (
                     <button
-                      className="slotkit-button-danger"
+                      className="tbk-button-danger"
                       onClick={() => onDelete(webhook.id)}
                     >
                       Delete
@@ -230,9 +230,9 @@ export function WebhookManager({
                 </div>
               </div>
 
-              <div className="slotkit-webhook-triggers">
+              <div className="tbk-webhook-triggers">
                 {webhook.triggers.map((t) => (
-                  <span key={t} className="slotkit-badge">
+                  <span key={t} className="tbk-badge">
                     {t}
                   </span>
                 ))}
@@ -242,7 +242,7 @@ export function WebhookManager({
               {webhook.deliveries && webhook.deliveries.length > 0 && (
                 <>
                   <button
-                    className="slotkit-link-button"
+                    className="tbk-link-button"
                     onClick={() =>
                       setExpandedId(
                         expandedId === webhook.id ? null : webhook.id,
@@ -255,7 +255,7 @@ export function WebhookManager({
                   </button>
 
                   {expandedId === webhook.id && (
-                    <table className="slotkit-webhook-deliveries-table">
+                    <table className="tbk-webhook-deliveries-table">
                       <thead>
                         <tr>
                           <th>Date</th>
@@ -273,10 +273,10 @@ export function WebhookManager({
                             <td>
                               <span
                                 className={cn(
-                                  "slotkit-delivery-status",
+                                  "tbk-delivery-status",
                                   d.success
-                                    ? "slotkit-delivery-success"
-                                    : "slotkit-delivery-failed",
+                                    ? "tbk-delivery-success"
+                                    : "tbk-delivery-failed",
                                 )}
                               >
                                 {d.success ? "Success" : "Failed"}

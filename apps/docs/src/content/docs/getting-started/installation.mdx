@@ -33,7 +33,7 @@ DATABASE_URL="postgresql://user:pass@localhost:5432/thebookingkit"
 npx drizzle-kit push
 
 # Apply custom SQL migrations (btree_gist extension, audit triggers, GDPR functions)
-# If using the CLI, this is handled automatically via 'npx slotkit migrate'
+# If using the CLI, this is handled automatically via 'npx thebookingkit migrate'
 npx tsx packages/db/src/migrate.ts
 ```
 

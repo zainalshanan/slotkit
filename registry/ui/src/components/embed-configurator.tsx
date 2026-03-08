@@ -57,14 +57,14 @@ export function EmbedConfigurator({
     if (!selectedSlug) return { inline: "", popup: "", float: "" };
 
     const baseAttrs = [
-      `src="${baseUrl}/embed/slotkit-embed.js"`,
+      `src="${baseUrl}/embed/tbk-embed.js"`,
       `data-provider="${providerId}"`,
       `data-event-type="${selectedSlug}"`,
       `data-color-primary="${primaryColor}"`,
     ];
 
     return {
-      inline: `<div id="slotkit-booking"></div>\n<script\n  ${[...baseAttrs, 'data-mode="inline"', 'data-container="#slotkit-booking"'].join("\n  ")}\n  async\n></script>`,
+      inline: `<div id="tbk-booking"></div>\n<script\n  ${[...baseAttrs, 'data-mode="inline"', 'data-container="#tbk-booking"'].join("\n  ")}\n  async\n></script>`,
       popup: `<script\n  ${[...baseAttrs, 'data-mode="popup"'].join("\n  ")}\n  async\n></script>`,
       float: `<script\n  ${[...baseAttrs, 'data-mode="float"'].join("\n  ")}\n  async\n></script>`,
     };
@@ -85,20 +85,20 @@ export function EmbedConfigurator({
 
   return (
     <div
-      className={cn("slotkit-embed-configurator", className)}
+      className={cn("tbk-embed-configurator", className)}
       style={style}
     >
       <h3>Embed Booking Flow</h3>
 
       {/* Configuration */}
-      <div className="slotkit-embed-config">
-        <div className="slotkit-field">
-          <label htmlFor="embed-event-type" className="slotkit-label">
+      <div className="tbk-embed-config">
+        <div className="tbk-field">
+          <label htmlFor="embed-event-type" className="tbk-label">
             Event Type
           </label>
           <select
             id="embed-event-type"
-            className="slotkit-select"
+            className="tbk-select"
             value={selectedSlug}
             onChange={(e) => setSelectedSlug(e.target.value)}
           >
@@ -110,11 +110,11 @@ export function EmbedConfigurator({
           </select>
         </div>
 
-        <div className="slotkit-field">
-          <label htmlFor="embed-color" className="slotkit-label">
+        <div className="tbk-field">
+          <label htmlFor="embed-color" className="tbk-label">
             Primary Color
           </label>
-          <div className="slotkit-color-input">
+          <div className="tbk-color-input">
             <input
               id="embed-color"
               type="color"
@@ -123,7 +123,7 @@ export function EmbedConfigurator({
             />
             <input
               type="text"
-              className="slotkit-input"
+              className="tbk-input"
               value={primaryColor}
               onChange={(e) => setPrimaryColor(e.target.value)}
               pattern="^#[0-9A-Fa-f]{6}$"
@@ -133,13 +133,13 @@ export function EmbedConfigurator({
       </div>
 
       {/* Mode tabs */}
-      <div className="slotkit-embed-tabs">
+      <div className="tbk-embed-tabs">
         {(["inline", "popup", "float"] as EmbedModeOption[]).map((m) => (
           <button
             key={m}
             className={cn(
-              "slotkit-embed-tab",
-              mode === m && "slotkit-embed-tab-active",
+              "tbk-embed-tab",
+              mode === m && "tbk-embed-tab-active",
             )}
             onClick={() => setMode(m)}
           >
@@ -149,7 +149,7 @@ export function EmbedConfigurator({
       </div>
 
       {/* Mode description */}
-      <p className="slotkit-embed-description">
+      <p className="tbk-embed-description">
         {mode === "inline" &&
           "Renders the booking calendar directly inside your page."}
         {mode === "popup" &&
@@ -159,12 +159,12 @@ export function EmbedConfigurator({
       </p>
 
       {/* Snippet */}
-      <div className="slotkit-embed-snippet-wrapper">
-        <pre className="slotkit-embed-snippet">
+      <div className="tbk-embed-snippet-wrapper">
+        <pre className="tbk-embed-snippet">
           <code>{snippets[mode]}</code>
         </pre>
         <button
-          className="slotkit-button-secondary slotkit-copy-btn"
+          className="tbk-button-secondary tbk-copy-btn"
           onClick={() => handleCopy(snippets[mode], mode)}
         >
           {copied === mode ? "Copied!" : "Copy"}
@@ -172,20 +172,20 @@ export function EmbedConfigurator({
       </div>
 
       {/* All snippets at a glance */}
-      <details className="slotkit-embed-all-snippets">
+      <details className="tbk-embed-all-snippets">
         <summary>All modes</summary>
         {(["inline", "popup", "float"] as EmbedModeOption[]).map((m) => (
-          <div key={m} className="slotkit-embed-snippet-block">
-            <div className="slotkit-embed-snippet-header">
+          <div key={m} className="tbk-embed-snippet-block">
+            <div className="tbk-embed-snippet-header">
               <strong>{m}</strong>
               <button
-                className="slotkit-button-secondary"
+                className="tbk-button-secondary"
                 onClick={() => handleCopy(snippets[m], m)}
               >
                 {copied === m ? "Copied!" : "Copy"}
               </button>
             </div>
-            <pre className="slotkit-embed-snippet">
+            <pre className="tbk-embed-snippet">
               <code>{snippets[m]}</code>
             </pre>
           </div>

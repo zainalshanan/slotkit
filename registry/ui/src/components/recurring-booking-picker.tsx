@@ -81,19 +81,19 @@ export function RecurringBookingPicker({
 
   return (
     <div
-      className={cn("slotkit-recurring-picker", className)}
+      className={cn("tbk-recurring-picker", className)}
       style={style}
     >
-      <h3 className="slotkit-recurring-title">Recurring Booking</h3>
+      <h3 className="tbk-recurring-title">Recurring Booking</h3>
 
-      <div className="slotkit-recurring-config">
-        <div className="slotkit-field">
-          <label htmlFor="recurring-freq" className="slotkit-label">
+      <div className="tbk-recurring-config">
+        <div className="tbk-field">
+          <label htmlFor="recurring-freq" className="tbk-label">
             Frequency
           </label>
           <select
             id="recurring-freq"
-            className="slotkit-select"
+            className="tbk-select"
             value={frequency}
             onChange={(e) => handleFrequencyChange(e.target.value)}
           >
@@ -105,14 +105,14 @@ export function RecurringBookingPicker({
           </select>
         </div>
 
-        <div className="slotkit-field">
-          <label htmlFor="recurring-count" className="slotkit-label">
+        <div className="tbk-field">
+          <label htmlFor="recurring-count" className="tbk-label">
             Number of sessions
           </label>
           <input
             id="recurring-count"
             type="number"
-            className="slotkit-input"
+            className="tbk-input"
             min={1}
             max={maxOccurrences}
             value={count}
@@ -123,25 +123,25 @@ export function RecurringBookingPicker({
 
       {/* Occurrence list */}
       {occurrences && occurrences.length > 0 && (
-        <div className="slotkit-occurrences-list">
+        <div className="tbk-occurrences-list">
           <h4>Sessions</h4>
           <ul>
             {occurrences.map((occ) => (
               <li
                 key={occ.index}
                 className={cn(
-                  "slotkit-occurrence-item",
-                  occ.isConflict && "slotkit-occurrence-conflict",
+                  "tbk-occurrence-item",
+                  occ.isConflict && "tbk-occurrence-conflict",
                 )}
               >
-                <span className="slotkit-occurrence-date">
+                <span className="tbk-occurrence-date">
                   {occ.startsAt.toLocaleDateString("en-US", {
                     weekday: "short",
                     month: "short",
                     day: "numeric",
                   })}
                 </span>
-                <span className="slotkit-occurrence-time">
+                <span className="tbk-occurrence-time">
                   {occ.startsAt.toLocaleTimeString("en-US", {
                     hour: "numeric",
                     minute: "2-digit",
@@ -153,7 +153,7 @@ export function RecurringBookingPicker({
                   })}
                 </span>
                 {occ.isConflict && (
-                  <span className="slotkit-badge slotkit-badge-warning">
+                  <span className="tbk-badge tbk-badge-warning">
                     Unavailable
                   </span>
                 )}
@@ -165,15 +165,15 @@ export function RecurringBookingPicker({
 
       {/* Conflict warning */}
       {conflicts.length > 0 && (
-        <p className="slotkit-recurring-warning">
+        <p className="tbk-recurring-warning">
           {conflicts.length} session(s) have scheduling conflicts. Please adjust
           the frequency or number of sessions.
         </p>
       )}
 
-      <div className="slotkit-form-actions">
+      <div className="tbk-form-actions">
         <button
-          className="slotkit-button-primary"
+          className="tbk-button-primary"
           onClick={() => onConfirm(frequency, count)}
           disabled={conflicts.length > 0}
         >
@@ -181,7 +181,7 @@ export function RecurringBookingPicker({
         </button>
         {onCancel && (
           <button
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={onCancel}
           >
             Cancel

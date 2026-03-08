@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * SlotKit CLI — add components, scaffold configs, run migrations.
+ * The Booking Kit CLI — add components, scaffold configs, run migrations.
  *
  * Usage:
- *   npx slotkit init          Scaffold slotkit.config.ts and .env.local
- *   npx slotkit add <name>    Add a component to your project
- *   npx slotkit list          List all available components
- *   npx slotkit migrate       Run pending database migrations
+ *   npx thebookingkit init          Scaffold thebookingkit.config.ts and .env.local
+ *   npx thebookingkit add <name>    Add a component to your project
+ *   npx thebookingkit list          List all available components
+ *   npx thebookingkit migrate       Run pending database migrations
  */
 
 import { createHash } from "node:crypto";
@@ -26,17 +26,17 @@ import {
   DEFAULT_MANIFEST,
   type SlotKitManifest,
 } from "./manifest.js";
-import { generateSlotkitConfig, generateEnvTemplate } from "./config.js";
+import { generateThebookingkitConfig, generateEnvTemplate } from "./config.js";
 
-const MANIFEST_FILE = ".slotkit-manifest.json";
-const DEFAULT_COMPONENTS_DIR = "src/components/slotkit";
-const REGISTRY_BASE_URL = "https://slotkit.dev/registry";
+const MANIFEST_FILE = ".thebookingkit-manifest.json";
+const DEFAULT_COMPONENTS_DIR = "src/components/thebookingkit";
+const REGISTRY_BASE_URL = "https://thebookingkit.dev/registry";
 
 const program = new Command();
 
 program
-  .name("slotkit")
-  .description("SlotKit CLI — The Headless Booking Primitive")
+  .name("thebookingkit")
+  .description("The Booking Kit CLI — The Headless Booking Primitive")
   .version("0.1.0");
 
 // ---------------------------------------------------------------------------
@@ -45,22 +45,22 @@ program
 
 program
   .command("init")
-  .description("Scaffold slotkit.config.ts and .env.local in your project")
+  .description("Scaffold thebookingkit.config.ts and .env.local in your project")
   .option("--auth <adapter>", "Auth adapter (nextauth, clerk, supabase, lucia)", "nextauth")
   .option("--jobs <adapter>", "Job adapter (inngest, trigger, bullmq, none)", "inngest")
   .option("--email <adapter>", "Email adapter (resend, sendgrid, ses, none)", "resend")
   .action((options) => {
-    const configPath = resolve("slotkit.config.ts");
+    const configPath = resolve("thebookingkit.config.ts");
     if (existsSync(configPath)) {
-      console.log("slotkit.config.ts already exists, skipping.");
+      console.log("thebookingkit.config.ts already exists, skipping.");
     } else {
-      const content = generateSlotkitConfig({
+      const content = generateThebookingkitConfig({
         authAdapter: options.auth,
         jobAdapter: options.jobs,
         emailAdapter: options.email,
       });
       writeFileSync(configPath, content);
-      console.log("Created slotkit.config.ts");
+      console.log("Created thebookingkit.config.ts");
     }
 
     const envPath = resolve(".env.local");
@@ -83,10 +83,10 @@ program
       console.log(`Created ${MANIFEST_FILE}`);
     }
 
-    console.log("\nSlotKit initialized! Next steps:");
+    console.log("\nThe Booking Kit initialized! Next steps:");
     console.log("  1. Update .env.local with your database URL");
-    console.log("  2. Run: npx slotkit add booking-calendar");
-    console.log("  3. Run: npx slotkit migrate");
+    console.log("  2. Run: npx thebookingkit add booking-calendar");
+    console.log("  3. Run: npx thebookingkit migrate");
   });
 
 // ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ program
 program
   .command("add")
   .argument("<component>", "Component name (e.g., booking-calendar)")
-  .description("Add a SlotKit component to your project")
+  .description("Add a Booking Kit component to your project")
   .option("-d, --dir <path>", "Components directory", DEFAULT_COMPONENTS_DIR)
   .option("-f, --force", "Overwrite existing files", false)
   .option("--registry <url>", "Registry URL", REGISTRY_BASE_URL)
@@ -104,7 +104,7 @@ program
     const entry = findComponent(componentName);
     if (!entry) {
       console.error(`Unknown component: "${componentName}"`);
-      console.error("Run 'npx slotkit list' to see available components.");
+      console.error("Run 'npx thebookingkit list' to see available components.");
       process.exit(1);
     }
 
@@ -198,7 +198,7 @@ program
 
 program
   .command("list")
-  .description("List all available SlotKit components")
+  .description("List all available Booking Kit components")
   .option("-c, --category <category>", "Filter by category")
   .action((options) => {
     const components = options.category
@@ -229,7 +229,7 @@ program
     }
 
     console.log(`\n${components.length} components available`);
-    console.log("Run 'npx slotkit add <name>' to add a component.");
+    console.log("Run 'npx thebookingkit add <name>' to add a component.");
   });
 
 // ---------------------------------------------------------------------------
@@ -238,7 +238,7 @@ program
 
 program
   .command("migrate")
-  .description("Run pending SlotKit database migrations")
+  .description("Run pending Booking Kit database migrations")
   .action(() => {
     console.log("Migration support requires @thebookingkit/db.");
     console.log("Run: npx drizzle-kit push");

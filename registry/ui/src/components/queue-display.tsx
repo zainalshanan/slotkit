@@ -90,22 +90,22 @@ export function QueueDisplay({
   const inService = entries.find((e) => e.status === "in_service");
 
   return (
-    <div className={cn("slotkit-queue-display", className)} style={style}>
+    <div className={cn("tbk-queue-display", className)} style={style}>
       {/* Header */}
-      <div className="slotkit-queue-header">
+      <div className="tbk-queue-header">
         {providerName && (
-          <h2 className="slotkit-queue-title">{providerName}</h2>
+          <h2 className="tbk-queue-title">{providerName}</h2>
         )}
         <div
           className={cn(
-            "slotkit-queue-status-indicator",
+            "tbk-queue-status-indicator",
             isAccepting
-              ? "slotkit-queue-accepting"
-              : "slotkit-queue-not-accepting",
+              ? "tbk-queue-accepting"
+              : "tbk-queue-not-accepting",
           )}
         >
           <span
-            className="slotkit-queue-status-dot"
+            className="tbk-queue-status-dot"
             aria-hidden="true"
           />
           {isAccepting ? "Accepting Walk-Ins" : "Not Accepting Walk-Ins"}
@@ -114,12 +114,12 @@ export function QueueDisplay({
 
       {/* Now Serving */}
       {inService && (
-        <div className="slotkit-queue-now-serving">
-          <span className="slotkit-queue-now-label">Now Serving</span>
-          <span className="slotkit-queue-now-name">
+        <div className="tbk-queue-now-serving">
+          <span className="tbk-queue-now-label">Now Serving</span>
+          <span className="tbk-queue-now-name">
             {inService.customerFirstName}
           </span>
-          <span className="slotkit-queue-now-service">
+          <span className="tbk-queue-now-service">
             {inService.serviceName}
           </span>
         </div>
@@ -127,8 +127,8 @@ export function QueueDisplay({
 
       {/* Queue List */}
       {queuedEntries.length > 0 ? (
-        <div className="slotkit-queue-list" role="list">
-          <div className="slotkit-queue-list-header">
+        <div className="tbk-queue-list" role="list">
+          <div className="tbk-queue-list-header">
             <span>#</span>
             <span>Customer</span>
             <span>Service</span>
@@ -138,26 +138,26 @@ export function QueueDisplay({
             <div
               key={entry.id}
               className={cn(
-                "slotkit-queue-list-row",
-                entry.estimatedWaitMinutes > 60 && "slotkit-queue-overdue",
+                "tbk-queue-list-row",
+                entry.estimatedWaitMinutes > 60 && "tbk-queue-overdue",
               )}
               role="listitem"
             >
-              <span className="slotkit-queue-position">{entry.position}</span>
-              <span className="slotkit-queue-name">
+              <span className="tbk-queue-position">{entry.position}</span>
+              <span className="tbk-queue-name">
                 {entry.customerFirstName}
               </span>
-              <span className="slotkit-queue-service">
+              <span className="tbk-queue-service">
                 {entry.serviceName}
               </span>
-              <span className="slotkit-queue-wait">
+              <span className="tbk-queue-wait">
                 ~{entry.estimatedWaitMinutes} min
               </span>
             </div>
           ))}
         </div>
       ) : (
-        <div className="slotkit-queue-empty">
+        <div className="tbk-queue-empty">
           {isAccepting
             ? "No one in the queue — walk right in!"
             : "Queue is currently closed."}
@@ -165,11 +165,11 @@ export function QueueDisplay({
       )}
 
       {/* Footer */}
-      <div className="slotkit-queue-footer">
-        <span className="slotkit-queue-count">
+      <div className="tbk-queue-footer">
+        <span className="tbk-queue-count">
           {queuedEntries.length} in queue
         </span>
-        <span className="slotkit-queue-updated">
+        <span className="tbk-queue-updated">
           Updated {lastUpdated.toLocaleTimeString("en-US", {
             hour: "numeric",
             minute: "2-digit",

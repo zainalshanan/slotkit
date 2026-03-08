@@ -43,17 +43,17 @@ export function SeatsPicker({
   const fillPercentage = (bookedSeats / maxSeats) * 100;
 
   return (
-    <div className={cn("slotkit-seats-picker", className)} style={style}>
-      <div className="slotkit-seats-info">
-        <span className="slotkit-seats-count">
+    <div className={cn("tbk-seats-picker", className)} style={style}>
+      <div className="tbk-seats-info">
+        <span className="tbk-seats-count">
           {availableSeats} of {maxSeats} seats available
         </span>
 
-        <div className="slotkit-seats-bar">
+        <div className="tbk-seats-bar">
           <div
             className={cn(
-              "slotkit-seats-fill",
-              isFull && "slotkit-seats-full",
+              "tbk-seats-fill",
+              isFull && "tbk-seats-full",
             )}
             style={{ width: `${Math.min(100, fillPercentage)}%` }}
           />
@@ -61,7 +61,7 @@ export function SeatsPicker({
       </div>
 
       <button
-        className="slotkit-button-primary"
+        className="tbk-button-primary"
         onClick={onReserve}
         disabled={isFull || isReserving}
       >

@@ -131,33 +131,33 @@ export function QueueManager({
     date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
 
   const getWaitClass = (minutes: number) => {
-    if (minutes > 45) return "slotkit-queue-wait-high";
-    if (minutes > 20) return "slotkit-queue-wait-medium";
-    return "slotkit-queue-wait-low";
+    if (minutes > 45) return "tbk-queue-wait-high";
+    if (minutes > 20) return "tbk-queue-wait-medium";
+    return "tbk-queue-wait-low";
   };
 
   return (
-    <div className={cn("slotkit-queue-manager", className)} style={style}>
-      <div className="slotkit-queue-manager-header">
-        <h2 className="slotkit-form-title">Walk-In Queue</h2>
-        <span className="slotkit-badge">{entries.length} total</span>
+    <div className={cn("tbk-queue-manager", className)} style={style}>
+      <div className="tbk-queue-manager-header">
+        <h2 className="tbk-form-title">Walk-In Queue</h2>
+        <span className="tbk-badge">{entries.length} total</span>
       </div>
 
       {/* In-Service Entry */}
       {inService && (
-        <div className="slotkit-queue-in-service">
-          <div className="slotkit-queue-in-service-label">Now Serving</div>
-          <div className="slotkit-queue-card slotkit-queue-card-active">
-            <div className="slotkit-queue-card-header">
-              <span className="slotkit-queue-card-name">
+        <div className="tbk-queue-in-service">
+          <div className="tbk-queue-in-service-label">Now Serving</div>
+          <div className="tbk-queue-card tbk-queue-card-active">
+            <div className="tbk-queue-card-header">
+              <span className="tbk-queue-card-name">
                 {inService.customerName}
               </span>
-              <span className="slotkit-queue-card-service">
+              <span className="tbk-queue-card-service">
                 {inService.serviceName} ({inService.durationMinutes} min)
               </span>
             </div>
             {(inService.customerPhone || inService.customerEmail) && (
-              <div className="slotkit-queue-card-contact">
+              <div className="tbk-queue-card-contact">
                 {inService.customerPhone && (
                   <span>{inService.customerPhone}</span>
                 )}
@@ -167,12 +167,12 @@ export function QueueManager({
               </div>
             )}
             {inService.notes && (
-              <div className="slotkit-queue-card-notes">{inService.notes}</div>
+              <div className="tbk-queue-card-notes">{inService.notes}</div>
             )}
-            <div className="slotkit-queue-card-actions">
+            <div className="tbk-queue-card-actions">
               <button
                 type="button"
-                className="slotkit-button-primary"
+                className="tbk-button-primary"
                 onClick={withLoading(inService.id, onCompleteService)}
                 disabled={isLoading(inService.id)}
               >
@@ -180,7 +180,7 @@ export function QueueManager({
               </button>
               <button
                 type="button"
-                className="slotkit-button-danger"
+                className="tbk-button-danger"
                 onClick={withLoading(inService.id, onMarkNoShow)}
                 disabled={isLoading(inService.id)}
               >
@@ -193,13 +193,13 @@ export function QueueManager({
 
       {/* Queued Entries */}
       {queued.length > 0 ? (
-        <div className="slotkit-queue-list" role="list">
+        <div className="tbk-queue-list" role="list">
           {queued.map((entry) => (
             <div
               key={entry.id}
               className={cn(
-                "slotkit-queue-card",
-                dragOverId === entry.id && "slotkit-queue-card-dragover",
+                "tbk-queue-card",
+                dragOverId === entry.id && "tbk-queue-card-dragover",
               )}
               role="listitem"
               draggable={!!onReorder}
@@ -208,39 +208,39 @@ export function QueueManager({
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, entry.id)}
             >
-              <div className="slotkit-queue-card-header">
-                <span className="slotkit-queue-card-position">
+              <div className="tbk-queue-card-header">
+                <span className="tbk-queue-card-position">
                   #{entry.position}
                 </span>
-                <span className="slotkit-queue-card-name">
+                <span className="tbk-queue-card-name">
                   {entry.customerName}
                 </span>
                 <span
                   className={cn(
-                    "slotkit-queue-card-wait",
+                    "tbk-queue-card-wait",
                     getWaitClass(entry.estimatedWaitMinutes),
                   )}
                 >
                   ~{entry.estimatedWaitMinutes} min
                 </span>
               </div>
-              <div className="slotkit-queue-card-meta">
+              <div className="tbk-queue-card-meta">
                 <span>{entry.serviceName} ({entry.durationMinutes} min)</span>
                 <span>Checked in {formatTime(entry.checkedInAt)}</span>
               </div>
               {(entry.customerPhone || entry.customerEmail) && (
-                <div className="slotkit-queue-card-contact">
+                <div className="tbk-queue-card-contact">
                   {entry.customerPhone && <span>{entry.customerPhone}</span>}
                   {entry.customerEmail && <span>{entry.customerEmail}</span>}
                 </div>
               )}
               {entry.notes && (
-                <div className="slotkit-queue-card-notes">{entry.notes}</div>
+                <div className="tbk-queue-card-notes">{entry.notes}</div>
               )}
-              <div className="slotkit-queue-card-actions">
+              <div className="tbk-queue-card-actions">
                 <button
                   type="button"
-                  className="slotkit-button-primary"
+                  className="tbk-button-primary"
                   onClick={withLoading(entry.id, onStartService)}
                   disabled={isLoading(entry.id) || !!inService}
                   title={
@@ -253,7 +253,7 @@ export function QueueManager({
                 </button>
                 <button
                   type="button"
-                  className="slotkit-button-secondary"
+                  className="tbk-button-secondary"
                   onClick={withLoading(entry.id, onMarkNoShow)}
                   disabled={isLoading(entry.id)}
                 >
@@ -261,7 +261,7 @@ export function QueueManager({
                 </button>
                 <button
                   type="button"
-                  className="slotkit-button-danger-outline"
+                  className="tbk-button-danger-outline"
                   onClick={withLoading(entry.id, onRemove)}
                   disabled={isLoading(entry.id)}
                 >
@@ -273,7 +273,7 @@ export function QueueManager({
         </div>
       ) : (
         !inService && (
-          <div className="slotkit-queue-empty">
+          <div className="tbk-queue-empty">
             No walk-ins in queue.
           </div>
         )

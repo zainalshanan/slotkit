@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SlotKit ("The Headless Booking Primitive") is an open-source, MIT-licensed developer toolkit for building production-grade booking systems. It provides a Drizzle ORM database schema, scheduling math engine, and copy-paste UI components (shadcn/ui convention) for Next.js applications backed by any Postgres 15+ instance.
+The Booking Kit ("The Headless Booking Primitive") is an open-source, MIT-licensed developer toolkit for building production-grade booking systems. It provides a Drizzle ORM database schema, scheduling math engine, and copy-paste UI components (shadcn/ui convention) for Next.js applications backed by any Postgres 15+ instance.
 
 Philosophy: **"Hide the Math, Expose the UI."** The scheduling logic is encapsulated in `@thebookingkit/core`; UI components are copy-paste source code developers own entirely.
 

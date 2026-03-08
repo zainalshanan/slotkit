@@ -161,24 +161,24 @@ export function KioskShell({
     <div
       ref={containerRef}
       className={cn(
-        "slotkit-kiosk-shell",
-        isFullscreen && "slotkit-kiosk-fullscreen",
+        "tbk-kiosk-shell",
+        isFullscreen && "tbk-kiosk-fullscreen",
         className,
       )}
       style={style}
     >
       {/* Lock Screen */}
       {isLocked && (
-        <div className="slotkit-kiosk-lock-overlay" role="dialog" aria-label="Kiosk locked">
-          <div className="slotkit-kiosk-lock-content">
-            <div className="slotkit-kiosk-lock-icon" aria-hidden="true">
+        <div className="tbk-kiosk-lock-overlay" role="dialog" aria-label="Kiosk locked">
+          <div className="tbk-kiosk-lock-content">
+            <div className="tbk-kiosk-lock-icon" aria-hidden="true">
               &#128274;
             </div>
-            <h2 className="slotkit-kiosk-lock-title">Kiosk Locked</h2>
+            <h2 className="tbk-kiosk-lock-title">Kiosk Locked</h2>
             {pin ? (
               <>
-                <p className="slotkit-kiosk-lock-hint">Enter PIN to unlock</p>
-                <div className="slotkit-kiosk-pin-input">
+                <p className="tbk-kiosk-lock-hint">Enter PIN to unlock</p>
+                <div className="tbk-kiosk-pin-input">
                   <input
                     type="password"
                     inputMode="numeric"
@@ -190,8 +190,8 @@ export function KioskShell({
                     }}
                     onKeyDown={handlePinKeyDown}
                     className={cn(
-                      "slotkit-input slotkit-pin-field",
-                      pinError && "slotkit-pin-error",
+                      "tbk-input tbk-pin-field",
+                      pinError && "tbk-pin-error",
                     )}
                     placeholder="****"
                     autoFocus
@@ -199,20 +199,20 @@ export function KioskShell({
                   />
                   <button
                     type="button"
-                    className="slotkit-button-primary"
+                    className="tbk-button-primary"
                     onClick={handleUnlock}
                   >
                     Unlock
                   </button>
                 </div>
                 {pinError && (
-                  <p className="slotkit-error">Incorrect PIN</p>
+                  <p className="tbk-error">Incorrect PIN</p>
                 )}
               </>
             ) : (
               <button
                 type="button"
-                className="slotkit-button-primary slotkit-button-large"
+                className="tbk-button-primary tbk-button-large"
                 onClick={() => {
                   setIsLocked(false);
                   resetIdleTimer();
@@ -226,10 +226,10 @@ export function KioskShell({
       )}
 
       {/* Kiosk Toolbar */}
-      <div className="slotkit-kiosk-shell-toolbar">
+      <div className="tbk-kiosk-shell-toolbar">
         <button
           type="button"
-          className="slotkit-button-secondary slotkit-button-small"
+          className="tbk-button-secondary tbk-button-small"
           onClick={toggleFullscreen}
           title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen (F11)"}
           aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
@@ -239,7 +239,7 @@ export function KioskShell({
         {autoLockMinutes > 0 && (
           <button
             type="button"
-            className="slotkit-button-secondary slotkit-button-small"
+            className="tbk-button-secondary tbk-button-small"
             onClick={() => setIsLocked(true)}
             title="Lock kiosk"
             aria-label="Lock kiosk"
@@ -250,7 +250,7 @@ export function KioskShell({
       </div>
 
       {/* Main Content */}
-      <div className="slotkit-kiosk-shell-content">{children}</div>
+      <div className="tbk-kiosk-shell-content">{children}</div>
     </div>
   );
 }

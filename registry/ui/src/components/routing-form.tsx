@@ -74,17 +74,17 @@ export function RoutingForm({
 
   return (
     <form
-      className={cn("slotkit-routing-form", className)}
+      className={cn("tbk-routing-form", className)}
       style={style}
       onSubmit={handleSubmit(handleFormSubmit)}
       noValidate
     >
       <h2>{title}</h2>
-      {description && <p className="slotkit-form-description">{description}</p>}
+      {description && <p className="tbk-form-description">{description}</p>}
 
       {fields.map((field) => (
-        <div key={field.key} className="slotkit-field">
-          <label htmlFor={`rf-${field.key}`} className="slotkit-label">
+        <div key={field.key} className="tbk-field">
+          <label htmlFor={`rf-${field.key}`} className="tbk-label">
             {field.label}
             {field.required && <span aria-hidden="true"> *</span>}
           </label>
@@ -93,7 +93,7 @@ export function RoutingForm({
             <input
               id={`rf-${field.key}`}
               type="text"
-              className="slotkit-input"
+              className="tbk-input"
               placeholder={field.placeholder}
               {...register(field.key, {
                 required: field.required ? `${field.label} is required` : false,
@@ -104,7 +104,7 @@ export function RoutingForm({
           {field.type === "dropdown" && (
             <select
               id={`rf-${field.key}`}
-              className="slotkit-select"
+              className="tbk-select"
               {...register(field.key, {
                 required: field.required ? `${field.label} is required` : false,
               })}
@@ -119,9 +119,9 @@ export function RoutingForm({
           )}
 
           {field.type === "radio" && (
-            <div className="slotkit-radio-group" role="radiogroup">
+            <div className="tbk-radio-group" role="radiogroup">
               {field.options?.map((opt) => (
-                <label key={opt} className="slotkit-radio-label">
+                <label key={opt} className="tbk-radio-label">
                   <input
                     type="radio"
                     value={opt}
@@ -138,9 +138,9 @@ export function RoutingForm({
           )}
 
           {field.type === "checkbox" && (
-            <div className="slotkit-checkbox-group">
+            <div className="tbk-checkbox-group">
               {field.options?.map((opt) => (
-                <label key={opt} className="slotkit-checkbox-label">
+                <label key={opt} className="tbk-checkbox-label">
                   <input
                     type="checkbox"
                     value={opt}
@@ -153,14 +153,14 @@ export function RoutingForm({
           )}
 
           {errors[field.key] ? (
-            <p className="slotkit-error">
+            <p className="tbk-error">
               {errors[field.key]?.message as string}
             </p>
           ) : null}
         </div>
       ))}
 
-      <button type="submit" className="slotkit-button-primary">
+      <button type="submit" className="tbk-button-primary">
         Continue
       </button>
     </form>

@@ -87,21 +87,21 @@ export function ManualBookingForm({
 
   return (
     <form
-      className={cn("slotkit-manual-booking-form", className)}
+      className={cn("tbk-manual-booking-form", className)}
       style={style}
       onSubmit={handleSubmit(handleFormSubmit)}
       noValidate
     >
-      <h2 className="slotkit-form-title">New Booking</h2>
+      <h2 className="tbk-form-title">New Booking</h2>
 
       {/* Event Type */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-event-type" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-event-type" className="tbk-label">
           Service <span aria-hidden="true">*</span>
         </label>
         <select
           id="mb-event-type"
-          className="slotkit-select"
+          className="tbk-select"
           {...register("eventTypeId", { required: "Please select a service" })}
         >
           {eventTypes.map((et) => (
@@ -111,71 +111,71 @@ export function ManualBookingForm({
           ))}
         </select>
         {errors.eventTypeId ? (
-          <p className="slotkit-error">{errors.eventTypeId.message}</p>
+          <p className="tbk-error">{errors.eventTypeId.message}</p>
         ) : null}
       </div>
 
       {/* Date */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-date" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-date" className="tbk-label">
           Date <span aria-hidden="true">*</span>
         </label>
         <input
           id="mb-date"
           type="date"
-          className="slotkit-input"
+          className="tbk-input"
           {...register("date", { required: "Please select a date" })}
         />
         {errors.date ? (
-          <p className="slotkit-error">{errors.date.message}</p>
+          <p className="tbk-error">{errors.date.message}</p>
         ) : null}
       </div>
 
       {/* Start Time */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-time" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-time" className="tbk-label">
           Start Time <span aria-hidden="true">*</span>
         </label>
         <input
           id="mb-time"
           type="time"
-          className="slotkit-input"
+          className="tbk-input"
           {...register("startTime", { required: "Please select a start time" })}
         />
         {errors.startTime ? (
-          <p className="slotkit-error">{errors.startTime.message}</p>
+          <p className="tbk-error">{errors.startTime.message}</p>
         ) : null}
       </div>
 
-      <hr className="slotkit-divider" />
-      <h3 className="slotkit-section-title">Customer Details</h3>
+      <hr className="tbk-divider" />
+      <h3 className="tbk-section-title">Customer Details</h3>
 
       {/* Customer Name */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-name" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-name" className="tbk-label">
           Full Name <span aria-hidden="true">*</span>
         </label>
         <input
           id="mb-name"
           type="text"
-          className="slotkit-input"
+          className="tbk-input"
           placeholder="Jane Smith"
           {...register("customerName", { required: "Customer name is required" })}
         />
         {errors.customerName ? (
-          <p className="slotkit-error">{errors.customerName.message}</p>
+          <p className="tbk-error">{errors.customerName.message}</p>
         ) : null}
       </div>
 
       {/* Customer Email */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-email" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-email" className="tbk-label">
           Email <span aria-hidden="true">*</span>
         </label>
         <input
           id="mb-email"
           type="email"
-          className="slotkit-input"
+          className="tbk-input"
           placeholder="jane@example.com"
           {...register("customerEmail", {
             required: "Email is required",
@@ -186,32 +186,32 @@ export function ManualBookingForm({
           })}
         />
         {errors.customerEmail ? (
-          <p className="slotkit-error">{errors.customerEmail.message}</p>
+          <p className="tbk-error">{errors.customerEmail.message}</p>
         ) : null}
       </div>
 
       {/* Customer Phone (optional) */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-phone" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-phone" className="tbk-label">
           Phone (optional)
         </label>
         <input
           id="mb-phone"
           type="tel"
-          className="slotkit-input"
+          className="tbk-input"
           placeholder="+1 555 000 0000"
           {...register("customerPhone")}
         />
       </div>
 
       {/* Notes (optional) */}
-      <div className="slotkit-field">
-        <label htmlFor="mb-notes" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="mb-notes" className="tbk-label">
           Notes (optional)
         </label>
         <textarea
           id="mb-notes"
-          className="slotkit-textarea"
+          className="tbk-textarea"
           rows={3}
           placeholder="Any additional information..."
           {...register("notes")}
@@ -219,15 +219,15 @@ export function ManualBookingForm({
       </div>
 
       {errors.root ? (
-        <div className="slotkit-alert slotkit-alert-error" role="alert">
+        <div className="tbk-alert tbk-alert-error" role="alert">
           {errors.root.message}
         </div>
       ) : null}
 
-      <div className="slotkit-form-actions">
+      <div className="tbk-form-actions">
         <button
           type="submit"
-          className="slotkit-button-primary"
+          className="tbk-button-primary"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Creating..." : "Create Booking"}
@@ -235,7 +235,7 @@ export function ManualBookingForm({
         {onCancel && (
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={onCancel}
             disabled={isSubmitting}
           >

@@ -12,15 +12,15 @@ export interface JobAdapter {
   cancel(jobId: string): Promise<void>;
 }
 
-/** Common job names used by SlotKit */
+/** Common job names used by The Booking Kit */
 export const JOB_NAMES = {
-  SEND_CONFIRMATION_EMAIL: "slotkit/send-confirmation-email",
-  SEND_REMINDER_EMAIL: "slotkit/send-reminder-email",
-  SEND_CANCELLATION_EMAIL: "slotkit/send-cancellation-email",
-  SEND_RESCHEDULE_EMAIL: "slotkit/send-reschedule-email",
-  SYNC_CALENDAR_EVENT: "slotkit/sync-calendar-event",
-  DELETE_CALENDAR_EVENT: "slotkit/delete-calendar-event",
-  CHECK_CALENDAR_CONFLICTS: "slotkit/check-calendar-conflicts",
-  AUTO_REJECT_PENDING: "slotkit/auto-reject-pending-booking",
-  PROCESS_WEBHOOK: "slotkit/process-webhook",
+  SEND_CONFIRMATION_EMAIL: "thebookingkit/send-confirmation-email",
+  SEND_REMINDER_EMAIL: "thebookingkit/send-reminder-email",
+  SEND_CANCELLATION_EMAIL: "thebookingkit/send-cancellation-email",
+  SEND_RESCHEDULE_EMAIL: "thebookingkit/send-reschedule-email",
+  SYNC_CALENDAR_EVENT: "thebookingkit/sync-calendar-event",
+  DELETE_CALENDAR_EVENT: "thebookingkit/delete-calendar-event",
+  CHECK_CALENDAR_CONFLICTS: "thebookingkit/check-calendar-conflicts",
+  AUTO_REJECT_PENDING: "thebookingkit/auto-reject-pending-booking",
+  PROCESS_WEBHOOK: "thebookingkit/process-webhook",
 } as const;

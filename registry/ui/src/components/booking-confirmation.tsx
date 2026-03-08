@@ -98,13 +98,13 @@ export function BookingConfirmation({
 
   if (state.status === "success") {
     return (
-      <div className={cn("slotkit-booking-confirmation slotkit-success", className)} style={style}>
-        <div className="slotkit-success-icon" aria-hidden="true">
+      <div className={cn("tbk-booking-confirmation tbk-success", className)} style={style}>
+        <div className="tbk-success-icon" aria-hidden="true">
           &#10003;
         </div>
         <h2>Booking Confirmed!</h2>
         <p>Your booking has been confirmed.</p>
-        <dl className="slotkit-confirmation-details">
+        <dl className="tbk-confirmation-details">
           <dt>Booking ID</dt>
           <dd>{state.bookingId}</dd>
           <dt>Event</dt>
@@ -119,10 +119,10 @@ export function BookingConfirmation({
   }
 
   return (
-    <div className={cn("slotkit-booking-confirmation", className)} style={style}>
+    <div className={cn("tbk-booking-confirmation", className)} style={style}>
       <h2>Confirm Your Booking</h2>
 
-      <dl className="slotkit-confirmation-details">
+      <dl className="tbk-confirmation-details">
         <dt>Service</dt>
         <dd>{eventTitle}</dd>
         <dt>Provider</dt>
@@ -150,7 +150,7 @@ export function BookingConfirmation({
       </dl>
 
       {Object.keys(formData.responses).length > 0 && (
-        <div className="slotkit-responses-review">
+        <div className="tbk-responses-review">
           <h3>Your Responses</h3>
           <dl>
             {Object.entries(formData.responses).map(([key, value]) => (
@@ -164,12 +164,12 @@ export function BookingConfirmation({
       )}
 
       {state.status === "conflict" && (
-        <div className="slotkit-alert slotkit-alert-warning" role="alert">
+        <div className="tbk-alert tbk-alert-warning" role="alert">
           <p>This time slot is no longer available. Please select a different time.</p>
           {onBack && (
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={onBack}
             >
               Choose Another Time
@@ -179,11 +179,11 @@ export function BookingConfirmation({
       )}
 
       {state.status === "error" && (
-        <div className="slotkit-alert slotkit-alert-error" role="alert">
+        <div className="tbk-alert tbk-alert-error" role="alert">
           <p>{state.message}</p>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={handleConfirm}
           >
             Try Again
@@ -191,11 +191,11 @@ export function BookingConfirmation({
         </div>
       )}
 
-      <div className="slotkit-confirmation-actions">
+      <div className="tbk-confirmation-actions">
         {onBack && state.status !== "conflict" && (
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={onBack}
             disabled={state.status === "submitting"}
           >
@@ -205,7 +205,7 @@ export function BookingConfirmation({
         {state.status !== "conflict" && (
           <button
             type="button"
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             onClick={handleConfirm}
             disabled={state.status === "submitting"}
           >

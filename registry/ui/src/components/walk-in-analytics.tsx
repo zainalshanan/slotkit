@@ -64,72 +64,72 @@ export function WalkInAnalytics({
   const scheduledBookings = totalBookings - data.totalWalkIns;
 
   return (
-    <div className={cn("slotkit-walkin-analytics", className)} style={style}>
-      <div className="slotkit-analytics-header">
-        <h2 className="slotkit-form-title">Walk-In Analytics</h2>
-        <span className="slotkit-analytics-period">{dateRangeLabel}</span>
+    <div className={cn("tbk-walkin-analytics", className)} style={style}>
+      <div className="tbk-analytics-header">
+        <h2 className="tbk-form-title">Walk-In Analytics</h2>
+        <span className="tbk-analytics-period">{dateRangeLabel}</span>
       </div>
 
       {/* KPI Cards */}
-      <div className="slotkit-analytics-cards">
-        <div className="slotkit-analytics-card">
-          <span className="slotkit-analytics-card-value">
+      <div className="tbk-analytics-cards">
+        <div className="tbk-analytics-card">
+          <span className="tbk-analytics-card-value">
             {data.totalWalkIns}
           </span>
-          <span className="slotkit-analytics-card-label">Total Walk-Ins</span>
+          <span className="tbk-analytics-card-label">Total Walk-Ins</span>
         </div>
-        <div className="slotkit-analytics-card">
-          <span className="slotkit-analytics-card-value">
+        <div className="tbk-analytics-card">
+          <span className="tbk-analytics-card-value">
             {data.averageWaitMinutes} min
           </span>
-          <span className="slotkit-analytics-card-label">Avg Wait Time</span>
+          <span className="tbk-analytics-card-label">Avg Wait Time</span>
         </div>
-        <div className="slotkit-analytics-card">
-          <span className="slotkit-analytics-card-value">
+        <div className="tbk-analytics-card">
+          <span className="tbk-analytics-card-value">
             {data.averageServiceDuration} min
           </span>
-          <span className="slotkit-analytics-card-label">
+          <span className="tbk-analytics-card-label">
             Avg Service Duration
           </span>
         </div>
-        <div className="slotkit-analytics-card">
-          <span className="slotkit-analytics-card-value">
+        <div className="tbk-analytics-card">
+          <span className="tbk-analytics-card-value">
             {(data.noShowRate * 100).toFixed(1)}%
           </span>
-          <span className="slotkit-analytics-card-label">No-Show Rate</span>
+          <span className="tbk-analytics-card-label">No-Show Rate</span>
         </div>
       </div>
 
       {/* Walk-In vs Scheduled */}
-      <div className="slotkit-analytics-section">
-        <h3 className="slotkit-section-title">Walk-In vs Scheduled</h3>
-        <div className="slotkit-analytics-ratio-bar">
+      <div className="tbk-analytics-section">
+        <h3 className="tbk-section-title">Walk-In vs Scheduled</h3>
+        <div className="tbk-analytics-ratio-bar">
           <div
-            className="slotkit-analytics-ratio-walkin"
+            className="tbk-analytics-ratio-walkin"
             style={{
               width: `${data.walkInRatio * 100}%`,
             }}
             title={`Walk-ins: ${data.totalWalkIns}`}
           />
           <div
-            className="slotkit-analytics-ratio-scheduled"
+            className="tbk-analytics-ratio-scheduled"
             style={{
               width: `${(1 - data.walkInRatio) * 100}%`,
             }}
             title={`Scheduled: ${scheduledBookings}`}
           />
         </div>
-        <div className="slotkit-analytics-ratio-legend">
-          <span className="slotkit-legend-item">
+        <div className="tbk-analytics-ratio-legend">
+          <span className="tbk-legend-item">
             <span
-              className="slotkit-legend-dot"
+              className="tbk-legend-dot"
               style={{ backgroundColor: "#3b82f6" }}
             />
             Walk-ins ({data.totalWalkIns})
           </span>
-          <span className="slotkit-legend-item">
+          <span className="tbk-legend-item">
             <span
-              className="slotkit-legend-dot"
+              className="tbk-legend-dot"
               style={{ backgroundColor: "#94a3b8" }}
             />
             Scheduled ({scheduledBookings})
@@ -138,42 +138,42 @@ export function WalkInAnalytics({
       </div>
 
       {/* Status Breakdown */}
-      <div className="slotkit-analytics-section">
-        <h3 className="slotkit-section-title">Status Breakdown</h3>
-        <div className="slotkit-analytics-status-grid">
-          <div className="slotkit-analytics-status-item">
-            <span className="slotkit-analytics-status-count">
+      <div className="tbk-analytics-section">
+        <h3 className="tbk-section-title">Status Breakdown</h3>
+        <div className="tbk-analytics-status-grid">
+          <div className="tbk-analytics-status-item">
+            <span className="tbk-analytics-status-count">
               {data.completedCount}
             </span>
-            <span className="slotkit-analytics-status-label">Completed</span>
+            <span className="tbk-analytics-status-label">Completed</span>
           </div>
-          <div className="slotkit-analytics-status-item">
-            <span className="slotkit-analytics-status-count">
+          <div className="tbk-analytics-status-item">
+            <span className="tbk-analytics-status-count">
               {data.noShowCount}
             </span>
-            <span className="slotkit-analytics-status-label">No-Shows</span>
+            <span className="tbk-analytics-status-label">No-Shows</span>
           </div>
-          <div className="slotkit-analytics-status-item">
-            <span className="slotkit-analytics-status-count">
+          <div className="tbk-analytics-status-item">
+            <span className="tbk-analytics-status-count">
               {data.cancelledCount}
             </span>
-            <span className="slotkit-analytics-status-label">Cancelled</span>
+            <span className="tbk-analytics-status-label">Cancelled</span>
           </div>
         </div>
       </div>
 
       {/* Hourly Distribution */}
-      <div className="slotkit-analytics-section">
-        <h3 className="slotkit-section-title">Busiest Hours</h3>
-        <div className="slotkit-analytics-chart">
+      <div className="tbk-analytics-section">
+        <h3 className="tbk-section-title">Busiest Hours</h3>
+        <div className="tbk-analytics-chart">
           {renderHourlyChart(data.hourlyDistribution)}
         </div>
       </div>
 
       {/* Daily Distribution */}
-      <div className="slotkit-analytics-section">
-        <h3 className="slotkit-section-title">Busiest Days</h3>
-        <div className="slotkit-analytics-chart">
+      <div className="tbk-analytics-section">
+        <h3 className="tbk-section-title">Busiest Days</h3>
+        <div className="tbk-analytics-chart">
           {renderDailyChart(data.dailyDistribution)}
         </div>
       </div>
@@ -188,18 +188,18 @@ function renderHourlyChart(distribution: Record<number, number>) {
   const displayHours = hours.filter((h) => h >= 6 && h <= 22);
 
   return (
-    <div className="slotkit-bar-chart" role="img" aria-label="Hourly walk-in distribution">
+    <div className="tbk-bar-chart" role="img" aria-label="Hourly walk-in distribution">
       {displayHours.map((hour) => {
         const count = distribution[hour] ?? 0;
         const height = max > 0 ? (count / max) * 100 : 0;
         return (
-          <div key={hour} className="slotkit-bar-column">
+          <div key={hour} className="tbk-bar-column">
             <div
-              className="slotkit-bar"
+              className="tbk-bar"
               style={{ height: `${height}%` }}
               title={`${hour}:00 — ${count} walk-ins`}
             />
-            <span className="slotkit-bar-label">
+            <span className="tbk-bar-label">
               {hour % 3 === 0 ? `${hour}:00` : ""}
             </span>
           </div>
@@ -214,18 +214,18 @@ function renderDailyChart(distribution: Record<number, number>) {
   const days = [0, 1, 2, 3, 4, 5, 6];
 
   return (
-    <div className="slotkit-bar-chart slotkit-bar-chart-daily" role="img" aria-label="Daily walk-in distribution">
+    <div className="tbk-bar-chart tbk-bar-chart-daily" role="img" aria-label="Daily walk-in distribution">
       {days.map((day) => {
         const count = distribution[day] ?? 0;
         const height = max > 0 ? (count / max) * 100 : 0;
         return (
-          <div key={day} className="slotkit-bar-column">
+          <div key={day} className="tbk-bar-column">
             <div
-              className="slotkit-bar"
+              className="tbk-bar"
               style={{ height: `${height}%` }}
               title={`${DAY_LABELS[day]} — ${count} walk-ins`}
             />
-            <span className="slotkit-bar-label">{DAY_LABELS[day]}</span>
+            <span className="tbk-bar-label">{DAY_LABELS[day]}</span>
           </div>
         );
       })}

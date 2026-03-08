@@ -190,17 +190,17 @@ export function WorkflowBuilder({
   );
 
   return (
-    <div className={cn("slotkit-workflow-builder", className)} style={style}>
+    <div className={cn("tbk-workflow-builder", className)} style={style}>
       <form onSubmit={handleSubmit}>
         {/* Workflow Name */}
-        <div className="slotkit-field">
-          <label htmlFor="wf-name" className="slotkit-label">
+        <div className="tbk-field">
+          <label htmlFor="wf-name" className="tbk-label">
             Workflow Name
           </label>
           <input
             id="wf-name"
             type="text"
-            className="slotkit-input"
+            className="tbk-input"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g., Send confirmation email"
@@ -209,10 +209,10 @@ export function WorkflowBuilder({
         </div>
 
         {/* Step 1: Trigger */}
-        <fieldset className="slotkit-fieldset">
-          <legend className="slotkit-legend">1. Trigger</legend>
+        <fieldset className="tbk-fieldset">
+          <legend className="tbk-legend">1. Trigger</legend>
           <select
-            className="slotkit-select"
+            className="tbk-select"
             value={trigger}
             onChange={(e) => setTrigger(e.target.value)}
           >
@@ -225,12 +225,12 @@ export function WorkflowBuilder({
         </fieldset>
 
         {/* Step 2: Conditions */}
-        <fieldset className="slotkit-fieldset">
-          <legend className="slotkit-legend">2. Conditions (optional)</legend>
+        <fieldset className="tbk-fieldset">
+          <legend className="tbk-legend">2. Conditions (optional)</legend>
           {conditions.map((condition, idx) => (
-            <div key={idx} className="slotkit-condition-row">
+            <div key={idx} className="tbk-condition-row">
               <select
-                className="slotkit-select"
+                className="tbk-select"
                 value={condition.field}
                 onChange={(e) =>
                   updateCondition(idx, { field: e.target.value })
@@ -244,7 +244,7 @@ export function WorkflowBuilder({
               </select>
 
               <select
-                className="slotkit-select"
+                className="tbk-select"
                 value={condition.operator}
                 onChange={(e) =>
                   updateCondition(idx, { operator: e.target.value })
@@ -257,7 +257,7 @@ export function WorkflowBuilder({
 
               <input
                 type="text"
-                className="slotkit-input"
+                className="tbk-input"
                 value={condition.value}
                 onChange={(e) =>
                   updateCondition(idx, { value: e.target.value })
@@ -267,7 +267,7 @@ export function WorkflowBuilder({
 
               <button
                 type="button"
-                className="slotkit-button-danger"
+                className="tbk-button-danger"
                 onClick={() => removeCondition(idx)}
               >
                 Remove
@@ -276,7 +276,7 @@ export function WorkflowBuilder({
           ))}
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={addCondition}
           >
             Add Condition
@@ -284,13 +284,13 @@ export function WorkflowBuilder({
         </fieldset>
 
         {/* Step 3: Actions */}
-        <fieldset className="slotkit-fieldset">
-          <legend className="slotkit-legend">3. Actions</legend>
+        <fieldset className="tbk-fieldset">
+          <legend className="tbk-legend">3. Actions</legend>
           {actions.map((action, idx) => (
-            <div key={idx} className="slotkit-action-card">
-              <div className="slotkit-action-header">
+            <div key={idx} className="tbk-action-card">
+              <div className="tbk-action-header">
                 <select
-                  className="slotkit-select"
+                  className="tbk-select"
                   value={action.type}
                   onChange={(e) =>
                     updateAction(idx, {
@@ -309,7 +309,7 @@ export function WorkflowBuilder({
                 {actions.length > 1 && (
                   <button
                     type="button"
-                    className="slotkit-button-danger"
+                    className="tbk-button-danger"
                     onClick={() => removeAction(idx)}
                   >
                     Remove
@@ -319,10 +319,10 @@ export function WorkflowBuilder({
 
               {/* Action-specific config fields */}
               {action.type === "send_email" && (
-                <div className="slotkit-action-config">
+                <div className="tbk-action-config">
                   <input
                     type="text"
-                    className="slotkit-input"
+                    className="tbk-input"
                     placeholder="To (customer, host, or email)"
                     value={action.config.to ?? ""}
                     onChange={(e) =>
@@ -331,7 +331,7 @@ export function WorkflowBuilder({
                   />
                   <input
                     type="text"
-                    className="slotkit-input"
+                    className="tbk-input"
                     placeholder="Subject"
                     value={action.config.subject ?? ""}
                     onChange={(e) =>
@@ -339,7 +339,7 @@ export function WorkflowBuilder({
                     }
                   />
                   <textarea
-                    className="slotkit-textarea"
+                    className="tbk-textarea"
                     placeholder="Body template (use {booking.title}, {attendee.name}, etc.)"
                     value={action.config.body ?? ""}
                     onChange={(e) =>
@@ -350,10 +350,10 @@ export function WorkflowBuilder({
               )}
 
               {action.type === "send_sms" && (
-                <div className="slotkit-action-config">
+                <div className="tbk-action-config">
                   <input
                     type="text"
-                    className="slotkit-input"
+                    className="tbk-input"
                     placeholder="To (phone number or field key)"
                     value={action.config.to ?? ""}
                     onChange={(e) =>
@@ -361,7 +361,7 @@ export function WorkflowBuilder({
                     }
                   />
                   <textarea
-                    className="slotkit-textarea"
+                    className="tbk-textarea"
                     placeholder="Message template"
                     value={action.config.body ?? ""}
                     onChange={(e) =>
@@ -372,10 +372,10 @@ export function WorkflowBuilder({
               )}
 
               {action.type === "fire_webhook" && (
-                <div className="slotkit-action-config">
+                <div className="tbk-action-config">
                   <input
                     type="url"
-                    className="slotkit-input"
+                    className="tbk-input"
                     placeholder="Webhook URL"
                     value={action.config.url ?? ""}
                     onChange={(e) =>
@@ -386,9 +386,9 @@ export function WorkflowBuilder({
               )}
 
               {action.type === "update_status" && (
-                <div className="slotkit-action-config">
+                <div className="tbk-action-config">
                   <select
-                    className="slotkit-select"
+                    className="tbk-select"
                     value={action.config.status ?? ""}
                     onChange={(e) =>
                       updateActionConfig(idx, "status", e.target.value)
@@ -405,7 +405,7 @@ export function WorkflowBuilder({
           ))}
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={addAction}
           >
             Add Action
@@ -413,8 +413,8 @@ export function WorkflowBuilder({
         </fieldset>
 
         {/* Step 4: Active toggle */}
-        <div className="slotkit-field">
-          <label className="slotkit-checkbox-label">
+        <div className="tbk-field">
+          <label className="tbk-checkbox-label">
             <input
               type="checkbox"
               checked={isActive}
@@ -425,14 +425,14 @@ export function WorkflowBuilder({
         </div>
 
         {/* Submit */}
-        <div className="slotkit-form-actions">
-          <button type="submit" className="slotkit-button-primary">
+        <div className="tbk-form-actions">
+          <button type="submit" className="tbk-button-primary">
             Save Workflow
           </button>
           {onCancel && (
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={onCancel}
             >
               Cancel
@@ -443,9 +443,9 @@ export function WorkflowBuilder({
 
       {/* Execution History */}
       {executionLogs && executionLogs.length > 0 && (
-        <div className="slotkit-workflow-logs">
+        <div className="tbk-workflow-logs">
           <h4>Execution History</h4>
-          <table className="slotkit-workflow-logs-table">
+          <table className="tbk-workflow-logs-table">
             <thead>
               <tr>
                 <th>Date</th>
@@ -462,8 +462,8 @@ export function WorkflowBuilder({
                   <td>
                     <span
                       className={cn(
-                        "slotkit-log-status",
-                        `slotkit-log-status-${log.status}`,
+                        "tbk-log-status",
+                        `tbk-log-status-${log.status}`,
                       )}
                     >
                       {log.status}

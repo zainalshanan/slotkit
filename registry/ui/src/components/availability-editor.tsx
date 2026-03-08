@@ -114,15 +114,15 @@ export function AvailabilityEditor({
   );
 
   return (
-    <div className={cn("slotkit-availability-editor", className)} style={style}>
+    <div className={cn("tbk-availability-editor", className)} style={style}>
       {timezone && (
-        <div className="slotkit-editor-timezone">
+        <div className="tbk-editor-timezone">
           <span>Timezone: {timezone}</span>
           {onTimezoneChange && (
             <select
               value={timezone}
               onChange={(e) => onTimezoneChange((e.target as HTMLSelectElement).value)}
-              className="slotkit-timezone-select"
+              className="tbk-timezone-select"
               aria-label="Provider timezone"
             >
               {COMMON_TIMEZONES.map((tz) => (
@@ -133,42 +133,42 @@ export function AvailabilityEditor({
         </div>
       )}
 
-      <div className="slotkit-days-list">
+      <div className="tbk-days-list">
         {DAYS_OF_WEEK.map((day) => {
           const ranges = value[day.key] ?? [];
           return (
-            <div key={day.key} className="slotkit-day-row">
-              <div className="slotkit-day-label">
+            <div key={day.key} className="tbk-day-row">
+              <div className="tbk-day-label">
                 <span>{day.label}</span>
               </div>
-              <div className="slotkit-day-ranges">
+              <div className="tbk-day-ranges">
                 {ranges.length === 0 && (
-                  <span className="slotkit-unavailable-label">Unavailable</span>
+                  <span className="tbk-unavailable-label">Unavailable</span>
                 )}
                 {ranges.map((range, idx) => (
-                  <div key={idx} className="slotkit-time-range">
+                  <div key={idx} className="tbk-time-range">
                     <input
                       type="time"
                       value={range.startTime}
                       onChange={(e) =>
                         updateTimeRange(day.key, idx, "startTime", (e.target as HTMLInputElement).value)
                       }
-                      className="slotkit-time-input"
+                      className="tbk-time-input"
                       aria-label={`${day.label} start time ${idx + 1}`}
                     />
-                    <span className="slotkit-time-separator">to</span>
+                    <span className="tbk-time-separator">to</span>
                     <input
                       type="time"
                       value={range.endTime}
                       onChange={(e) =>
                         updateTimeRange(day.key, idx, "endTime", (e.target as HTMLInputElement).value)
                       }
-                      className="slotkit-time-input"
+                      className="tbk-time-input"
                       aria-label={`${day.label} end time ${idx + 1}`}
                     />
                     <button
                       type="button"
-                      className="slotkit-remove-range"
+                      className="tbk-remove-range"
                       onClick={() => removeTimeRange(day.key, idx)}
                       aria-label={`Remove time range ${idx + 1} for ${day.label}`}
                     >
@@ -176,10 +176,10 @@ export function AvailabilityEditor({
                     </button>
                   </div>
                 ))}
-                <div className="slotkit-day-actions">
+                <div className="tbk-day-actions">
                   <button
                     type="button"
-                    className="slotkit-add-range"
+                    className="tbk-add-range"
                     onClick={() => addTimeRange(day.key)}
                   >
                     + Add hours
@@ -187,7 +187,7 @@ export function AvailabilityEditor({
                   {ranges.length > 0 && (
                     <button
                       type="button"
-                      className="slotkit-copy-all"
+                      className="tbk-copy-all"
                       onClick={() => copyToAllDays(day.key)}
                     >
                       Copy to all days
@@ -203,7 +203,7 @@ export function AvailabilityEditor({
       {onSave && (
         <button
           type="button"
-          className="slotkit-button-primary"
+          className="tbk-button-primary"
           onClick={() => onSave(value)}
           disabled={isSaving}
         >

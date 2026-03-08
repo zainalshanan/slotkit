@@ -99,12 +99,12 @@ export function BookingManagementView({
   if (state.mode === "cancelled") {
     return (
       <div
-        className={cn("slotkit-management-view slotkit-management-cancelled", className)}
+        className={cn("tbk-management-view tbk-management-cancelled", className)}
         style={style}
       >
         <h2>Booking Cancelled</h2>
         <p>Your booking has been successfully cancelled.</p>
-        <dl className="slotkit-detail-list">
+        <dl className="tbk-detail-list">
           <dt>Event</dt>
           <dd>{booking.eventTitle}</dd>
           <dt>Date</dt>
@@ -117,15 +117,15 @@ export function BookingManagementView({
   }
 
   return (
-    <div className={cn("slotkit-management-view", className)} style={style}>
-      <div className="slotkit-management-header">
+    <div className={cn("tbk-management-view", className)} style={style}>
+      <div className="tbk-management-header">
         <h2>Manage Your Booking</h2>
         <BookingStatusBadge status={booking.status} />
       </div>
 
-      <dl className="slotkit-detail-list">
+      <dl className="tbk-detail-list">
         <dt>Booking ID</dt>
-        <dd className="slotkit-booking-id">{booking.bookingId}</dd>
+        <dd className="tbk-booking-id">{booking.bookingId}</dd>
         <dt>Service</dt>
         <dd>{booking.eventTitle}</dd>
         <dt>Provider</dt>
@@ -150,9 +150,9 @@ export function BookingManagementView({
 
       {booking.questionResponses &&
         Object.keys(booking.questionResponses).length > 0 && (
-          <div className="slotkit-responses-section">
+          <div className="tbk-responses-section">
             <h3>Your Responses</h3>
-            <dl className="slotkit-detail-list">
+            <dl className="tbk-detail-list">
               {Object.entries(booking.questionResponses).map(([key, value]) => (
                 <React.Fragment key={key}>
                   <dt>{key}</dt>
@@ -164,11 +164,11 @@ export function BookingManagementView({
         )}
 
       {state.mode === "error" && (
-        <div className="slotkit-alert slotkit-alert-error" role="alert">
+        <div className="tbk-alert tbk-alert-error" role="alert">
           <p>{state.message}</p>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => setState({ mode: "view" })}
           >
             Dismiss
@@ -177,21 +177,21 @@ export function BookingManagementView({
       )}
 
       {state.mode === "cancel-confirm" && (
-        <div className="slotkit-alert slotkit-alert-warning" role="alertdialog">
+        <div className="tbk-alert tbk-alert-warning" role="alertdialog">
           <p>
             Are you sure you want to cancel this booking? This action cannot be undone.
           </p>
-          <div className="slotkit-alert-actions">
+          <div className="tbk-alert-actions">
             <button
               type="button"
-              className="slotkit-button-danger"
+              className="tbk-button-danger"
               onClick={handleCancelConfirm}
             >
               Yes, Cancel Booking
             </button>
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={handleCancelAbort}
             >
               Keep Booking
@@ -201,11 +201,11 @@ export function BookingManagementView({
       )}
 
       {!isTerminal && state.mode !== "cancel-confirm" && (
-        <div className="slotkit-management-actions">
+        <div className="tbk-management-actions">
           {isReschedulable && onReschedule && (
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={() => onReschedule(booking.bookingId)}
             >
               Reschedule
@@ -214,7 +214,7 @@ export function BookingManagementView({
           {isCancellable && onCancel && (
             <button
               type="button"
-              className="slotkit-button-danger"
+              className="tbk-button-danger"
               onClick={handleCancelClick}
               disabled={state.mode === "cancelling"}
             >
@@ -225,7 +225,7 @@ export function BookingManagementView({
       )}
 
       {isTerminal && (
-        <p className="slotkit-terminal-note">
+        <p className="tbk-terminal-note">
           This booking is {booking.status} and can no longer be modified.
         </p>
       )}

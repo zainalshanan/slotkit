@@ -77,7 +77,7 @@ export function BookingCalendar({
   };
 
   return (
-    <div className={cn("slotkit-booking-calendar", className)} style={style}>
+    <div className={cn("tbk-booking-calendar", className)} style={style}>
       <DayPicker
         mode="single"
         selected={selected}
@@ -88,7 +88,7 @@ export function BookingCalendar({
         showOutsideDays={false}
       />
       {timezone && (
-        <div className="slotkit-timezone-display">
+        <div className="tbk-timezone-display">
           <span>Timezone: {timezone}</span>
           {onTimezoneChange && (
             <TimezoneSelector
@@ -130,7 +130,7 @@ function TimezoneSelector({
 
   return (
     <select
-      className="slotkit-timezone-select"
+      className="tbk-timezone-select"
       value={value}
       onChange={(e) => onChange((e.target as HTMLSelectElement).value)}
       aria-label="Select timezone"

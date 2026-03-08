@@ -97,38 +97,38 @@ export function BreakBlockForm({
 
   return (
     <form
-      className={cn("slotkit-break-form", className)}
+      className={cn("tbk-break-form", className)}
       style={style}
       onSubmit={handleSubmit(handleFormSubmit)}
       noValidate
     >
-      <h2 className="slotkit-form-title">Add Break / Block</h2>
+      <h2 className="tbk-form-title">Add Break / Block</h2>
 
       {/* Title */}
-      <div className="slotkit-field">
-        <label htmlFor="bb-title" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="bb-title" className="tbk-label">
           Title
         </label>
         <input
           id="bb-title"
           type="text"
-          className="slotkit-input"
+          className="tbk-input"
           placeholder="Lunch Break"
           {...register("title", { required: "Title is required" })}
         />
         {errors.title ? (
-          <p className="slotkit-error">{errors.title.message}</p>
+          <p className="tbk-error">{errors.title.message}</p>
         ) : null}
       </div>
 
       {/* Block Type */}
-      <div className="slotkit-field">
-        <label htmlFor="bb-type" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="bb-type" className="tbk-label">
           Type
         </label>
         <select
           id="bb-type"
-          className="slotkit-select"
+          className="tbk-select"
           {...register("blockType")}
         >
           {(Object.entries(BLOCK_TYPE_LABELS) as [BlockType, string][]).map(
@@ -142,56 +142,56 @@ export function BreakBlockForm({
       </div>
 
       {/* Date */}
-      <div className="slotkit-field">
-        <label htmlFor="bb-date" className="slotkit-label">
+      <div className="tbk-field">
+        <label htmlFor="bb-date" className="tbk-label">
           Date <span aria-hidden="true">*</span>
         </label>
         <input
           id="bb-date"
           type="date"
-          className="slotkit-input"
+          className="tbk-input"
           {...register("date", { required: "Date is required" })}
         />
         {errors.date ? (
-          <p className="slotkit-error">{errors.date.message}</p>
+          <p className="tbk-error">{errors.date.message}</p>
         ) : null}
       </div>
 
       {/* Time Range */}
-      <div className="slotkit-field-row">
-        <div className="slotkit-field">
-          <label htmlFor="bb-start" className="slotkit-label">
+      <div className="tbk-field-row">
+        <div className="tbk-field">
+          <label htmlFor="bb-start" className="tbk-label">
             Start <span aria-hidden="true">*</span>
           </label>
           <input
             id="bb-start"
             type="time"
-            className="slotkit-input"
+            className="tbk-input"
             {...register("startTime", { required: "Start time is required" })}
           />
           {errors.startTime ? (
-            <p className="slotkit-error">{errors.startTime.message}</p>
+            <p className="tbk-error">{errors.startTime.message}</p>
           ) : null}
         </div>
-        <div className="slotkit-field">
-          <label htmlFor="bb-end" className="slotkit-label">
+        <div className="tbk-field">
+          <label htmlFor="bb-end" className="tbk-label">
             End <span aria-hidden="true">*</span>
           </label>
           <input
             id="bb-end"
             type="time"
-            className="slotkit-input"
+            className="tbk-input"
             {...register("endTime", { required: "End time is required" })}
           />
           {errors.endTime ? (
-            <p className="slotkit-error">{errors.endTime.message}</p>
+            <p className="tbk-error">{errors.endTime.message}</p>
           ) : null}
         </div>
       </div>
 
       {/* Recurring */}
-      <div className="slotkit-field">
-        <label className="slotkit-checkbox-label">
+      <div className="tbk-field">
+        <label className="tbk-checkbox-label">
           <input type="checkbox" {...register("recurring")} />
           Repeat daily for the rest of the week
         </label>
@@ -199,21 +199,21 @@ export function BreakBlockForm({
 
       {/* Conflict Warning */}
       {conflictWarning && (
-        <div className="slotkit-alert slotkit-alert-warning" role="alert">
+        <div className="tbk-alert tbk-alert-warning" role="alert">
           {conflictWarning}
         </div>
       )}
 
       {errors.root ? (
-        <div className="slotkit-alert slotkit-alert-error" role="alert">
+        <div className="tbk-alert tbk-alert-error" role="alert">
           {errors.root.message}
         </div>
       ) : null}
 
-      <div className="slotkit-form-actions">
+      <div className="tbk-form-actions">
         <button
           type="submit"
-          className="slotkit-button-primary"
+          className="tbk-button-primary"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Adding..." : "Add Block"}
@@ -221,7 +221,7 @@ export function BreakBlockForm({
         {onCancel && (
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={onCancel}
             disabled={isSubmitting}
           >
@@ -231,10 +231,10 @@ export function BreakBlockForm({
       </div>
 
       {/* Quick Actions */}
-      <div className="slotkit-break-quick-actions">
+      <div className="tbk-break-quick-actions">
         <button
           type="button"
-          className="slotkit-button-secondary slotkit-button-small"
+          className="tbk-button-secondary tbk-button-small"
           onClick={() => {
             const now = new Date();
             const todayStr = now.toISOString().split("T")[0];

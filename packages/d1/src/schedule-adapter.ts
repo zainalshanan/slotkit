@@ -3,7 +3,7 @@
  * Cloudflare D1 / SQLite text columns) into `AvailabilityRuleInput[]` arrays
  * for `@thebookingkit/core`'s slot engine.
  *
- * This logic was originally hand-written in `forza-barber-v2/src/lib/slotkit-adapter.ts`.
+ * This logic was originally hand-written in `forza-barber-v2/src/lib/thebookingkit-adapter.ts`.
  * Moving it into `@thebookingkit/d1` makes it reusable for any D1-backed booking
  * system that stores schedules as day-of-week JSON blobs rather than
  * normalised RRULE rows.

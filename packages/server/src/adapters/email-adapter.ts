@@ -73,11 +73,11 @@ export function generateICSAttachment(booking: {
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//SlotKit//EN",
+    "PRODID:-//TheBookingKit//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
-    `UID:${booking.id}@slotkit`,
+    `UID:${booking.id}@thebookingkit`,
     `DTSTART:${formatICSDate(booking.startsAt)}`,
     `DTEND:${formatICSDate(booking.endsAt)}`,
     `SUMMARY:${escapeICS(booking.title)}`,

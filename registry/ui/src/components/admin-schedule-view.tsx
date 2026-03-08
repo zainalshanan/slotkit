@@ -154,15 +154,15 @@ export function AdminScheduleView({
 
   return (
     <div
-      className={cn("slotkit-admin-schedule", className)}
+      className={cn("tbk-admin-schedule", className)}
       style={style}
     >
       {/* Toolbar */}
-      <div className="slotkit-schedule-toolbar">
-        <div className="slotkit-schedule-nav">
+      <div className="tbk-schedule-toolbar">
+        <div className="tbk-schedule-nav">
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => handleNavigate("prev")}
             aria-label="Previous"
           >
@@ -170,28 +170,28 @@ export function AdminScheduleView({
           </button>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => handleNavigate("today")}
           >
             Today
           </button>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => handleNavigate("next")}
             aria-label="Next"
           >
             &rsaquo;
           </button>
         </div>
-        <div className="slotkit-schedule-view-switcher">
+        <div className="tbk-schedule-view-switcher">
           {(["week", "month"] as View[]).map((v) => (
             <button
               key={v}
               type="button"
               className={cn(
-                "slotkit-button-secondary",
-                view === v && "slotkit-button-active",
+                "tbk-button-secondary",
+                view === v && "tbk-button-active",
               )}
               onClick={() => setView(v)}
             >
@@ -200,7 +200,7 @@ export function AdminScheduleView({
           ))}
         </div>
         {timezone && (
-          <span className="slotkit-schedule-timezone">{timezone}</span>
+          <span className="tbk-schedule-timezone">{timezone}</span>
         )}
       </div>
 
@@ -219,12 +219,12 @@ export function AdminScheduleView({
       />
 
       {/* Status legend */}
-      <div className="slotkit-schedule-legend">
+      <div className="tbk-schedule-legend">
         {(Object.entries(STATUS_COLORS) as [BookingStatus, string][]).map(
           ([status, color]) => (
-            <span key={status} className="slotkit-legend-item">
+            <span key={status} className="tbk-legend-item">
               <span
-                className="slotkit-legend-dot"
+                className="tbk-legend-dot"
                 style={{ backgroundColor: color }}
               />
               <span>{status}</span>
@@ -236,13 +236,13 @@ export function AdminScheduleView({
       {/* Detail popover */}
       {selectedBooking && (
         <div
-          className="slotkit-booking-popover"
+          className="tbk-booking-popover"
           role="dialog"
           aria-label="Booking details"
         >
           <button
             type="button"
-            className="slotkit-popover-close"
+            className="tbk-popover-close"
             onClick={() => setSelectedBooking(null)}
             aria-label="Close"
           >
@@ -250,7 +250,7 @@ export function AdminScheduleView({
           </button>
           <BookingStatusBadge status={selectedBooking.status} />
           <h3>{selectedBooking.eventTitle}</h3>
-          <dl className="slotkit-detail-list">
+          <dl className="tbk-detail-list">
             <dt>Customer</dt>
             <dd>{selectedBooking.customerName}</dd>
             <dt>Email</dt>
@@ -278,7 +278,7 @@ export function AdminScheduleView({
             Object.keys(selectedBooking.questionResponses).length > 0 && (
               <>
                 <h4>Responses</h4>
-                <dl className="slotkit-detail-list">
+                <dl className="tbk-detail-list">
                   {Object.entries(selectedBooking.questionResponses).map(
                     ([key, value]) => (
                       <React.Fragment key={key}>

@@ -129,37 +129,37 @@ export function BookingLifecycleActions({
 
   return (
     <div
-      className={cn("slotkit-lifecycle-actions", className)}
+      className={cn("tbk-lifecycle-actions", className)}
       style={style}
     >
       {error && (
-        <div className="slotkit-alert slotkit-alert-error" role="alert">
+        <div className="tbk-alert tbk-alert-error" role="alert">
           {error}
         </div>
       )}
 
       {showReasonPrompt ? (
-        <div className="slotkit-reason-prompt">
-          <label htmlFor={`reason-${bookingId}`} className="slotkit-label">
+        <div className="tbk-reason-prompt">
+          <label htmlFor={`reason-${bookingId}`} className="tbk-label">
             {pendingAction === "reject"
               ? "Rejection reason (optional)"
               : "Cancellation reason (optional)"}
           </label>
           <textarea
             id={`reason-${bookingId}`}
-            className="slotkit-textarea"
+            className="tbk-textarea"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             rows={3}
             placeholder="Add a reason..."
           />
-          <div className="slotkit-reason-actions">
+          <div className="tbk-reason-actions">
             <button
               type="button"
               className={cn(
                 pendingAction === "reject"
-                  ? "slotkit-button-danger"
-                  : "slotkit-button-danger",
+                  ? "tbk-button-danger"
+                  : "tbk-button-danger",
               )}
               onClick={handleReasonSubmit}
               disabled={isProcessing}
@@ -172,7 +172,7 @@ export function BookingLifecycleActions({
             </button>
             <button
               type="button"
-              className="slotkit-button-secondary"
+              className="tbk-button-secondary"
               onClick={cancelPrompt}
               disabled={isProcessing}
             >
@@ -181,13 +181,13 @@ export function BookingLifecycleActions({
           </div>
         </div>
       ) : (
-        <div className="slotkit-action-buttons">
+        <div className="tbk-action-buttons">
           {status === "pending" && (
             <>
               {onConfirm && (
                 <button
                   type="button"
-                  className="slotkit-button-primary"
+                  className="tbk-button-primary"
                   onClick={handleConfirm}
                   disabled={isProcessing}
                 >
@@ -197,7 +197,7 @@ export function BookingLifecycleActions({
               {onReject && (
                 <button
                   type="button"
-                  className="slotkit-button-danger"
+                  className="tbk-button-danger"
                   onClick={() => openReasonPrompt("reject")}
                   disabled={isProcessing}
                 >
@@ -212,7 +212,7 @@ export function BookingLifecycleActions({
               {onCancel && (
                 <button
                   type="button"
-                  className="slotkit-button-danger"
+                  className="tbk-button-danger"
                   onClick={() => openReasonPrompt("cancel")}
                   disabled={isProcessing}
                 >
@@ -222,7 +222,7 @@ export function BookingLifecycleActions({
               {onNoShow && (
                 <button
                   type="button"
-                  className="slotkit-button-secondary"
+                  className="tbk-button-secondary"
                   onClick={handleNoShow}
                   disabled={isProcessing}
                 >

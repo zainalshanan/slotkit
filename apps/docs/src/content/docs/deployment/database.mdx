@@ -26,7 +26,7 @@ docker compose up -d
 ```
 
 This starts Postgres 15 with:
-- Database: `slotkit`
+- Database: `thebookingkit`
 - Port: `5432`
 - User: `postgres`
 - Password: from `.env`
@@ -34,7 +34,7 @@ This starts Postgres 15 with:
 ### Connection string
 
 ```
-DATABASE_URL="postgresql://postgres:password@localhost:5432/slotkit"
+DATABASE_URL="postgresql://postgres:password@localhost:5432/thebookingkit"
 ```
 
 ## Schema setup
@@ -59,7 +59,7 @@ Create a Postgres 15+ database with your preferred provider. Ensure the user has
 ### 2. Set the connection string
 
 ```bash
-DATABASE_URL="postgresql://user:pass@host:5432/slotkit?sslmode=require"
+DATABASE_URL="postgresql://user:pass@host:5432/thebookingkit?sslmode=require"
 ```
 
 ### 3. Run migrations

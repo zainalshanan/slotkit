@@ -46,7 +46,7 @@ export function BookingStatusBadge({
 }: BookingStatusBadgeProps) {
   return (
     <span
-      className={cn("slotkit-status-badge", `slotkit-status-${status}`, className)}
+      className={cn("tbk-status-badge", `tbk-status-${status}`, className)}
       style={style}
       role="status"
     >

@@ -179,7 +179,7 @@ describe("generateEmbedSnippet", () => {
     expect(snippet).toContain('data-container="#booking"');
     expect(snippet).toContain('data-provider="my-provider"');
     expect(snippet).toContain('data-event-type="consultation"');
-    expect(snippet).toContain("slotkit-embed.js");
+    expect(snippet).toContain("thebookingkit-embed.js");
     expect(snippet).toContain("async");
   });
 

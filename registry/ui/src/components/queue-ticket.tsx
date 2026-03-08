@@ -52,32 +52,32 @@ export function QueueTicket({
 }: QueueTicketProps) {
   return (
     <div
-      className={cn("slotkit-queue-ticket", className)}
+      className={cn("tbk-queue-ticket", className)}
       style={style}
       role="region"
       aria-label="Queue ticket"
     >
       {providerName && (
-        <div className="slotkit-ticket-provider">{providerName}</div>
+        <div className="tbk-ticket-provider">{providerName}</div>
       )}
 
-      <div className="slotkit-ticket-number">
-        <span className="slotkit-ticket-label">Your Number</span>
-        <span className="slotkit-ticket-position">#{position}</span>
+      <div className="tbk-ticket-number">
+        <span className="tbk-ticket-label">Your Number</span>
+        <span className="tbk-ticket-position">#{position}</span>
       </div>
 
-      <div className="slotkit-ticket-details">
-        <div className="slotkit-ticket-row">
-          <span className="slotkit-ticket-dt">Name</span>
-          <span className="slotkit-ticket-dd">{customerName}</span>
+      <div className="tbk-ticket-details">
+        <div className="tbk-ticket-row">
+          <span className="tbk-ticket-dt">Name</span>
+          <span className="tbk-ticket-dd">{customerName}</span>
         </div>
-        <div className="slotkit-ticket-row">
-          <span className="slotkit-ticket-dt">Service</span>
-          <span className="slotkit-ticket-dd">{serviceName}</span>
+        <div className="tbk-ticket-row">
+          <span className="tbk-ticket-dt">Service</span>
+          <span className="tbk-ticket-dd">{serviceName}</span>
         </div>
-        <div className="slotkit-ticket-row">
-          <span className="slotkit-ticket-dt">Est. Wait</span>
-          <span className="slotkit-ticket-dd">
+        <div className="tbk-ticket-row">
+          <span className="tbk-ticket-dt">Est. Wait</span>
+          <span className="tbk-ticket-dd">
             {estimatedWaitMinutes === 0
               ? "No wait"
               : `~${estimatedWaitMinutes} min`}
@@ -86,9 +86,9 @@ export function QueueTicket({
       </div>
 
       {statusUrl && (
-        <div className="slotkit-ticket-qr">
+        <div className="tbk-ticket-qr">
           <div
-            className="slotkit-ticket-qr-placeholder"
+            className="tbk-ticket-qr-placeholder"
             aria-label={`QR code linking to ${statusUrl}`}
             title="Scan to track your position"
           >
@@ -97,9 +97,9 @@ export function QueueTicket({
               Use a library like `qrcode.react` or `react-qr-code`:
               <QRCodeSVG value={statusUrl} size={120} />
             */}
-            <span className="slotkit-ticket-qr-text">QR</span>
+            <span className="tbk-ticket-qr-text">QR</span>
           </div>
-          <p className="slotkit-ticket-qr-hint">
+          <p className="tbk-ticket-qr-hint">
             Scan to track your position
           </p>
         </div>

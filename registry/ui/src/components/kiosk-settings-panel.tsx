@@ -102,24 +102,24 @@ export function KioskSettingsPanel({
 
   return (
     <div
-      className={cn("slotkit-kiosk-settings-overlay", className)}
+      className={cn("tbk-kiosk-settings-overlay", className)}
       style={style}
     >
       <div
-        className="slotkit-kiosk-settings-backdrop"
+        className="tbk-kiosk-settings-backdrop"
         onClick={onClose}
         aria-hidden="true"
       />
       <aside
-        className="slotkit-kiosk-settings-panel"
+        className="tbk-kiosk-settings-panel"
         role="dialog"
         aria-label="Kiosk settings"
       >
-        <div className="slotkit-kiosk-settings-header">
-          <h2 className="slotkit-form-title">Kiosk Settings</h2>
+        <div className="tbk-kiosk-settings-header">
+          <h2 className="tbk-form-title">Kiosk Settings</h2>
           <button
             type="button"
-            className="slotkit-popover-close"
+            className="tbk-popover-close"
             onClick={onClose}
             aria-label="Close settings"
           >
@@ -127,13 +127,13 @@ export function KioskSettingsPanel({
           </button>
         </div>
 
-        <div className="slotkit-kiosk-settings-body">
+        <div className="tbk-kiosk-settings-body">
           {/* Default View */}
-          <div className="slotkit-field">
-            <label className="slotkit-label">Default View</label>
-            <div className="slotkit-radio-group">
+          <div className="tbk-field">
+            <label className="tbk-label">Default View</label>
+            <div className="tbk-radio-group">
               {(["day", "3day", "week"] as KioskView[]).map((v) => (
-                <label key={v} className="slotkit-radio-label">
+                <label key={v} className="tbk-radio-label">
                   <input
                     type="radio"
                     name="defaultView"
@@ -148,10 +148,10 @@ export function KioskSettingsPanel({
           </div>
 
           {/* Block Density */}
-          <div className="slotkit-field">
-            <label className="slotkit-label">Block Density</label>
+          <div className="tbk-field">
+            <label className="tbk-label">Block Density</label>
             <select
-              className="slotkit-select"
+              className="tbk-select"
               value={settings.blockDensity}
               onChange={(e) =>
                 update("blockDensity", e.target.value as BlockDensity)
@@ -164,10 +164,10 @@ export function KioskSettingsPanel({
           </div>
 
           {/* Color Coding */}
-          <div className="slotkit-field">
-            <label className="slotkit-label">Color Coding</label>
+          <div className="tbk-field">
+            <label className="tbk-label">Color Coding</label>
             <select
-              className="slotkit-select"
+              className="tbk-select"
               value={settings.colorCoding}
               onChange={(e) =>
                 update("colorCoding", e.target.value as ColorCoding)
@@ -179,11 +179,11 @@ export function KioskSettingsPanel({
             </select>
           </div>
 
-          <hr className="slotkit-divider" />
-          <h3 className="slotkit-section-title">Visible Fields</h3>
+          <hr className="tbk-divider" />
+          <h3 className="tbk-section-title">Visible Fields</h3>
 
           {/* Field Toggles */}
-          <div className="slotkit-checkbox-group">
+          <div className="tbk-checkbox-group">
             {(
               [
                 ["customerName", "Customer Name"],
@@ -196,7 +196,7 @@ export function KioskSettingsPanel({
                 ["notes", "Notes"],
               ] as [keyof KioskSettingsValues["fields"], string][]
             ).map(([key, label]) => (
-              <label key={key} className="slotkit-checkbox-label">
+              <label key={key} className="tbk-checkbox-label">
                 <input
                   type="checkbox"
                   checked={settings.fields[key]}
@@ -207,18 +207,18 @@ export function KioskSettingsPanel({
             ))}
           </div>
 
-          <hr className="slotkit-divider" />
-          <h3 className="slotkit-section-title">Display Hours</h3>
+          <hr className="tbk-divider" />
+          <h3 className="tbk-section-title">Display Hours</h3>
 
-          <div className="slotkit-field-row">
-            <div className="slotkit-field">
-              <label htmlFor="ks-start-hour" className="slotkit-label">
+          <div className="tbk-field-row">
+            <div className="tbk-field">
+              <label htmlFor="ks-start-hour" className="tbk-label">
                 Start Hour
               </label>
               <input
                 id="ks-start-hour"
                 type="number"
-                className="slotkit-input"
+                className="tbk-input"
                 min={0}
                 max={23}
                 value={settings.dayStartHour}
@@ -227,14 +227,14 @@ export function KioskSettingsPanel({
                 }
               />
             </div>
-            <div className="slotkit-field">
-              <label htmlFor="ks-end-hour" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="ks-end-hour" className="tbk-label">
                 End Hour
               </label>
               <input
                 id="ks-end-hour"
                 type="number"
-                className="slotkit-input"
+                className="tbk-input"
                 min={1}
                 max={24}
                 value={settings.dayEndHour}
@@ -245,17 +245,17 @@ export function KioskSettingsPanel({
             </div>
           </div>
 
-          <hr className="slotkit-divider" />
-          <h3 className="slotkit-section-title">Security</h3>
+          <hr className="tbk-divider" />
+          <h3 className="tbk-section-title">Security</h3>
 
-          <div className="slotkit-field">
-            <label htmlFor="ks-autolock" className="slotkit-label">
+          <div className="tbk-field">
+            <label htmlFor="ks-autolock" className="tbk-label">
               Auto-lock timeout (minutes, 0 = disabled)
             </label>
             <input
               id="ks-autolock"
               type="number"
-              className="slotkit-input"
+              className="tbk-input"
               min={0}
               max={60}
               value={settings.autoLockMinutes}
@@ -265,8 +265,8 @@ export function KioskSettingsPanel({
             />
           </div>
 
-          <div className="slotkit-field">
-            <label className="slotkit-checkbox-label">
+          <div className="tbk-field">
+            <label className="tbk-checkbox-label">
               <input
                 type="checkbox"
                 checked={settings.showWalkInSidebar}
@@ -277,10 +277,10 @@ export function KioskSettingsPanel({
           </div>
         </div>
 
-        <div className="slotkit-kiosk-settings-footer">
+        <div className="tbk-kiosk-settings-footer">
           <button
             type="button"
-            className="slotkit-button-primary"
+            className="tbk-button-primary"
             onClick={handleSave}
             disabled={isSaving}
           >
@@ -288,7 +288,7 @@ export function KioskSettingsPanel({
           </button>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={onClose}
             disabled={isSaving}
           >

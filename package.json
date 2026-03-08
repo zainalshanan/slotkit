@@ -1,5 +1,5 @@
 {
-  "name": "slotkit",
+  "name": "thebookingkit",
   "private": true,
   "workspaces": [
     "packages/*",

@@ -1,7 +1,7 @@
 /**
- * Manifest management for tracking installed SlotKit components.
+ * Manifest management for tracking installed Booking Kit components.
  *
- * The manifest file (.slotkit-manifest.json) tracks which components
+ * The manifest file (.thebookingkit-manifest.json) tracks which components
  * have been installed, their versions, and checksums for detecting
  * local modifications.
  */
@@ -24,7 +24,7 @@ export interface ManifestEntry {
   installedAt: string;
 }
 
-/** The .slotkit-manifest.json file structure */
+/** The .thebookingkit-manifest.json file structure */
 export interface SlotKitManifest {
   version: string;
   components: Record<string, ManifestEntry>;

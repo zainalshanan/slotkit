@@ -18,7 +18,7 @@ import {
 } from "../api.js";
 
 // Set the required env var for API key hashing in tests
-process.env.SLOTKIT_API_KEY_SECRET = "test-secret-for-unit-tests-only";
+process.env.THEBOOKINGKIT_API_KEY_SECRET = "test-secret-for-unit-tests-only";
 
 // ---------------------------------------------------------------------------
 // Response Helpers
@@ -106,15 +106,15 @@ describe("generateApiKey", () => {
 });
 
 describe("hashApiKey", () => {
-  it("throws when SLOTKIT_API_KEY_SECRET is missing", () => {
-    const original = process.env.SLOTKIT_API_KEY_SECRET;
-    delete process.env.SLOTKIT_API_KEY_SECRET;
+  it("throws when THEBOOKINGKIT_API_KEY_SECRET is missing", () => {
+    const original = process.env.THEBOOKINGKIT_API_KEY_SECRET;
+    delete process.env.THEBOOKINGKIT_API_KEY_SECRET;
     try {
       expect(() => hashApiKey("sk_live_test")).toThrow(
-        "SLOTKIT_API_KEY_SECRET environment variable is required",
+        "THEBOOKINGKIT_API_KEY_SECRET environment variable is required",
       );
     } finally {
-      process.env.SLOTKIT_API_KEY_SECRET = original;
+      process.env.THEBOOKINGKIT_API_KEY_SECRET = original;
     }
   });
 

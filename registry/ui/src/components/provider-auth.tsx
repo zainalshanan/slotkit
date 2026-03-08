@@ -155,32 +155,32 @@ export function ProviderAuth({
   };
 
   return (
-    <div className={cn("slotkit-provider-auth", className)} style={style}>
+    <div className={cn("tbk-provider-auth", className)} style={style}>
       {mode === "login" && (
         <>
           <h2>Sign in to your account</h2>
 
           {googleOAuthUrl && (
-            <a href={googleOAuthUrl} className="slotkit-button-oauth">
+            <a href={googleOAuthUrl} className="tbk-button-oauth">
               <GoogleIcon />
               Continue with Google
             </a>
           )}
 
-          {googleOAuthUrl && <div className="slotkit-auth-divider">or</div>}
+          {googleOAuthUrl && <div className="tbk-auth-divider">or</div>}
 
           <form
             onSubmit={loginForm.handleSubmit(handleLogin)}
             noValidate
           >
-            <div className="slotkit-field">
-              <label htmlFor="auth-email" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="auth-email" className="tbk-label">
                 Email
               </label>
               <input
                 id="auth-email"
                 type="email"
-                className="slotkit-input"
+                className="tbk-input"
                 autoComplete="email"
                 {...loginForm.register("email", {
                   required: "Email is required",
@@ -191,27 +191,27 @@ export function ProviderAuth({
                 })}
               />
               {loginForm.formState.errors.email ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {loginForm.formState.errors.email.message}
                 </p>
               ) : null}
             </div>
 
-            <div className="slotkit-field">
-              <label htmlFor="auth-password" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="auth-password" className="tbk-label">
                 Password
               </label>
               <input
                 id="auth-password"
                 type="password"
-                className="slotkit-input"
+                className="tbk-input"
                 autoComplete="current-password"
                 {...loginForm.register("password", {
                   required: "Password is required",
                 })}
               />
               {loginForm.formState.errors.password ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {loginForm.formState.errors.password.message}
                 </p>
               ) : null}
@@ -219,32 +219,32 @@ export function ProviderAuth({
 
             <button
               type="button"
-              className="slotkit-link"
+              className="tbk-link"
               onClick={() => switchMode("reset-request")}
             >
               Forgot password?
             </button>
 
             {serverError && (
-              <div className="slotkit-alert slotkit-alert-error" role="alert">
+              <div className="tbk-alert tbk-alert-error" role="alert">
                 {serverError}
               </div>
             )}
 
             <button
               type="submit"
-              className="slotkit-button-primary"
+              className="tbk-button-primary"
               disabled={loginForm.formState.isSubmitting}
             >
               {loginForm.formState.isSubmitting ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
-          <p className="slotkit-auth-switch">
+          <p className="tbk-auth-switch">
             Don&apos;t have an account?{" "}
             <button
               type="button"
-              className="slotkit-link"
+              className="tbk-link"
               onClick={() => switchMode("signup")}
             >
               Sign up
@@ -258,26 +258,26 @@ export function ProviderAuth({
           <h2>Create your account</h2>
 
           {googleOAuthUrl && (
-            <a href={googleOAuthUrl} className="slotkit-button-oauth">
+            <a href={googleOAuthUrl} className="tbk-button-oauth">
               <GoogleIcon />
               Sign up with Google
             </a>
           )}
 
-          {googleOAuthUrl && <div className="slotkit-auth-divider">or</div>}
+          {googleOAuthUrl && <div className="tbk-auth-divider">or</div>}
 
           <form
             onSubmit={signupForm.handleSubmit(handleSignup)}
             noValidate
           >
-            <div className="slotkit-field">
-              <label htmlFor="signup-name" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="signup-name" className="tbk-label">
                 Display Name
               </label>
               <input
                 id="signup-name"
                 type="text"
-                className="slotkit-input"
+                className="tbk-input"
                 placeholder="Your name or business name"
                 {...signupForm.register("displayName", {
                   required: "Display name is required",
@@ -285,20 +285,20 @@ export function ProviderAuth({
                 })}
               />
               {signupForm.formState.errors.displayName ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {signupForm.formState.errors.displayName.message}
                 </p>
               ) : null}
             </div>
 
-            <div className="slotkit-field">
-              <label htmlFor="signup-email" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="signup-email" className="tbk-label">
                 Email
               </label>
               <input
                 id="signup-email"
                 type="email"
-                className="slotkit-input"
+                className="tbk-input"
                 autoComplete="email"
                 {...signupForm.register("email", {
                   required: "Email is required",
@@ -309,20 +309,20 @@ export function ProviderAuth({
                 })}
               />
               {signupForm.formState.errors.email ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {signupForm.formState.errors.email.message}
                 </p>
               ) : null}
             </div>
 
-            <div className="slotkit-field">
-              <label htmlFor="signup-password" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="signup-password" className="tbk-label">
                 Password
               </label>
               <input
                 id="signup-password"
                 type="password"
-                className="slotkit-input"
+                className="tbk-input"
                 autoComplete="new-password"
                 {...signupForm.register("password", {
                   required: "Password is required",
@@ -330,52 +330,52 @@ export function ProviderAuth({
                 })}
               />
               {signupForm.formState.errors.password ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {signupForm.formState.errors.password.message}
                 </p>
               ) : null}
             </div>
 
-            <div className="slotkit-field">
-              <label htmlFor="signup-confirm" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="signup-confirm" className="tbk-label">
                 Confirm Password
               </label>
               <input
                 id="signup-confirm"
                 type="password"
-                className="slotkit-input"
+                className="tbk-input"
                 autoComplete="new-password"
                 {...signupForm.register("confirmPassword", {
                   required: "Please confirm your password",
                 })}
               />
               {signupForm.formState.errors.confirmPassword ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {signupForm.formState.errors.confirmPassword.message}
                 </p>
               ) : null}
             </div>
 
             {serverError && (
-              <div className="slotkit-alert slotkit-alert-error" role="alert">
+              <div className="tbk-alert tbk-alert-error" role="alert">
                 {serverError}
               </div>
             )}
 
             <button
               type="submit"
-              className="slotkit-button-primary"
+              className="tbk-button-primary"
               disabled={signupForm.formState.isSubmitting}
             >
               {signupForm.formState.isSubmitting ? "Creating account..." : "Create Account"}
             </button>
           </form>
 
-          <p className="slotkit-auth-switch">
+          <p className="tbk-auth-switch">
             Already have an account?{" "}
             <button
               type="button"
-              className="slotkit-link"
+              className="tbk-link"
               onClick={() => switchMode("login")}
             >
               Sign in
@@ -393,14 +393,14 @@ export function ProviderAuth({
             onSubmit={resetForm.handleSubmit(handleResetRequest)}
             noValidate
           >
-            <div className="slotkit-field">
-              <label htmlFor="reset-email" className="slotkit-label">
+            <div className="tbk-field">
+              <label htmlFor="reset-email" className="tbk-label">
                 Email
               </label>
               <input
                 id="reset-email"
                 type="email"
-                className="slotkit-input"
+                className="tbk-input"
                 autoComplete="email"
                 {...resetForm.register("email", {
                   required: "Email is required",
@@ -411,31 +411,31 @@ export function ProviderAuth({
                 })}
               />
               {resetForm.formState.errors.email ? (
-                <p className="slotkit-error">
+                <p className="tbk-error">
                   {resetForm.formState.errors.email.message}
                 </p>
               ) : null}
             </div>
 
             {serverError && (
-              <div className="slotkit-alert slotkit-alert-error" role="alert">
+              <div className="tbk-alert tbk-alert-error" role="alert">
                 {serverError}
               </div>
             )}
 
             <button
               type="submit"
-              className="slotkit-button-primary"
+              className="tbk-button-primary"
               disabled={resetForm.formState.isSubmitting}
             >
               {resetForm.formState.isSubmitting ? "Sending..." : "Send Reset Link"}
             </button>
           </form>
 
-          <p className="slotkit-auth-switch">
+          <p className="tbk-auth-switch">
             <button
               type="button"
-              className="slotkit-link"
+              className="tbk-link"
               onClick={() => switchMode("login")}
             >
               Back to sign in
@@ -453,7 +453,7 @@ export function ProviderAuth({
           </p>
           <button
             type="button"
-            className="slotkit-button-secondary"
+            className="tbk-button-secondary"
             onClick={() => switchMode("login")}
           >
             Back to sign in

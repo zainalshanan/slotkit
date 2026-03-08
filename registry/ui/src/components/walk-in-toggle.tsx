@@ -58,30 +58,30 @@ export function WalkInToggle({
   return (
     <div
       className={cn(
-        "slotkit-walkin-toggle",
-        isAccepting && "slotkit-walkin-toggle-on",
-        !isWithinHours && "slotkit-walkin-toggle-disabled",
+        "tbk-walkin-toggle",
+        isAccepting && "tbk-walkin-toggle-on",
+        !isWithinHours && "tbk-walkin-toggle-disabled",
         className,
       )}
       style={style}
     >
-      <div className="slotkit-walkin-toggle-content">
-        <div className="slotkit-walkin-toggle-info">
-          <span className="slotkit-walkin-toggle-label">
+      <div className="tbk-walkin-toggle-content">
+        <div className="tbk-walkin-toggle-info">
+          <span className="tbk-walkin-toggle-label">
             Walk-Ins
           </span>
           <span
             className={cn(
-              "slotkit-walkin-toggle-status",
+              "tbk-walkin-toggle-status",
               isAccepting
-                ? "slotkit-walkin-status-on"
-                : "slotkit-walkin-status-off",
+                ? "tbk-walkin-status-on"
+                : "tbk-walkin-status-off",
             )}
           >
             {isAccepting ? "Accepting" : "Not Accepting"}
           </span>
           {!isWithinHours && (
-            <span className="slotkit-walkin-toggle-hint">
+            <span className="tbk-walkin-toggle-hint">
               Outside working hours
             </span>
           )}
@@ -97,19 +97,19 @@ export function WalkInToggle({
               : "Start accepting walk-ins"
           }
           className={cn(
-            "slotkit-toggle-switch",
-            isAccepting && "slotkit-toggle-switch-on",
+            "tbk-toggle-switch",
+            isAccepting && "tbk-toggle-switch-on",
           )}
           onClick={handleToggle}
           disabled={isLoading || !isWithinHours}
         >
-          <span className="slotkit-toggle-thumb" />
+          <span className="tbk-toggle-thumb" />
         </button>
       </div>
 
       {isAccepting && queueCount > 0 && (
-        <div className="slotkit-walkin-toggle-queue">
-          <span className="slotkit-badge">
+        <div className="tbk-walkin-toggle-queue">
+          <span className="tbk-badge">
             {queueCount} in queue
           </span>
         </div>

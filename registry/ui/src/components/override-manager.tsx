@@ -73,25 +73,25 @@ export function OverrideManager({
   };
 
   return (
-    <div className={cn("slotkit-override-manager", className)} style={style}>
+    <div className={cn("tbk-override-manager", className)} style={style}>
       <h3>Schedule Overrides</h3>
 
       {/* Add override form */}
-      <div className="slotkit-override-form">
-        <div className="slotkit-field">
+      <div className="tbk-override-form">
+        <div className="tbk-field">
           <label htmlFor="override-date">Date</label>
           <input
             id="override-date"
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate((e.target as HTMLInputElement).value)}
-            className="slotkit-input"
+            className="tbk-input"
           />
         </div>
 
-        <div className="slotkit-field">
+        <div className="tbk-field">
           <label>Override Type</label>
-          <div className="slotkit-radio-group">
+          <div className="tbk-radio-group">
             <label>
               <input
                 type="radio"
@@ -114,12 +114,12 @@ export function OverrideManager({
         </div>
 
         {overrideType === "custom" && (
-          <div className="slotkit-time-range">
+          <div className="tbk-time-range">
             <input
               type="time"
               value={startTime}
               onChange={(e) => setStartTime((e.target as HTMLInputElement).value)}
-              className="slotkit-time-input"
+              className="tbk-time-input"
               aria-label="Override start time"
             />
             <span>to</span>
@@ -127,27 +127,27 @@ export function OverrideManager({
               type="time"
               value={endTime}
               onChange={(e) => setEndTime((e.target as HTMLInputElement).value)}
-              className="slotkit-time-input"
+              className="tbk-time-input"
               aria-label="Override end time"
             />
           </div>
         )}
 
-        <div className="slotkit-field">
+        <div className="tbk-field">
           <label htmlFor="override-reason">Reason (optional)</label>
           <input
             id="override-reason"
             type="text"
             value={reason}
             onChange={(e) => setReason((e.target as HTMLInputElement).value)}
-            className="slotkit-input"
+            className="tbk-input"
             placeholder="e.g., Public holiday, Dentist appointment"
           />
         </div>
 
         <button
           type="button"
-          className="slotkit-button-primary"
+          className="tbk-button-primary"
           onClick={handleAdd}
           disabled={!selectedDate}
         >
@@ -156,15 +156,15 @@ export function OverrideManager({
       </div>
 
       {/* Existing overrides list */}
-      <div className="slotkit-override-list">
+      <div className="tbk-override-list">
         {overrides.length === 0 && (
-          <p className="slotkit-empty-message">No overrides set.</p>
+          <p className="tbk-empty-message">No overrides set.</p>
         )}
         {overrides
           .sort((a, b) => a.date.getTime() - b.date.getTime())
           .map((override) => (
-            <div key={override.id ?? override.date.toISOString()} className="slotkit-override-item">
-              <div className="slotkit-override-info">
+            <div key={override.id ?? override.date.toISOString()} className="tbk-override-item">
+              <div className="tbk-override-info">
                 <strong>
                   {override.date.toLocaleDateString("en-US", {
                     weekday: "short",
@@ -174,20 +174,20 @@ export function OverrideManager({
                   })}
                 </strong>
                 {override.isUnavailable ? (
-                  <span className="slotkit-badge-unavailable">Unavailable</span>
+                  <span className="tbk-badge-unavailable">Unavailable</span>
                 ) : (
-                  <span className="slotkit-badge-custom">
+                  <span className="tbk-badge-custom">
                     {override.startTime} - {override.endTime}
                   </span>
                 )}
                 {override.reason && (
-                  <span className="slotkit-override-reason">{override.reason}</span>
+                  <span className="tbk-override-reason">{override.reason}</span>
                 )}
               </div>
               {override.id && (
                 <button
                   type="button"
-                  className="slotkit-remove-override"
+                  className="tbk-remove-override"
                   onClick={() => onRemove(override.id!)}
                   aria-label={`Remove override for ${override.date.toLocaleDateString()}`}
                 >

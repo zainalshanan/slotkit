@@ -1,4 +1,4 @@
-# SlotKit
+# The Booking Kit
 
 **The Headless Booking Primitive** — an open-source TypeScript toolkit for building production-grade booking and scheduling systems.
 
@@ -7,11 +7,13 @@
 [![Tests](https://img.shields.io/badge/Tests-434%20passing-brightgreen)]()
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-336791)](https://www.postgresql.org/)
 
+**[Documentation](https://thebookingkit.dev)** | **[Live Demo](https://demo.thebookingkit.dev)** | **[GitHub](https://github.com/thebookingkit/thebookingkit)**
+
 ---
 
-## What is SlotKit?
+## What is The Booking Kit?
 
-SlotKit gives you the database schema, scheduling math, and UI components to build a booking system — without locking you into a SaaS platform. It's designed for developers building with Next.js and Postgres who want full control over their booking flow.
+The Booking Kit gives you the database schema, scheduling math, and UI components to build a booking system — without locking you into a SaaS platform. It's designed for developers building with Next.js and Postgres who want full control over their booking flow.
 
 **Philosophy: "Hide the Math, Expose the UI."** The hard parts (timezone-aware slot computation, RRULE expansion, double-booking prevention, team scheduling algorithms) are encapsulated in `@thebookingkit/core`. The UI components are copy-paste source code you own entirely, following the [shadcn/ui](https://ui.shadcn.com/) convention.
 
@@ -103,7 +105,7 @@ npm install @thebookingkit/core @thebookingkit/db
 
 ```bash
 # Configure your Postgres connection
-echo 'DATABASE_URL="postgresql://user:pass@localhost:5432/slotkit"' > .env
+echo 'DATABASE_URL="postgresql://user:pass@localhost:5432/thebookingkit"' > .env
 
 # Push the schema (creates tables, enums, indexes)
 npx drizzle-kit push
@@ -277,8 +279,8 @@ Key infrastructure:
 
 ```bash
 # Clone and install
-git clone https://github.com/your-org/slotkit.git
-cd slotkit
+git clone https://github.com/thebookingkit/thebookingkit.git
+cd thebookingkit
 npm install
 
 # Run all tests (434 tests across 21 files)
@@ -299,7 +301,7 @@ npm run db:seed       # Seed sample data
 ### Project Structure
 
 ```
-slotkit/
+thebookingkit/
 ├── packages/
 │   ├── core/                 # @thebookingkit/core
 │   │   └── src/
@@ -345,7 +347,7 @@ slotkit/
 
 ### Database
 
-SlotKit requires Postgres 15+ with the `btree_gist` extension. Works with any provider:
+The Booking Kit requires Postgres 15+ with the `btree_gist` extension. Works with any provider:
 
 ```bash
 # Set production DATABASE_URL, then:
@@ -368,7 +370,7 @@ GOOGLE_CLIENT_SECRET=
 
 ### Background Jobs
 
-SlotKit uses a `JobAdapter` interface. With Inngest (recommended):
+The Booking Kit uses a `JobAdapter` interface. With Inngest (recommended):
 
 1. Expose the API route at `app/api/inngest/route.ts`
 2. Connect to Inngest Cloud
@@ -403,7 +405,14 @@ SlotKit uses a `JobAdapter` interface. With Inngest (recommended):
 | **Walk-In Queue** | Hybrid appointment + walk-in scheduling for physical locations |
 | **Kiosk Mode** | Full-screen drag-and-drop calendar for reception desks and tablets |
 
-See [docs/](docs/) for detailed specifications.
+See the [full documentation](https://thebookingkit.dev) and the [live demo](https://demo.thebookingkit.dev) for more.
+
+---
+
+## Links
+
+- **Documentation:** [thebookingkit.dev](https://thebookingkit.dev)
+- **Live Demo:** [demo.thebookingkit.dev](https://demo.thebookingkit.dev)
 
 ---
 
@@ -421,4 +430,4 @@ Contributions are welcome!
 
 ## License
 
-[MIT](LICENSE) — use SlotKit in personal and commercial projects.
+[MIT](LICENSE) — use The Booking Kit in personal and commercial projects.

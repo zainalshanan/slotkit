@@ -9,7 +9,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "slotkit": "./dist/bin.js"
+    "thebookingkit": "./dist/bin.js"
   },
   "exports": {
     ".": {
@@ -35,7 +35,7 @@
     "dist"
   ],
   "keywords": [
-    "slotkit",
+    "thebookingkit",
     "booking",
     "scheduling",
     "cli"
