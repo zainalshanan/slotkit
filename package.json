@@ -12,10 +12,10 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "db:push": "npm -w @slotkit/db run db:push",
-    "db:migrate": "npm -w @slotkit/db run db:migrate",
-    "db:seed": "npm -w @slotkit/db run db:seed",
-    "db:generate": "npm -w @slotkit/db run db:generate"
+    "db:push": "npm -w @thebookingkit/db run db:push",
+    "db:migrate": "npm -w @thebookingkit/db run db:migrate",
+    "db:seed": "npm -w @thebookingkit/db run db:seed",
+    "db:generate": "npm -w @thebookingkit/db run db:generate"
   },
   "devDependencies": {
     "turbo": "^2.4.0",

@@ -174,7 +174,7 @@ describe("DEFAULT_MANIFEST", () => {
 describe("generateSlotkitConfig", () => {
   it("generates valid TypeScript config with defaults", () => {
     const config = generateSlotkitConfig({});
-    expect(config).toContain('import type { SlotKitConfig } from "@slotkit/cli"');
+    expect(config).toContain('import type { SlotKitConfig } from "@thebookingkit/cli"');
     expect(config).toContain("src/components/slotkit");
     expect(config).toContain("nextauth");
     expect(config).toContain("inngest");

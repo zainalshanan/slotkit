@@ -1,7 +1,7 @@
 import {
   BookingConflictError,
   SerializationRetryExhaustedError,
-} from "@slotkit/core";
+} from "@thebookingkit/core";
 
 /** Options for the serialization retry wrapper */
 export interface SerializableRetryOptions {

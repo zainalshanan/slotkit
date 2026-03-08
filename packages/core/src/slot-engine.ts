@@ -21,7 +21,9 @@ import type {
  * @param rules - Provider's availability rules from the database
  * @param overrides - Provider's availability overrides from the database
  * @param existingBookings - Non-cancelled bookings for the provider in the date range
- * @param dateRange - The date range to compute slots for
+ * @param dateRange - The date range to compute slots for. Both `start` and `end`
+ *   **must be UTC** Date objects (use `new Date("...Z")` or `Date.UTC()`).
+ *   Passing local-time dates on a non-UTC server will shift the RRULE boundary.
  * @param customerTimezone - Customer's IANA timezone for localStart/localEnd formatting
  * @param options - Slot duration, buffer, and interval configuration
  * @returns Sorted array of available slots

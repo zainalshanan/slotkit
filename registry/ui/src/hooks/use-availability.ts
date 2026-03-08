@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { Slot } from "@slotkit/core";
+import type { Slot } from "@thebookingkit/core";
 
 /** Parameters for the useAvailability hook */
 export interface UseAvailabilityParams {

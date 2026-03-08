@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BookingQuestions } from "../components/booking-questions.js";
-import type { BookingQuestion } from "@slotkit/core";
+import type { BookingQuestion } from "@thebookingkit/core";
 
 describe("BookingQuestions", () => {
   const mockQuestions: BookingQuestion[] = [

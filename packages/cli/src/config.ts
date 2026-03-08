@@ -36,7 +36,7 @@ export function generateSlotkitConfig(config: Partial<SlotKitConfig>): string {
     emailAdapter = "resend",
   } = config;
 
-  return `import type { SlotKitConfig } from "@slotkit/cli";
+  return `import type { SlotKitConfig } from "@thebookingkit/cli";
 
 const config: SlotKitConfig = {
   database: {

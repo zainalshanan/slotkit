@@ -4,7 +4,7 @@ export {
   SerializationRetryExhaustedError,
   UnauthorizedError,
   ForbiddenError,
-} from "@slotkit/core";
+} from "@thebookingkit/core";
 
 // Serialization retry utility
 export {

@@ -14,7 +14,7 @@
 export interface ManifestEntry {
   /** Component name */
   name: string;
-  /** Version of @slotkit/cli when this component was added */
+  /** Version of @thebookingkit/cli when this component was added */
   version: string;
   /** File path where the component was installed */
   installedPath: string;

@@ -34,9 +34,41 @@ export interface SlotComputeOptions {
   slotInterval?: number;
 }
 
-/** Date range for queries */
+/**
+ * Date range for slot queries.
+ *
+ * Both `start` and `end` **must be UTC Date objects**. The RRULE expansion
+ * uses `start` as `dtstart`, which determines the time-of-day reference for
+ * generated occurrences. Passing local-time dates (e.g. constructed without
+ * a `Z` suffix on a non-UTC server) will shift the RRULE boundary and can
+ * cause occurrences to be silently excluded.
+ *
+ * @example
+ * ```ts
+ * // Correct — explicit UTC
+ * const dateRange = {
+ *   start: new Date("2026-03-09T00:00:00.000Z"),
+ *   end:   new Date("2026-03-09T23:59:59.999Z"),
+ * };
+ *
+ * // Also correct
+ * const day = new Date(Date.UTC(2026, 2, 9));
+ * const dateRange = {
+ *   start: day,
+ *   end:   new Date(Date.UTC(2026, 2, 9, 23, 59, 59, 999)),
+ * };
+ *
+ * // WRONG — on a non-UTC server this silently shifts the range
+ * const dateRange = {
+ *   start: new Date("2026-03-09T00:00:00"),   // parsed as local time!
+ *   end:   new Date("2026-03-09T23:59:59"),
+ * };
+ * ```
+ */
 export interface DateRange {
+  /** Start of range — must be a UTC Date */
   start: Date;
+  /** End of range — must be a UTC Date */
   end: Date;
 }
 

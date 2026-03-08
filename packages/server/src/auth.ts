@@ -1,4 +1,4 @@
-import { UnauthorizedError, ForbiddenError } from "@slotkit/core";
+import { UnauthorizedError, ForbiddenError } from "@thebookingkit/core";
 
 /** Represents an authenticated user in the system */
 export interface AuthUser {

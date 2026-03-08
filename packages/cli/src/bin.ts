@@ -184,11 +184,11 @@ program
     if (depsToInstall.length > 0) {
       console.log("\nInstall required dependencies:");
       console.log(
-        `  npm install @slotkit/core ${depsToInstall.map(([n, v]) => `${n}@${v}`).join(" ")}`,
+        `  npm install @thebookingkit/core ${depsToInstall.map(([n, v]) => `${n}@${v}`).join(" ")}`,
       );
     } else {
       console.log("\nInstall required dependency:");
-      console.log("  npm install @slotkit/core");
+      console.log("  npm install @thebookingkit/core");
     }
   });
 
@@ -240,7 +240,7 @@ program
   .command("migrate")
   .description("Run pending SlotKit database migrations")
   .action(() => {
-    console.log("Migration support requires @slotkit/db.");
+    console.log("Migration support requires @thebookingkit/db.");
     console.log("Run: npx drizzle-kit push");
     console.log("Or:  npx drizzle-kit migrate");
   });

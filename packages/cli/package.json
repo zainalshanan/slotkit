@@ -1,6 +1,9 @@
 {
-  "name": "@slotkit/cli",
+  "name": "@thebookingkit/cli",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "CLI for adding SlotKit components and running migrations",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,6 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },

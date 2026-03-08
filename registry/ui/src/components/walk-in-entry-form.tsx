@@ -44,6 +44,10 @@ export interface WalkInEntryFormProps {
   onSubmit: (values: WalkInEntryFormValues) => Promise<WalkInEntryResult>;
   /** Called when form is cancelled */
   onCancel?: () => void;
+  /** Pre-select a provider (e.g. from clicking a resource column) */
+  defaultProviderId?: string;
+  /** Called when the selected service changes — provides duration in minutes */
+  onServiceChange?: (serviceId: string, durationMinutes: number) => void;
   /** Additional CSS class name */
   className?: string;
   /** Inline styles */
@@ -77,6 +81,8 @@ export function WalkInEntryForm({
   providers,
   onSubmit,
   onCancel,
+  defaultProviderId,
+  onServiceChange,
   className,
   style,
 }: WalkInEntryFormProps) {
@@ -84,6 +90,12 @@ export function WalkInEntryForm({
   const [recentNames, setRecentNames] = useState<string[]>([]);
 
   const acceptingProviders = providers.filter((p) => p.acceptingWalkIns);
+
+  // Use defaultProviderId if it matches an accepting provider, otherwise first available
+  const initialProviderId =
+    defaultProviderId && acceptingProviders.some((p) => p.id === defaultProviderId)
+      ? defaultProviderId
+      : acceptingProviders[0]?.id ?? "";
 
   const {
     register,
@@ -95,7 +107,7 @@ export function WalkInEntryForm({
   } = useForm<WalkInEntryFormValues>({
     defaultValues: {
       eventTypeId: eventTypes[0]?.id ?? "",
-      providerId: acceptingProviders[0]?.id ?? "",
+      providerId: initialProviderId,
     },
   });
 
@@ -126,6 +138,13 @@ export function WalkInEntryForm({
   const selectedEventType = eventTypes.find(
     (et) => et.id === selectedEventTypeId,
   );
+
+  // Notify parent when service selection changes
+  useEffect(() => {
+    if (selectedEventType && onServiceChange) {
+      onServiceChange(selectedEventType.id, selectedEventType.durationMinutes);
+    }
+  }, [selectedEventTypeId]);
 
   const handleFormSubmit = async (values: WalkInEntryFormValues) => {
     // Validate provider is accepting

@@ -1,5 +1,5 @@
 /**
- * Embed configuration utilities for @slotkit/embed.
+ * Embed configuration utilities for @thebookingkit/embed.
  *
  * Generates embed configuration, validates embed options,
  * and produces HTML snippets for copy-paste integration.

@@ -1,7 +1,10 @@
 {
-  "name": "@slotkit/server",
+  "name": "@thebookingkit/server",
   "version": "0.1.0",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,12 +16,13 @@
   },
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@slotkit/core": "*"
+    "@thebookingkit/core": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^25.3.5",

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BookingConfirmation } from "../components/booking-confirmation.js";
-import type { Slot } from "@slotkit/core";
+import type { Slot } from "@thebookingkit/core";
 
 describe("BookingConfirmation", () => {
   const mockSlot: Slot = {

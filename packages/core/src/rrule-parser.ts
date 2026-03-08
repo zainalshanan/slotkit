@@ -19,7 +19,9 @@ export class InvalidRRuleError extends Error {
  * within the given date range.
  *
  * @param rruleString - An RFC 5545 RRULE string (e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR")
- * @param dateRange - The range to expand occurrences within
+ * @param dateRange - The range to expand occurrences within. Must use UTC Date
+ *   objects — `dateRange.start` is used as RRULE `dtstart` which determines
+ *   the time-of-day reference for occurrence generation
  * @param startTime - The start time for each occurrence (HH:mm)
  * @param endTime - The end time for each occurrence (HH:mm)
  * @returns Array of date occurrences

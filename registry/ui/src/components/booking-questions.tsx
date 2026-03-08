@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { BookingQuestion } from "@slotkit/core";
+import type { BookingQuestion } from "@thebookingkit/core";
 import { cn } from "../utils/cn.js";
 
 /** Data collected from the booking questions form */

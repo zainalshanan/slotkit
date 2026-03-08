@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { TimeSlotPicker } from "../components/time-slot-picker.js";
-import type { Slot } from "@slotkit/core";
+import type { Slot } from "@thebookingkit/core";
 
 describe("TimeSlotPicker", () => {
   const mockSlots: Slot[] = [

@@ -1,9 +1,10 @@
 {
-  "name": "@thebookingkit/core",
+  "name": "@thebookingkit/d1",
   "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,19 +16,18 @@
   },
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@thebookingkit/core": "^0.1.0",
     "date-fns": "^3.6.0",
-    "date-fns-tz": "^3.2.0",
-    "rrule": "^2.8.0"
+    "date-fns-tz": "^3.2.0"
   },
   "devDependencies": {
-    "@thebookingkit/db": "*",
     "@types/node": "^25.3.5",
-    "fast-check": "^4.5.3",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
   }
