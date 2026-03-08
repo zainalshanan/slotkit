@@ -9,24 +9,19 @@ The Booking Kit is a general-purpose scheduling primitive. The same core APIs po
 
 ---
 
-## 1. Barber Shop — Forza Barber v2
+## 1. Barber Shop — Multi-Location with Walk-Ins
 
-Forza Barber v2 is the flagship reference implementation for The Booking Kit. It is a production barber shop booking system built on **TanStack Start + Cloudflare Workers + Cloudflare D1**, replacing an earlier Next.js + Payload CMS architecture.
+A barber shop with multiple locations and individual barber schedules. Each barber has their own weekly availability stored as simple JSON in Cloudflare D1. The `@thebookingkit/d1` adapter converts these into the RRULE-based rules that `@thebookingkit/core` expects.
 
-The app covers two Sydney locations (CBD and Bondi), seven barbers with individual weekly schedules, a five-step customer booking wizard, and a full kiosk/admin timeline for walk-in queue management at the reception desk.
-
-**Stack:** TanStack Start, Cloudflare Workers, Cloudflare D1 (SQLite), `@slotkit/core`, `@slotkit/d1`, Drizzle ORM, Tailwind CSS, shadcn/ui.
-
-The `@slotkit/d1` adapter converts the barber shop's `weekly_schedule` JSON format (stored in D1) into the RRULE-based availability rules that `@slotkit/core` expects:
+**Stack:** TanStack Start (or Next.js), Cloudflare D1 (or Postgres), `@thebookingkit/core`, `@thebookingkit/d1`, Drizzle ORM.
 
 ```typescript
-// lib/slotkit-adapter.ts
-import { toWeeklyAvailabilityRules } from '@slotkit/d1';
-import { getAvailableSlots } from '@slotkit/core';
+import { toWeeklyAvailabilityRules } from '@thebookingkit/d1';
+import { getAvailableSlots } from '@thebookingkit/core';
 
 // Each barber stores their schedule as a simple JSON object in D1.
 // The adapter converts this to RRULE-based AvailabilityRuleInput[] that
-// @slotkit/core understands.
+// @thebookingkit/core understands.
 const barberSchedule = {
   monday:    { startTime: '09:00', endTime: '18:00', isOff: false },
   tuesday:   { startTime: '09:00', endTime: '18:00', isOff: false },
@@ -53,10 +48,10 @@ const slots = getAvailableSlots({
 });
 ```
 
-The admin kiosk uses the walk-in queue API to accept walk-in customers alongside scheduled appointments:
+The kiosk view uses the walk-in queue API to accept walk-in customers alongside scheduled appointments:
 
 ```typescript
-import { addWalkIn, estimateWaitTime } from '@slotkit/core';
+import { addWalkIn, estimateWaitTime } from '@thebookingkit/core';
 
 // Receptionist adds a walk-in at the desk.
 const entry = addWalkIn({
@@ -82,7 +77,7 @@ const { estimatedWaitMinutes } = estimateWaitTime({
 A medical clinic needs to route appointment requests to available doctors using round-robin assignment, and requires manual approval before confirming any appointment. Patients book a type of appointment (GP visit, specialist review) and the system assigns a doctor — the patient does not pick one directly.
 
 ```typescript
-import { getTeamSlots, assignHost } from '@slotkit/core';
+import { getTeamSlots, assignHost } from '@thebookingkit/core';
 
 // Get available slots across the entire GP team.
 // The team scheduling engine merges individual availability windows
@@ -129,7 +124,7 @@ const booking = await createBooking({
 A fitness studio runs group classes with a fixed capacity. Multiple participants can book the same time slot up to the seat limit. Classes repeat on the same days each week via a recurring schedule.
 
 ```typescript
-import { getAvailableSlots, isSlotAvailable } from '@slotkit/core';
+import { getAvailableSlots, isSlotAvailable } from '@thebookingkit/core';
 import { rrulestr } from 'rrule';
 
 // The instructor's recurring availability is defined as an RRULE.
@@ -173,7 +168,7 @@ if (!available) {
 A tutoring marketplace connects students with tutors across multiple countries. A routing form first asks the student what subject they need, then routes them to tutors who teach that subject. Slots are displayed in the student's local timezone regardless of where the tutor is located.
 
 ```typescript
-import { evaluateRoutingForm, getAvailableSlots } from '@slotkit/core';
+import { evaluateRoutingForm, getAvailableSlots } from '@thebookingkit/core';
 
 // The routing form asks for subject and level, then resolves
 // to a filtered list of tutors and their event types.
@@ -230,7 +225,7 @@ import {
   estimateWaitTime,
   findNextAvailableGap,
   getQueueMetrics,
-} from '@slotkit/core';
+} from '@thebookingkit/core';
 
 // Find the next gap in the stylist's schedule that fits a 45-minute service.
 const nextGap = findNextAvailableGap({
@@ -274,6 +269,6 @@ const metrics = getQueueMetrics({
 
 ## What to Build Next
 
-All five examples above use the same underlying APIs from `@slotkit/core`. The difference is configuration: which scheduling algorithm, what seat count, which timezone, whether confirmation is automatic or manual.
+All five examples above use the same underlying APIs from `@thebookingkit/core`. The difference is configuration: which scheduling algorithm, what seat count, which timezone, whether confirmation is automatic or manual.
 
 To start integrating The Booking Kit into your own application, follow the [Quick Start](/getting-started/quick-start) guide or review the [Architecture](/getting-started/architecture) page for a full picture of how the packages fit together.
