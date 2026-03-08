@@ -58,7 +58,7 @@ export default function DemoPage() {
       <footer className="demo-footer">
         <p>
           This is a demo application &mdash; no real appointments are being made.
-          All slot computation powered by <code>@slotkit/core</code> pure functions.
+          All slot computation powered by <code>@thebookingkit/core</code> pure functions.
         </p>
         <p>
           <strong>SlotKit</strong> &mdash; Open-source scheduling toolkit for developers.

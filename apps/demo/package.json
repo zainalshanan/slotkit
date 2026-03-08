@@ -1,5 +1,5 @@
 {
-  "name": "@slotkit/demo",
+  "name": "@thebookingkit/demo",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "start": "next start --port 3333"
   },
   "dependencies": {
-    "@slotkit/core": "*",
+    "@thebookingkit/core": "^0.1.1",
     "date-fns": "^3.6.0",
     "next": "^15.3.0",
     "react": "^19.0.0",

@@ -14,7 +14,7 @@ import {
   isSameDay,
   isBefore,
 } from "date-fns";
-import type { Slot } from "@slotkit/core";
+import type { Slot } from "@thebookingkit/core";
 import { fetchSlots, createBooking, type BookingResult } from "@/lib/actions";
 import { SERVICES, BARBER_SHOP, type Service } from "@/lib/constants";
 

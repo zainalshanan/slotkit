@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@slotkit/core"],
+  transpilePackages: ["@thebookingkit/core"],
 };
 
 export default nextConfig;

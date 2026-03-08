@@ -7,7 +7,7 @@ import {
   generateAllSnippets,
   type Slot,
   type AvailabilityOverrideInput,
-} from "@slotkit/core";
+} from "@thebookingkit/core";
 import {
   AVAILABILITY_RULES,
   addBooking,

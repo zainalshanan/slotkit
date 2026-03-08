@@ -6,7 +6,7 @@ import type {
   AvailabilityRuleInput,
   AvailabilityOverrideInput,
   BookingInput,
-} from "@slotkit/core";
+} from "@thebookingkit/core";
 import { BARBER_SHOP, SERVICES, type Service } from "./constants";
 
 // ---------------------------------------------------------------------------
