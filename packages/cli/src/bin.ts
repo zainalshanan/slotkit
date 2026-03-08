@@ -37,7 +37,7 @@ const program = new Command();
 program
   .name("thebookingkit")
   .description("The Booking Kit CLI — The Headless Booking Primitive")
-  .version("0.1.0");
+  .version("0.1.2");
 
 // ---------------------------------------------------------------------------
 // init

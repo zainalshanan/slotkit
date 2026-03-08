@@ -1,10 +1,10 @@
 {
   "name": "@thebookingkit/cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publishConfig": {
     "access": "public"
   },
-  "description": "CLI for adding SlotKit components and running migrations",
+  "description": "CLI for adding The Booking Kit components and running migrations",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
