@@ -344,3 +344,25 @@ export {
   type SlotKitConfig,
   type MigrationFile,
 } from "./cli.js";
+
+// Multi-Tenancy
+export {
+  resolveEffectiveSettings,
+  getRolePermissions,
+  roleHasPermission,
+  assertOrgPermission,
+  assertTenantScope,
+  buildOrgBookingUrl,
+  parseOrgBookingPath,
+  TenantAuthorizationError,
+  GLOBAL_DEFAULTS,
+  type OrgRole,
+  type OrgMember,
+  type OrgBranding,
+  type OrgSettings,
+  type ProviderSettings,
+  type EventTypeSettings,
+  type GlobalDefaults,
+  type ResolvedSettings,
+  type OrgPermission,
+} from "./multi-tenancy.js";
