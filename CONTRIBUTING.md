@@ -40,6 +40,12 @@ Follow the prompts to select the affected packages and describe the change. Comm
 4.  Submit a Pull Request.
 5.  All PRs require approval from the maintainers before merging.
 
+## Publishing Policy
+
+To maintain the security and integrity of the project, **only the project owner (@zainalshanan) has permission to publish new versions** of the packages to the npm registry. 
+
+Contributors should never attempt to publish packages directly. Versions are managed via Changesets and triggered exclusively by the maintainer after code is merged into the `main` branch.
+
 ## Code of Conduct
 
 Please be respectful and professional in all interactions.
