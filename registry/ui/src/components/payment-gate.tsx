@@ -78,9 +78,9 @@ export function PaymentGate({
       setInternalProcessing(true);
 
       try {
-        // In a real integration, the parent would call stripe.confirmPayment()
-        // using the clientSecret. This component signals readiness via the form submit.
-        // The parent handles actual Stripe confirmation and calls onPaymentSuccess/onPaymentError.
+        // This component acts as a UI shell. On form submit it signals the parent
+        // via onPaymentSuccess with the clientSecret. The parent is responsible
+        // for calling stripe.confirmPayment() and handling the result.
         onPaymentSuccess(clientSecret);
       } catch (err) {
         const message =

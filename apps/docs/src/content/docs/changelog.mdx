@@ -7,6 +7,50 @@ description: Latest updates and release notes for The Booking Kit.
 
 All notable changes to The Booking Kit will be documented in this file.
 
+## 0.1.3 (2026-03-10)
+
+### KioskCalendar — Drag-and-Drop & Schedule Map
+
+- **Fixed**: `onEventDrop` and `onEventResize` callbacks were defined as props but never wired to the underlying calendar. Events can now be dragged to reschedule and (optionally) reassign resources.
+- **Added**: `resizable` prop (default `false`) — opt-in to allow event duration changes by dragging the bottom edge.
+- **Added**: `scheduleMap` prop and `KioskScheduleEntry` interface — pass per-resource working hours to automatically dim off-hours slots with the `tbk-slot-off` CSS class.
+- **Added**: `draggableAccessor` — events with terminal statuses (completed, cancelled, no_show, rejected) are automatically non-draggable.
+
+### Component Bug Fixes
+
+- **BreakBlockForm**: "Block rest of day" quick action now flows through react-hook-form validation instead of bypassing it.
+- **WalkInEntryForm**: Fixed missing dependencies in `useEffect` for `onServiceChange` callback.
+- **PaymentGate**: Clarified misleading comment about Stripe confirmation flow.
+
+### Registry & Docs
+
+- `kiosk-calendar` now correctly lists `react-big-calendar` and `date-fns` as npm dependencies and `booking-status-badge` as a component dependency.
+- Updated kiosk-calendar documentation with new props, schedule map usage example, and CSS class reference.
+- Comprehensive documentation added for all booking, kiosk, and admin components.
+
+### Infrastructure
+
+- Renamed CLI config generation function for branding consistency.
+- Updated package metadata, repository URLs, and GitHub links across all packages.
+- Swapped domains — demo app becomes main site, docs becomes subdomain.
+- Added publishing instructions and launch preparation documents.
+
+---
+
+## 0.1.2 (2026-03-09)
+
+### Maintenance
+
+- Bumped all packages to v0.1.2.
+- Redesigned demo as single-page scroll showcase.
+- Wired registry build into docs deploy pipeline.
+- Removed client references from examples, fixed package scope.
+- Added npm registry READMEs for all packages.
+- Added comparison and examples pages, fixed card alignment in docs.
+- Renamed scope from `slotkit` to `thebookingkit` across entire codebase.
+
+---
+
 ## 0.1.1 (2026-03-09)
 
 ### Initial Release

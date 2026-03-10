@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, dateFnsLocalizer, type View } from "react-big-calendar";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import {
   format,
   parse,
@@ -22,6 +24,8 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+
+const DnDCalendar = withDragAndDrop(Calendar);
 
 /** A resource (provider/room/equipment) shown as a column in day view */
 export interface KioskResource {
@@ -55,6 +59,16 @@ export interface KioskEvent {
 
 /** Color coding mode */
 export type KioskColorMode = "status" | "event_type" | "source";
+
+/** Per-resource working-hours entry for slot styling */
+export interface KioskScheduleEntry {
+  /** Whether the resource is completely off for the day */
+  isOff: boolean;
+  /** Working hours start in "HH:MM" format */
+  startTime: string;
+  /** Working hours end in "HH:MM" format */
+  endTime: string;
+}
 
 /** Props for the KioskCalendar component */
 export interface KioskCalendarProps {
@@ -111,6 +125,10 @@ export interface KioskCalendarProps {
    * default status/source color coding for a specific event.
    */
   eventStyleGetter?: (event: KioskEvent) => { style: React.CSSProperties } | undefined;
+  /** Allow events to be resized by dragging their bottom edge. @default false */
+  resizable?: boolean;
+  /** Per-resource schedule map for dimming off-hours slots. Keyed by resource ID. */
+  scheduleMap?: Map<string | number, KioskScheduleEntry>;
   /** Additional CSS class name */
   className?: string;
   /** Inline styles */
@@ -197,6 +215,8 @@ export function KioskCalendar({
   onEventDrop,
   onEventResize,
   eventStyleGetter: customStyleGetter,
+  resizable = false,
+  scheduleMap,
   className,
   style,
 }: KioskCalendarProps) {
@@ -310,11 +330,13 @@ export function KioskCalendar({
       start,
       end,
       resourceId,
+      isAllDay,
     }: {
-      event: CalendarEvent;
+      event: any;
       start: Date | string;
       end: Date | string;
       resourceId?: string | number;
+      isAllDay?: boolean;
     }) => {
       if (!onEventDrop) return;
       const s = typeof start === "string" ? new Date(start) : start;
@@ -330,7 +352,7 @@ export function KioskCalendar({
       start,
       end,
     }: {
-      event: CalendarEvent;
+      event: any;
       start: Date | string;
       end: Date | string;
     }) => {
@@ -340,6 +362,44 @@ export function KioskCalendar({
       await onEventResize(event.id, s, e);
     },
     [onEventResize],
+  );
+
+  const slotPropGetter = useCallback(
+    (slotDate: Date, resourceId?: string | number) => {
+      const baseClass = "tbk-kiosk-slot";
+      const timeStr = format(slotDate, "h:mm a");
+
+      const props: Record<string, any> = {
+        className: baseClass,
+        "data-time": timeStr,
+      };
+
+      if (!scheduleMap || !resourceId) return props;
+
+      const schedule = scheduleMap.get(resourceId);
+      if (!schedule) return props;
+
+      if (schedule.isOff) {
+        props.className = cn(baseClass, "tbk-slot-off");
+        return props;
+      }
+
+      const toHours = (t: string) => {
+        const [h, m] = t.split(":").map(Number);
+        return h + m / 60;
+      };
+
+      const slotHour = slotDate.getHours() + slotDate.getMinutes() / 60;
+      const start = toHours(schedule.startTime);
+      const end = toHours(schedule.endTime);
+
+      if (slotHour < start || slotHour >= end) {
+        props.className = cn(baseClass, "tbk-slot-off");
+      }
+
+      return props;
+    },
+    [scheduleMap],
   );
 
   const defaultEventStyleGetter = useCallback(
@@ -526,16 +586,17 @@ export function KioskCalendar({
       </div>
 
       {/* ── Calendar ── */}
-      <Calendar<CalendarEvent, KioskResource>
+      <DnDCalendar
         localizer={localizer}
         events={calendarEvents}
         view={view}
         date={date}
         onView={setView}
         onNavigate={setDate}
-        onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot}
-        eventPropGetter={defaultEventStyleGetter}
+        onSelectEvent={handleSelectEvent as any}
+        onSelectSlot={handleSelectSlot as any}
+        eventPropGetter={defaultEventStyleGetter as any}
+        slotPropGetter={slotPropGetter as any}
         toolbar={false}
         selectable
         step={15}
@@ -543,6 +604,14 @@ export function KioskCalendar({
         min={new Date(1970, 0, 1, dayStartHour, 0, 0)}
         max={new Date(1970, 0, 1, dayEndHour, 0, 0)}
         style={{ height: "calc(100vh - 156px)" }}
+        onEventDrop={handleEventDrop as any}
+        onEventResize={handleEventResize as any}
+        resizable={resizable}
+        draggableAccessor={(event: any) =>
+          !["completed", "cancelled", "no_show", "rejected"].includes(
+            event.resource.status,
+          )
+        }
         // Resources are injected only in day view with multiple resources.
         // In week view this is undefined → clean 7-day grid.
         {...(activeResources

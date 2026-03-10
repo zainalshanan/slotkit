@@ -281,10 +281,10 @@ export const COMPONENT_REGISTRY: ComponentRegistryEntry[] = [
   {
     name: "kiosk-calendar",
     displayName: "KioskCalendar",
-    description: "Multi-provider day/week calendar view for reception kiosks",
+    description: "Multi-provider day/week calendar with drag-and-drop rescheduling and off-hours dimming",
     sourcePath: "components/kiosk-calendar.tsx",
-    dependencies: [],
-    npmDependencies: {},
+    dependencies: ["booking-status-badge"],
+    npmDependencies: { "react-big-calendar": "^1.8.7", "date-fns": "^3.6.0" },
     category: "kiosk",
   },
   {

@@ -410,7 +410,11 @@ function PaymentCard() {
 
 function KioskCard() {
   const [viewType, setViewType] = useState("day");
-  const [data, setData] = useState<{ resolved: { defaultView: string; blockDensity: string; showWalkInSidebar: boolean; autoLockMinutes: number; dayStartHour: number; dayEndHour: number }; viewLabel: string } | null>(null);
+  const [data, setData] = useState<{
+    resolved: { defaultView: string; blockDensity: string; showWalkInSidebar: boolean; autoLockMinutes: number; dayStartHour: number; dayEndHour: number };
+    viewLabel: string;
+    capabilities: { dragAndDrop: boolean; scheduleMap: boolean; resizable: boolean; offHoursDimming: boolean };
+  } | null>(null);
 
   useEffect(() => {
     fetchKioskDemo(viewType).then(setData);
@@ -425,7 +429,7 @@ function KioskCard() {
       </div>
       <div className="feature-card-title">Kiosk Mode</div>
       <div className="feature-card-desc">
-        Tablet-optimized check-in kiosks with configurable views, walk-in support, and provider management.
+        Tablet-optimized kiosks with drag-and-drop rescheduling, off-hours dimming, configurable views, and walk-in support.
       </div>
 
       <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
@@ -458,6 +462,23 @@ function KioskCard() {
             <div style={{ color: "var(--text-muted)", marginTop: "0.3rem", fontSize: "0.75rem" }}>
               Walk-in sidebar: {data.resolved.showWalkInSidebar ? "enabled" : "disabled"} &bull;{" "}
               Hours: {data.resolved.dayStartHour}:00 &ndash; {data.resolved.dayEndHour}:00
+            </div>
+            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginTop: "0.4rem" }}>
+              {data.capabilities.dragAndDrop && (
+                <span style={{ fontSize: "0.65rem", padding: "0.15rem 0.4rem", background: "rgba(22,163,106,0.12)", color: "var(--success)", borderRadius: "4px", fontWeight: 600 }}>
+                  Drag &amp; Drop
+                </span>
+              )}
+              {data.capabilities.offHoursDimming && (
+                <span style={{ fontSize: "0.65rem", padding: "0.15rem 0.4rem", background: "rgba(37,99,235,0.12)", color: "var(--info)", borderRadius: "4px", fontWeight: 600 }}>
+                  Schedule Map
+                </span>
+              )}
+              {data.capabilities.resizable && (
+                <span style={{ fontSize: "0.65rem", padding: "0.15rem 0.4rem", background: "rgba(124,58,237,0.12)", color: "#7c3aed", borderRadius: "4px", fontWeight: 600 }}>
+                  Resizable
+                </span>
+              )}
             </div>
           </>
         )}

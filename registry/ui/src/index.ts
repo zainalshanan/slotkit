@@ -50,7 +50,7 @@ export { WalkInToggle, type WalkInToggleProps } from "./components/walk-in-toggl
 export { WalkInAnalytics, type WalkInAnalyticsProps, type WalkInAnalyticsData } from "./components/walk-in-analytics.js";
 
 // Kiosk Mode Components (E-20)
-export { KioskCalendar, type KioskCalendarProps, type KioskEvent, type KioskColorMode } from "./components/kiosk-calendar.js";
+export { KioskCalendar, type KioskCalendarProps, type KioskEvent, type KioskColorMode, type KioskScheduleEntry } from "./components/kiosk-calendar.js";
 export { KioskSettingsPanel, type KioskSettingsPanelProps, type KioskSettingsValues, type BlockDensity, type ColorCoding, type KioskView } from "./components/kiosk-settings-panel.js";
 export { BreakBlockForm, type BreakBlockFormProps, type BreakBlockFormValues, type BlockType } from "./components/break-block-form.js";
 export { KioskShell, type KioskShellProps } from "./components/kiosk-shell.js";

@@ -144,7 +144,7 @@ export function WalkInEntryForm({
     if (selectedEventType && onServiceChange) {
       onServiceChange(selectedEventType.id, selectedEventType.durationMinutes);
     }
-  }, [selectedEventTypeId]);
+  }, [selectedEventTypeId, selectedEventType, onServiceChange]);
 
   const handleFormSubmit = async (values: WalkInEntryFormValues) => {
     // Validate provider is accepting

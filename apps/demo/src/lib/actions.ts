@@ -719,6 +719,12 @@ export interface KioskDemoResult {
     dayEndHour: number;
   };
   viewLabel: string;
+  capabilities: {
+    dragAndDrop: boolean;
+    scheduleMap: boolean;
+    resizable: boolean;
+    offHoursDimming: boolean;
+  };
 }
 
 export async function fetchKioskDemo(viewType: string): Promise<KioskDemoResult> {
@@ -744,5 +750,11 @@ export async function fetchKioskDemo(viewType: string): Promise<KioskDemoResult>
   return {
     resolved,
     viewLabel: viewLabels[viewType] ?? "Custom view",
+    capabilities: {
+      dragAndDrop: true,
+      scheduleMap: true,
+      resizable: false,
+      offHoursDimming: true,
+    },
   };
 }

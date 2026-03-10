@@ -67,6 +67,7 @@ export function BreakBlockForm({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<BreakBlockFormValues>({
@@ -238,14 +239,13 @@ export function BreakBlockForm({
           onClick={() => {
             const now = new Date();
             const todayStr = now.toISOString().split("T")[0];
-            onSubmit({
-              title: "Closed for the day",
-              date: todayStr,
-              startTime: now.toTimeString().slice(0, 5),
-              endTime: "23:59",
-              blockType: "closed",
-              recurring: false,
-            });
+            setValue("title", "Closed for the day");
+            setValue("date", todayStr);
+            setValue("startTime", now.toTimeString().slice(0, 5));
+            setValue("endTime", "23:59");
+            setValue("blockType", "closed");
+            setValue("recurring", false);
+            handleSubmit(handleFormSubmit)();
           }}
         >
           Block rest of day
