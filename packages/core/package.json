@@ -1,6 +1,23 @@
 {
   "name": "@thebookingkit/core",
-  "version": "0.1.2",
+  "version": "0.1.3",
+  "description": "Headless scheduling engine: slot computation, RRULE expansion, team assignment, recurring bookings, walk-ins, and kiosk mode",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thebookingkit/thebookingkit",
+    "directory": "packages/core"
+  },
+  "homepage": "https://thebookingkit.com",
+  "keywords": [
+    "thebookingkit",
+    "booking",
+    "scheduling",
+    "availability",
+    "slots",
+    "rrule",
+    "timezone"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -13,8 +30,13 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "files": [
+    "dist",
+    "!dist/__tests__"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
