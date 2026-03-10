@@ -13,6 +13,8 @@
 
 import type { BookingInput, AvailabilityOverrideInput } from "@thebookingkit/core";
 import { normalizeToUTC } from "@thebookingkit/core";
+import { toZonedTime } from "date-fns-tz";
+import { format } from "date-fns";
 import { D1DateCodec } from "./codec.js";
 
 /**
@@ -234,4 +236,28 @@ export function d1LocalDayQuery(dateStr: string, timezone: string): {
       end: new Date(utcDayBounds.lte),
     },
   };
+}
+
+/**
+ * Get today's date as a "YYYY-MM-DD" string in the given IANA timezone.
+ *
+ * This is essential for D1-backed booking systems where the server (e.g.
+ * Cloudflare Workers) runs in UTC but needs to determine "today" relative to
+ * a location's local timezone. Pair with `d1LocalDayQuery()` for timezone-aware
+ * day queries.
+ *
+ * @param timezone - IANA timezone identifier (e.g. "Australia/Sydney", "America/New_York").
+ * @param now - Optional reference Date; defaults to `new Date()`. Useful for testing.
+ * @returns "YYYY-MM-DD" string representing the current local date.
+ *
+ * @example
+ * ```ts
+ * const today = localToday("Australia/Sydney");
+ * // => "2026-03-10" (even if UTC is still March 9)
+ *
+ * const { bounds, dateRange } = d1LocalDayQuery(today, "Australia/Sydney");
+ * ```
+ */
+export function localToday(timezone: string, now?: Date): string {
+  return format(toZonedTime(now ?? new Date(), timezone), "yyyy-MM-dd");
 }

@@ -72,6 +72,7 @@ export {
   d1DayBounds,
   d1DayQuery,
   d1LocalDayQuery,
+  localToday,
   type D1BookingRow,
   type D1AvailabilityOverrideRow,
 } from "./booking-helpers.js";

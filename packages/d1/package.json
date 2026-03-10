@@ -1,6 +1,6 @@
 {
   "name": "@thebookingkit/d1",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Cloudflare D1/SQLite adapter for The Booking Kit — date codec, row converters, and advisory locking",
   "license": "MIT",
   "repository": {
